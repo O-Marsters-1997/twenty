@@ -67,7 +67,8 @@ export const RatingInput = ({
       aria-valuemax={RATING_VALUES.length}
       aria-valuemin={1}
       aria-valuenow={selectedIndex + 1}
-      tabIndex={0} {...stylex.props(styles.container)}
+      tabIndex={0}
+      {...stylex.props(styles.container)}
     >
       {RATING_VALUES.map((value, index) => {
         const isActive = index <= selectedIndex;

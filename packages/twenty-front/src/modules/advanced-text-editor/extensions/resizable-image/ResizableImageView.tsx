@@ -29,18 +29,18 @@ const styles = stylex.create({
     height: '100%',
   },
   imageHandle: {
-    backgroundColor: background['--t-background-primary-inverted'],
     borderColor: background['--t-background-primary'],
     borderRadius: borderRadius['--t-border-radius-md'],
     borderStyle: 'solid',
     borderWidth: '1px',
+    backgroundColor: background['--t-background-primary-inverted'],
     cursor: 'col-resize',
-    height: spacing['--t-spacing-8'],
     position: 'absolute',
-    top: '50%',
     transform: 'translateY(-50%)',
-    width: spacing['--t-spacing-2'],
     zIndex: 1,
+    height: spacing['--t-spacing-8'],
+    top: '50%',
+    width: spacing['--t-spacing-2'],
   },
   imageHandleLeft: {
     left: spacing['--t-spacing-1'],
@@ -51,8 +51,8 @@ const styles = stylex.create({
     right: spacing['--t-spacing-1'],
   },
   imageContainer: {
-    maxWidth: '100%',
     position: 'relative',
+    maxWidth: '100%',
   },
   image: {
     height: 'auto',
@@ -204,10 +204,7 @@ export const ResizableImageView = (props: ResizableImageViewProps) => {
                 />
                 <div
                   onMouseDown={(e) => handleImageHandleMouseDown('right', e)}
-                  {...stylex.props(
-                    styles.imageHandle,
-                    styles.imageHandleRight,
-                  )}
+                  {...stylex.props(styles.imageHandle, styles.imageHandleRight)}
                 />
               </>
             )}

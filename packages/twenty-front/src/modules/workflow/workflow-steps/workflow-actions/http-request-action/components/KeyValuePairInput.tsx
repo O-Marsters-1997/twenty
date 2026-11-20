@@ -15,8 +15,8 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   keyValueContainer: {
-    display: 'grid',
     gap: spacing['--t-spacing-2'],
+    display: 'grid',
     gridTemplateColumns: `repeat(2, minmax(0, 1fr)) ${spacing['--t-spacing-8']}`,
   },
   keyValueContainerReadonly: {
@@ -24,9 +24,9 @@ const styles = stylex.create({
   },
 
   container: {
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
   },
 });
 

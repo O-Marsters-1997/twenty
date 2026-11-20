@@ -53,33 +53,33 @@ export type ViewBarDetailsProps = {
 const styles = stylex.create({
   bar: {
     alignItems: 'center',
-    borderTopWidth: '1px',
-    borderTopStyle: 'solid',
-    borderTopColor: borderColor['--t-border-color-light'],
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    zIndex: 4,
+    borderTopColor: borderColor['--t-border-color-light'],
+    borderTopStyle: 'solid',
+    borderTopWidth: '1px',
     minHeight: '32px',
     paddingBottom: spacing['--t-spacing-1'],
     paddingTop: spacing['--t-spacing-1'],
-    zIndex: '4',
   },
   chipContainer: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'row',
-    gap: spacing['--t-spacing-2'],
-    zIndex: '1',
+    zIndex: 1,
   },
   actionButtonContainer: {
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexDirection: 'row',
-    gap: spacing['--t-spacing-2'],
   },
   filterContainer: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
     overflowX: 'hidden',
   },
   separatorContainer: {
@@ -92,12 +92,12 @@ const styles = stylex.create({
     paddingTop: spacing['--t-spacing-2'],
   },
   separator: {
-    alignSelf: 'stretch',
     background: background['--t-background-quaternary'],
+    alignSelf: 'stretch',
     width: '1px',
   },
   addFilterContainer: {
-    zIndex: '5',
+    zIndex: 5,
   },
 });
 

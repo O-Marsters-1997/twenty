@@ -25,23 +25,23 @@ const DROPDOWN_ID = 'command-menu-edit-record-selection-dropdown';
 
 const styles = stylex.create({
   label: {
+    overflow: 'hidden',
     color: fontColor['--t-font-color-primary'],
     fontSize: fontSize['--t-font-size-md'],
-    overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },
   clickableArea: {
-    alignItems: 'center',
-    backgroundColor:
-      backgroundTransparent['--t-background-transparent-lighter'],
     borderColor: borderColor['--t-border-color-medium'],
     borderRadius: borderRadius['--t-border-radius-sm'],
     borderStyle: 'solid',
     borderWidth: '1px',
+    gap: spacing['--t-spacing-1'],
+    alignItems: 'center',
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
     cursor: 'pointer',
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
     height: '24px',
     paddingLeft: spacing['--t-spacing-2'],
     paddingRight: spacing['--t-spacing-1'],

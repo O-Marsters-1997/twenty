@@ -45,18 +45,18 @@ type FormArrayFieldInputProps = {
 
 const styles = stylex.create({
   displayModeContainer: {
+    borderStyle: 'none',
+    paddingInline: spacing['--t-spacing-2'],
     alignItems: 'center',
     backgroundColor: {
       default: 'transparent',
       ':hover': backgroundTransparent['--t-background-transparent-lighter'],
     },
-    borderStyle: 'none',
     boxSizing: 'border-box',
     cursor: 'pointer',
     display: 'flex',
     fontFamily: 'inherit',
     height: 30,
-    paddingInline: spacing['--t-spacing-2'],
     width: '100%',
   },
   displayModeContainerOpen: {
@@ -64,19 +64,19 @@ const styles = stylex.create({
       backgroundTransparent['--t-background-transparent-lighter'],
   },
   displayModeReadonlyContainer: {
-    alignItems: 'center',
     background: 'transparent',
     borderStyle: 'none',
+    paddingInline: spacing['--t-spacing-2'],
+    alignItems: 'center',
     display: 'flex',
     fontFamily: 'inherit',
-    paddingInline: spacing['--t-spacing-2'],
     width: '100%',
   },
   inputContainer: {
-    paddingTop: spacing['--t-spacing-1'],
-    paddingRight: spacing['--t-spacing-2'],
     paddingBottom: spacing['--t-spacing-1'],
     paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-1'],
   },
   placeholderContainer: {
     width: '100%',

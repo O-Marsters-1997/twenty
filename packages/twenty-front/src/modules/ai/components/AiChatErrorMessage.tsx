@@ -22,21 +22,21 @@ import {
 
 const styles = stylex.create({
   errorContainer: {
-    alignItems: 'center',
     background: background['--t-background-danger'],
-    borderWidth: '1px',
-    borderStyle: 'solid',
     borderColor: borderColor['--t-border-color-danger'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    gap: spacing['--t-spacing-2'],
+    alignItems: 'center',
+    display: 'flex',
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
     borderTopLeftRadius: borderRadius['--t-border-radius-md'],
     borderTopRightRadius: borderRadius['--t-border-radius-md'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
-    display: 'flex',
-    gap: spacing['--t-spacing-2'],
-    paddingTop: spacing['--t-spacing-2'],
-    paddingRight: spacing['--t-spacing-3'],
     paddingBottom: spacing['--t-spacing-2'],
     paddingLeft: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingTop: spacing['--t-spacing-2'],
   },
   errorIcon: {
     alignItems: 'center',
@@ -44,10 +44,10 @@ const styles = stylex.create({
     display: 'flex',
   },
   errorContent: {
-    display: 'flex',
     flex: '1',
-    flexDirection: 'column',
     gap: spacing['--t-spacing-0_5'],
+    display: 'flex',
+    flexDirection: 'column',
   },
   errorTitle: {
     color: fontColor['--t-font-color-primary'],

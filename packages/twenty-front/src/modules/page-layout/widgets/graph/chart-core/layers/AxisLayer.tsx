@@ -28,10 +28,10 @@ type AxisLayerProps = {
 
 const styles = stylex.create({
   svgOverlay: {
-    left: '0',
     overflow: 'visible',
     pointerEvents: 'none',
     position: 'absolute',
+    left: '0',
     top: '0',
   },
 });

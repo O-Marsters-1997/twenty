@@ -63,8 +63,8 @@ export const PageLayoutTabWidgetDropTarget = ({
 const styles = stylex.create({
   dropTarget: {
     borderRadius: borderRadius['--t-border-radius-sm'],
-    display: 'flex',
     outline: 'none',
+    display: 'flex',
     outlineOffset: -1,
     zIndex: 'auto',
   },

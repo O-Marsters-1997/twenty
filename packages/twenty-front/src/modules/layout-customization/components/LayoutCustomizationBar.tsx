@@ -22,38 +22,38 @@ import { color, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   animatedContainer: {
-    flexShrink: 0,
     overflow: 'hidden',
+    flexShrink: 0,
   },
   container: {
-    alignItems: 'center',
     background: color['--t-color-blue'],
+    paddingBlock: spacing['--t-spacing-2'],
+    paddingInline: spacing['--t-spacing-3'],
+    alignItems: 'center',
     boxSizing: 'border-box',
     color: color['--t-color-gray1'],
     display: 'flex',
     justifyContent: 'space-between',
-    paddingBlock: spacing['--t-spacing-2'],
-    paddingInline: spacing['--t-spacing-3'],
     width: '100%',
   },
   leftSection: {
-    alignItems: 'center',
-    display: 'flex',
     flex: '1',
     gap: spacing['--t-spacing-2'],
+    alignItems: 'center',
+    display: 'flex',
   },
   title: {
-    alignItems: 'center',
-    display: 'flex',
     flex: '1',
     gap: spacing['--t-spacing-2'],
+    alignItems: 'center',
+    display: 'flex',
     justifyContent: 'center',
     textAlign: 'center',
   },
   rightSection: {
+    flex: '1',
     alignItems: 'center',
     display: 'flex',
-    flex: '1',
     justifyContent: 'flex-end',
   },
 });

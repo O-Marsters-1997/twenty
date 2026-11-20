@@ -40,8 +40,8 @@ const sortNewestFirst = (eventLogRecords: EventLogRecord[]) =>
 
 const styles = stylex.create({
   results: {
-    display: 'flex',
     flex: '1',
+    display: 'flex',
     flexDirection: 'column',
     minHeight: '0',
   },

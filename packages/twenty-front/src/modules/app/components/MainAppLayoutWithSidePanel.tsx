@@ -10,7 +10,6 @@ import { Outlet } from 'react-router-dom';
 import * as stylex from '@stylexjs/stylex';
 import { media } from 'twenty-ui/theme/constants.stylex';
 
-
 const styles = stylex.create({
   row: {
     display: { default: 'flex', [media.print]: 'block' },
@@ -27,18 +26,18 @@ const styles = stylex.create({
     flexDirection: 'column',
     flexGrow: 1,
     flexShrink: 1,
+    position: 'relative',
     minHeight: { default: 0, [media.print]: 'auto' },
     minWidth: { default: 0, [media.print]: 'auto' },
-    position: 'relative',
   },
   content: {
+    overflow: { default: null, [media.print]: 'visible' },
     display: { default: 'flex', [media.print]: 'block' },
     flexBasis: 0,
     flexGrow: 1,
     flexShrink: 1,
     minHeight: { default: 0, [media.print]: 'auto' },
     minWidth: { default: 0, [media.print]: 'auto' },
-    overflow: { default: null, [media.print]: 'visible' },
   },
   sidePanel: {
     display: { default: 'contents', [media.print]: 'none' },
@@ -61,11 +60,13 @@ export const MainAppLayoutWithSidePanel = () => {
         </div>
         <LogConsole />
       </div>
-      {isMobile ? <CommandMenuForMobile /> : (
-          <div {...stylex.props(styles.sidePanel)}>
-            <SidePanelForDesktop />
-          </div>
-        )}
+      {isMobile ? (
+        <CommandMenuForMobile />
+      ) : (
+        <div {...stylex.props(styles.sidePanel)}>
+          <SidePanelForDesktop />
+        </div>
+      )}
     </div>
   );
 };

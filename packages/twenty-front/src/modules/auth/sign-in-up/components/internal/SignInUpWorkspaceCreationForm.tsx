@@ -21,7 +21,16 @@ import { IconTrash, IconUpload } from 'twenty-ui/icon';
 import { Avatar } from 'twenty-ui/primitives/data-display';
 import { Button } from 'twenty-ui/primitives/input';
 import * as stylex from '@stylexjs/stylex';
-import { backgroundTransparent, borderColor, borderRadius, color, fontColor, fontSize, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  color,
+  fontColor,
+  fontSize,
+  fontWeight,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   logoAvatar: {
@@ -29,70 +38,71 @@ const styles = stylex.create({
     width: spacing['--t-spacing-8'],
   },
   contentContainer: {
+    gap: spacing['--t-spacing-14'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-14'],
     maxWidth: '100%',
     width: onboardingLayout.contentBlockWidth,
   },
   heading: {
+    gap: spacing['--t-spacing-4'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-4'],
   },
   title: {
     color: fontColor['--t-font-color-primary'],
     fontSize: fontSize['--t-font-size-xl'],
     fontWeight: fontWeight['--t-font-weight-semi-bold'],
-    lineHeight: '1.2',
+    lineHeight: 1.2,
   },
   subtitle: {
     color: fontColor['--t-font-color-secondary'],
     fontSize: fontSize['--t-font-size-md'],
-    lineHeight: '1.4',
+    lineHeight: 1.4,
   },
   formSection: {
+    gap: spacing['--t-spacing-8'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-8'],
     paddingBottom: spacing['--t-spacing-4'],
     width: '100%',
   },
   logoRow: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
   },
   logoButtons: {
+    gap: spacing['--t-spacing-0_5'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-0_5'],
   },
   hiddenFileInput: {
     display: 'none',
   },
   subdomainSection: {
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
     width: '100%',
   },
   alternativesBox: {
-    backgroundColor: backgroundTransparent['--t-background-transparent-lighter'],
-    borderWidth: '1px',
-    borderStyle: 'solid',
     borderColor: borderColor['--t-border-color-medium'],
-    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
-    borderTopRightRadius: borderRadius['--t-border-radius-md'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    gap: spacing['--t-spacing-2'],
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
-    paddingTop: spacing['--t-spacing-3'],
-    paddingRight: spacing['--t-spacing-3'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-md'],
+    borderTopRightRadius: borderRadius['--t-border-radius-md'],
     paddingBottom: spacing['--t-spacing-3'],
     paddingLeft: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingTop: spacing['--t-spacing-3'],
   },
   alternativesLabel: {
     color: fontColor['--t-font-color-secondary'],
@@ -101,42 +111,42 @@ const styles = stylex.create({
     paddingBottom: spacing['--t-spacing-1'],
   },
   alternativeRows: {
+    gap: spacing['--t-spacing-1'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-1'],
   },
   alternativeRow: {
-    alignItems: 'center',
     background: 'transparent',
     borderStyle: 'none',
+    gap: spacing['--t-spacing-1'],
+    alignItems: 'center',
     color: color['--t-color-green'],
     cursor: 'pointer',
     display: 'flex',
     fontSize: fontSize['--t-font-size-xs'],
     fontWeight: fontWeight['--t-font-weight-semi-bold'],
-    gap: spacing['--t-spacing-1'],
-    paddingTop: '2px',
-    paddingRight: '0',
+    textAlign: 'left',
     paddingBottom: '2px',
     paddingLeft: '0',
-    textAlign: 'left',
+    paddingRight: '0',
+    paddingTop: '2px',
   },
   availabilityDotBox: {
     display: 'flex',
-    paddingTop: spacing['--t-spacing-1'],
-    paddingRight: spacing['--t-spacing-1'],
     paddingBottom: spacing['--t-spacing-1'],
     paddingLeft: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-1'],
   },
   availabilityDot: {
+    cornerShape: 'round',
     backgroundColor: color['--t-color-green'],
+    boxShadow: `0 0 0 3px ${color['--t-color-green5']}`,
+    flexShrink: '0',
+    borderBottomLeftRadius: '50%',
+    borderBottomRightRadius: '50%',
     borderTopLeftRadius: '50%',
     borderTopRightRadius: '50%',
-    borderBottomRightRadius: '50%',
-    borderBottomLeftRadius: '50%',
-    boxShadow: `0 0 0 3px ${color['--t-color-green5']}`,
-    cornerShape: 'round',
-    flexShrink: '0',
     height: '6px',
     width: '6px',
   },
@@ -281,7 +291,8 @@ export const SignInUpWorkspaceCreationForm = () => {
                   handleLogoUpload(file);
                 }
                 event.target.value = '';
-              }} {...stylex.props(styles.hiddenFileInput)}
+              }}
+              {...stylex.props(styles.hiddenFileInput)}
             />
             <div {...stylex.props(styles.logoButtons)}>
               <Button
@@ -340,7 +351,8 @@ export const SignInUpWorkspaceCreationForm = () => {
                       <button
                         key={alternative}
                         type="button"
-                        onClick={() => applySuggestionValue(alternative)} {...stylex.props(styles.alternativeRow)}
+                        onClick={() => applySuggestionValue(alternative)}
+                        {...stylex.props(styles.alternativeRow)}
                       >
                         <div {...stylex.props(styles.availabilityDotBox)}>
                           <div {...stylex.props(styles.availabilityDot)} />

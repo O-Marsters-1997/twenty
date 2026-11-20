@@ -22,7 +22,10 @@ const styles = stylex.create({
 });
 
 const WideMainButton = (props: ComponentProps<typeof MainButton>) => (
-  <MainButton {...props} className={stylex.props(styles.wideButton).className} />
+  <MainButton
+    {...props}
+    className={stylex.props(styles.wideButton).className}
+  />
 );
 
 const CurrentLocation = () => {

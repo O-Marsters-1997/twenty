@@ -23,9 +23,9 @@ const styles = stylex.create({
       default: null,
       [media.mobile]: background['--t-background-primary'],
     },
-    left: { default: null, [media.mobile]: 0 },
     position: { default: null, [media.mobile]: 'sticky' },
     zIndex: { default: null, [media.mobile]: 1 },
+    left: { default: null, [media.mobile]: 0 },
   },
 });
 

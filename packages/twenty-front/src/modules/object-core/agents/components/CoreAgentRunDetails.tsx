@@ -15,30 +15,30 @@ import {
 
 const styles = stylex.create({
   details: {
-    borderBottomWidth: '1px',
-    borderBottomStyle: 'solid',
-    borderBottomColor: borderColor['--t-border-color-light'],
-    display: 'grid',
     gap: `${spacing['--t-spacing-2']} ${spacing['--t-spacing-4']}`,
+    display: 'grid',
     gridTemplateColumns: '120px minmax(0, 1fr)',
-    paddingTop: spacing['--t-spacing-3'],
-    paddingRight: spacing['--t-spacing-2'],
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
     paddingBottom: spacing['--t-spacing-3'],
     paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-3'],
   },
   label: {
     color: fontColor['--t-font-color-tertiary'],
   },
   tags: {
+    gap: spacing['--t-spacing-1'],
     display: 'flex',
     flexWrap: 'wrap',
-    gap: spacing['--t-spacing-1'],
   },
   text: {
     color: fontColor['--t-font-color-primary'],
-    minWidth: '0',
     overflowWrap: 'anywhere',
     whiteSpace: 'pre-wrap',
+    minWidth: '0',
   },
   error: {
     color: color['--t-color-red'],

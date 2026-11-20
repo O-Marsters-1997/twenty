@@ -18,17 +18,17 @@ import {
 
 const styles = stylex.create({
   container: {
-    alignItems: 'center',
-    backgroundColor: background['--t-background-secondary'],
-    borderWidth: '2px',
-    borderStyle: 'dashed',
     borderColor: borderColor['--t-border-color-strong'],
     borderRadius: borderRadius['--t-border-radius-sm'],
+    borderStyle: 'dashed',
+    borderWidth: '2px',
+    alignItems: 'center',
+    backgroundColor: background['--t-background-secondary'],
     display: 'flex',
     flexDirection: 'column',
-    height: '100%',
     justifyContent: 'center',
     textAlign: 'center',
+    height: '100%',
   },
   uploadDragTitle: {
     color: fontColor['--t-font-color-primary'],

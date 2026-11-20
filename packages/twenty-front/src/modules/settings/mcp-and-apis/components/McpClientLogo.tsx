@@ -5,8 +5,8 @@ const styles = stylex.create({
   image: {
     display: 'block',
     filter: 'none',
-    height: '100%',
     objectFit: 'contain',
+    height: '100%',
     width: '100%',
   },
   imageInverted: {

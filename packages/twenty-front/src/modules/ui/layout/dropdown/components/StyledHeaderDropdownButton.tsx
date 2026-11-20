@@ -10,19 +10,19 @@ import { type ComponentProps } from 'react';
 
 const styles = stylex.create({
   root: {
+    borderRadius: borderRadius['--t-border-radius-md'],
+    borderStyle: 'none',
+    paddingBlock: spacing['--t-spacing-1'],
+    paddingInline: spacing['--t-spacing-2'],
     alignItems: 'center',
     backgroundColor: {
       default: background['--t-background-primary'],
       ':hover': backgroundTransparent['--t-background-transparent-light'],
     },
-    borderRadius: borderRadius['--t-border-radius-md'],
-    borderStyle: 'none',
     color: fontColor['--t-font-color-secondary'],
     cursor: 'pointer',
     display: 'flex',
     fontFamily: 'inherit',
-    paddingBlock: spacing['--t-spacing-1'],
-    paddingInline: spacing['--t-spacing-2'],
     userSelect: 'none',
   },
   unfolded: {

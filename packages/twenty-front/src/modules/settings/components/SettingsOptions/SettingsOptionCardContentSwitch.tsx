@@ -87,14 +87,14 @@ export const SettingsOptionCardContentSwitch = ({
 
 const styles = stylex.create({
   content: {
+    padding: spacing['--t-spacing-4'],
+    gap: spacing['--t-spacing-3'],
     alignItems: 'center',
     backgroundColor: {
       default: background['--t-background-secondary'],
       ':hover': backgroundTransparent['--t-background-transparent-lighter'],
     },
     display: 'flex',
-    gap: spacing['--t-spacing-3'],
-    padding: spacing['--t-spacing-4'],
     position: 'relative',
   },
   contentEnabled: {
@@ -115,8 +115,8 @@ const styles = stylex.create({
     marginLeft: 'auto',
   },
   settingsCardSwitchCover: {
-    cursor: 'pointer',
     inset: '0',
+    cursor: 'pointer',
     position: 'absolute',
   },
 });

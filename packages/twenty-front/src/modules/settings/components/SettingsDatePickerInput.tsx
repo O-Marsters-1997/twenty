@@ -45,9 +45,6 @@ const styles = stylex.create({
     display: 'flex',
   },
   input: {
-    alignItems: 'center',
-    backgroundColor:
-      backgroundTransparent['--t-background-transparent-lighter'],
     borderColor: {
       default: borderColor['--t-border-color-medium'],
       ':hover': borderColor['--t-border-color-strong'],
@@ -55,13 +52,16 @@ const styles = stylex.create({
     borderRadius: borderRadius['--t-border-radius-sm'],
     borderStyle: 'solid',
     borderWidth: '1px',
+    gap: spacing['--t-spacing-2'],
+    paddingBlock: 0,
+    paddingInline: spacing['--t-spacing-2'],
+    alignItems: 'center',
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
     boxSizing: 'border-box',
     cursor: 'pointer',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
     height: '32px',
-    paddingBlock: 0,
-    paddingInline: spacing['--t-spacing-2'],
     width: '100%',
   },
   inputWithValue: {

@@ -18,19 +18,19 @@ import {
 
 const styles = stylex.create({
   tableWrapper: {
+    overflow: 'hidden',
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
-    overflow: 'hidden',
     width: '100%',
   },
   table: {
     background: background['--t-background-primary'],
-    display: 'flex',
     flex: '1',
+    overflow: 'hidden',
+    display: 'flex',
     flexDirection: 'column',
     fontSize: fontSize['--t-font-size-md'],
-    overflow: 'hidden',
     position: 'relative',
   },
   headerLabel: {
@@ -59,46 +59,46 @@ const styles = stylex.create({
     flexShrink: '0',
   },
   checkboxHeaderColumn: {
-    alignItems: 'center',
     background: background['--t-background-primary'],
-    borderBottomColor: borderColor['--t-border-color-light'],
-    borderBottomStyle: 'solid',
-    borderBottomWidth: '1px',
+    alignItems: 'center',
     boxSizing: 'border-box',
     display: 'flex',
     flexShrink: '0',
     justifyContent: 'center',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
     paddingRight: spacing['--t-spacing-1'],
   },
   headerCell: {
-    alignItems: 'center',
     background: background['--t-background-primary'],
+    gap: spacing['--t-spacing-1'],
+    overflow: 'hidden',
+    paddingBlock: 0,
+    paddingInline: spacing['--t-spacing-2'],
+    alignItems: 'center',
+    boxSizing: 'border-box',
+    color: fontColor['--t-font-color-tertiary'],
+    display: 'flex',
+    flexShrink: '0',
+    fontWeight: fontWeight['--t-font-weight-medium'],
     borderBottomColor: borderColor['--t-border-color-light'],
     borderBottomStyle: 'solid',
     borderBottomWidth: '1px',
     borderRightColor: borderColor['--t-border-color-light'],
     borderRightStyle: 'solid',
     borderRightWidth: '1px',
+  },
+  addColumnHeaderCell: {
+    background: background['--t-background-primary'],
+    flex: '1',
+    alignItems: 'center',
     boxSizing: 'border-box',
     color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
-    flexShrink: '0',
-    fontWeight: fontWeight['--t-font-weight-medium'],
-    gap: spacing['--t-spacing-1'],
-    overflow: 'hidden',
-    paddingBlock: 0,
-    paddingInline: spacing['--t-spacing-2'],
-  },
-  addColumnHeaderCell: {
-    alignItems: 'center',
-    background: background['--t-background-primary'],
     borderBottomColor: borderColor['--t-border-color-light'],
     borderBottomStyle: 'solid',
     borderBottomWidth: '1px',
-    boxSizing: 'border-box',
-    color: fontColor['--t-font-color-tertiary'],
-    display: 'flex',
-    flex: '1',
   },
   addColumnIconWrapper: {
     alignItems: 'center',
@@ -113,17 +113,17 @@ const styles = stylex.create({
     flexShrink: '0',
   },
   footerCell: {
+    gap: spacing['--t-spacing-1'],
+    overflow: 'hidden',
+    paddingBlock: 0,
+    paddingInline: spacing['--t-spacing-2'],
     alignItems: 'center',
     boxSizing: 'border-box',
     color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
     flexShrink: '0',
     fontWeight: fontWeight['--t-font-weight-medium'],
-    gap: spacing['--t-spacing-1'],
     justifyContent: 'space-between',
-    overflow: 'hidden',
-    paddingBlock: 0,
-    paddingInline: spacing['--t-spacing-2'],
     whiteSpace: 'nowrap',
   },
   lastEmptyCell: {
@@ -148,14 +148,18 @@ export const BackgroundMockTable = () => {
             {...stylex.props(
               styles.dragHandleColumn,
               styles.height(ROW_HEIGHT),
-              styles.width(BACKGROUND_MOCK_TABLE_DIMENSIONS.dragHandleColumnWidth),
+              styles.width(
+                BACKGROUND_MOCK_TABLE_DIMENSIONS.dragHandleColumnWidth,
+              ),
             )}
           />
           <div
             {...stylex.props(
               styles.checkboxHeaderColumn,
               styles.height(ROW_HEIGHT),
-              styles.width(BACKGROUND_MOCK_TABLE_DIMENSIONS.checkboxColumnWidth),
+              styles.width(
+                BACKGROUND_MOCK_TABLE_DIMENSIONS.checkboxColumnWidth,
+              ),
             )}
           >
             <Checkbox hoverable checked={false} />
@@ -177,7 +181,9 @@ export const BackgroundMockTable = () => {
                     stroke={theme.icon.stroke.sm}
                   />
                 )}
-                <span {...stylex.props(styles.headerLabel)}>{column.label}</span>
+                <span {...stylex.props(styles.headerLabel)}>
+                  {column.label}
+                </span>
               </div>
             );
           })}
@@ -185,14 +191,18 @@ export const BackgroundMockTable = () => {
             {...stylex.props(
               styles.addColumnHeaderCell,
               styles.height(ROW_HEIGHT),
-              styles.minWidth(BACKGROUND_MOCK_TABLE_DIMENSIONS.addColumnButtonWidth),
+              styles.minWidth(
+                BACKGROUND_MOCK_TABLE_DIMENSIONS.addColumnButtonWidth,
+              ),
             )}
           >
             <div
               {...stylex.props(
                 styles.addColumnIconWrapper,
                 styles.height(ROW_HEIGHT),
-                styles.width(BACKGROUND_MOCK_TABLE_DIMENSIONS.addColumnButtonWidth),
+                styles.width(
+                  BACKGROUND_MOCK_TABLE_DIMENSIONS.addColumnButtonWidth,
+                ),
               )}
             >
               <IconPlus
@@ -212,17 +222,27 @@ export const BackgroundMockTable = () => {
             {...stylex.props(
               styles.dragHandleColumn,
               styles.height(ROW_HEIGHT),
-              styles.width(BACKGROUND_MOCK_TABLE_DIMENSIONS.dragHandleColumnWidth),
+              styles.width(
+                BACKGROUND_MOCK_TABLE_DIMENSIONS.dragHandleColumnWidth,
+              ),
             )}
           />
           <div
             {...stylex.props(
               styles.footerCheckboxColumn,
               styles.height(ROW_HEIGHT),
-              styles.width(BACKGROUND_MOCK_TABLE_DIMENSIONS.checkboxColumnWidth),
+              styles.width(
+                BACKGROUND_MOCK_TABLE_DIMENSIONS.checkboxColumnWidth,
+              ),
             )}
           />
-          <div {...stylex.props(styles.footerCell, styles.height(ROW_HEIGHT), styles.width(BACKGROUND_MOCK_COLUMNS[0].width))}>
+          <div
+            {...stylex.props(
+              styles.footerCell,
+              styles.height(ROW_HEIGHT),
+              styles.width(BACKGROUND_MOCK_COLUMNS[0].width),
+            )}
+          >
             <div {...stylex.props(styles.footerLabel)}>
               <OverflowingTextWithTooltip text="Calculate" />
             </div>
@@ -231,22 +251,58 @@ export const BackgroundMockTable = () => {
               stroke={theme.icon.stroke.sm}
             />
           </div>
-          <div {...stylex.props(styles.footerCell, styles.height(ROW_HEIGHT), styles.width(BACKGROUND_MOCK_COLUMNS[1].width))}>
+          <div
+            {...stylex.props(
+              styles.footerCell,
+              styles.height(ROW_HEIGHT),
+              styles.width(BACKGROUND_MOCK_COLUMNS[1].width),
+            )}
+          >
             <div {...stylex.props(styles.footerLabel)}>
               <OverflowingTextWithTooltip text="Count all" />
             </div>
             <span {...stylex.props(styles.footerValue)}>599</span>
           </div>
-          <div {...stylex.props(styles.footerCell, styles.height(ROW_HEIGHT), styles.width(BACKGROUND_MOCK_COLUMNS[2].width))} />
-          <div {...stylex.props(styles.footerCell, styles.height(ROW_HEIGHT), styles.width(BACKGROUND_MOCK_COLUMNS[3].width))} />
-          <div {...stylex.props(styles.footerCell, styles.height(ROW_HEIGHT), styles.width(BACKGROUND_MOCK_COLUMNS[4].width))} />
-          <div {...stylex.props(styles.footerCell, styles.height(ROW_HEIGHT), styles.width(BACKGROUND_MOCK_COLUMNS[5].width))}>
+          <div
+            {...stylex.props(
+              styles.footerCell,
+              styles.height(ROW_HEIGHT),
+              styles.width(BACKGROUND_MOCK_COLUMNS[2].width),
+            )}
+          />
+          <div
+            {...stylex.props(
+              styles.footerCell,
+              styles.height(ROW_HEIGHT),
+              styles.width(BACKGROUND_MOCK_COLUMNS[3].width),
+            )}
+          />
+          <div
+            {...stylex.props(
+              styles.footerCell,
+              styles.height(ROW_HEIGHT),
+              styles.width(BACKGROUND_MOCK_COLUMNS[4].width),
+            )}
+          />
+          <div
+            {...stylex.props(
+              styles.footerCell,
+              styles.height(ROW_HEIGHT),
+              styles.width(BACKGROUND_MOCK_COLUMNS[5].width),
+            )}
+          >
             <div {...stylex.props(styles.footerLabel)}>
               <OverflowingTextWithTooltip text="Max of Employees" />
             </div>
             <span {...stylex.props(styles.footerValue)}>284,571</span>
           </div>
-          <div {...stylex.props(styles.footerCell, styles.height(ROW_HEIGHT), styles.width(BACKGROUND_MOCK_COLUMNS[6].width))}>
+          <div
+            {...stylex.props(
+              styles.footerCell,
+              styles.height(ROW_HEIGHT),
+              styles.width(BACKGROUND_MOCK_COLUMNS[6].width),
+            )}
+          >
             <div {...stylex.props(styles.footerLabel)}>
               <OverflowingTextWithTooltip text="Not empty of Address" />
             </div>
@@ -256,7 +312,9 @@ export const BackgroundMockTable = () => {
             {...stylex.props(
               styles.lastEmptyCell,
               styles.height(ROW_HEIGHT),
-              styles.minWidth(BACKGROUND_MOCK_TABLE_DIMENSIONS.addColumnButtonWidth),
+              styles.minWidth(
+                BACKGROUND_MOCK_TABLE_DIMENSIONS.addColumnButtonWidth,
+              ),
             )}
           />
         </div>

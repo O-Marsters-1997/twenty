@@ -12,8 +12,8 @@ type EventCardToggleButtonProps = {
 
 const styles = stylex.create({
   buttonContainer: {
-    alignItems: 'center',
     borderRadius: borderRadius['--t-border-radius-sm'],
+    alignItems: 'center',
     display: 'flex',
     flexShrink: 0,
     height: timelineIconSlot.size,

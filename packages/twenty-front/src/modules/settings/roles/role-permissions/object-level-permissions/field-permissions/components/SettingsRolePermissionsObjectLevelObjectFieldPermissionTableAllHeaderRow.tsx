@@ -23,11 +23,11 @@ const styles = stylex.create({
     alignItems: 'center',
     backgroundColor:
       backgroundTransparent['--t-background-transparent-lighter'],
+    display: 'grid',
+    gridTemplateColumns,
     borderBottomColor: borderColor['--t-border-color-light'],
     borderBottomStyle: 'solid',
     borderBottomWidth: '1px',
-    display: 'grid',
-    gridTemplateColumns,
     height: spacing['--t-spacing-6'],
     paddingLeft: spacing['--t-spacing-2'],
   }),

@@ -10,13 +10,13 @@ import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   buttonContainer: {
-    borderBottomWidth: '1px',
-    borderBottomStyle: 'solid',
     borderBottomColor: borderColor['--t-border-color-light'],
-    paddingTop: spacing['--t-spacing-4'],
-    paddingRight: spacing['--t-spacing-6'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
     paddingBottom: spacing['--t-spacing-4'],
     paddingLeft: spacing['--t-spacing-6'],
+    paddingRight: spacing['--t-spacing-6'],
+    paddingTop: spacing['--t-spacing-4'],
   },
 });
 

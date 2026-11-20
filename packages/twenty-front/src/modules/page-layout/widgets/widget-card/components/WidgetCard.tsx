@@ -93,15 +93,15 @@ export const WidgetCard = ({
 
 const styles = stylex.create({
   card: {
-    backgroundColor: 'transparent',
+    padding: 0,
     borderStyle: 'none',
+    backgroundColor: 'transparent',
     boxSizing: 'border-box',
     cursor: 'default',
     display: 'flex',
     flexDirection: 'column',
-    height: 'var(--widget-height, 100%)',
-    padding: 0,
     position: 'relative',
+    height: 'var(--widget-height, 100%)',
     width: '100%',
   },
   insetsFlush: {

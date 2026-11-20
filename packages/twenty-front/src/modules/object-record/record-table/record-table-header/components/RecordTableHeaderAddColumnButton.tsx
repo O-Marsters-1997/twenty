@@ -39,10 +39,10 @@ const styles = stylex.create({
     },
     color: fontColor['--t-font-color-tertiary'],
     cursor: 'pointer',
+    zIndex: 1,
     height: recordTableLayout.rowHeight,
     maxHeight: recordTableLayout.rowHeight,
     width: recordTableLayout.addColumnButtonWidth,
-    zIndex: 1,
   },
   borderBottom: {
     borderBottomColor: borderColor['--t-border-color-light'],
@@ -52,8 +52,8 @@ const styles = stylex.create({
   plusIconContainer: {
     alignItems: 'center',
     display: 'flex',
-    height: recordTableLayout.rowHeight,
     justifyContent: 'center',
+    height: recordTableLayout.rowHeight,
     width: '100%',
   },
   dropdownContainer: {

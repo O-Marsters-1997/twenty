@@ -25,9 +25,9 @@ import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   recordChange: {
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
   },
   emptyValue: {
     color: fontColor['--t-font-color-tertiary'],

@@ -1,4 +1,4 @@
-import { MONOSPACE_FONT_FAMILY } from '@/ui/theme/constants/MonospaceFontFamily';
+import { monospaceFont } from '@/ui/theme/constants/MonospaceFontFamily.stylex';
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 import { LightIconButton } from 'twenty-ui/components/input';
@@ -24,12 +24,14 @@ const blink = stylex.keyframes({
 
 const styles = stylex.create({
   tab: {
+    borderRadius: borderRadius['--t-border-radius-xs'],
+    borderStyle: 'none',
+    paddingBlock: spacing['--t-spacing-0_5'],
+    paddingInline: spacing['--t-spacing-1'],
     backgroundColor: {
       default: 'transparent',
       ':hover': background['--t-background-secondary'],
     },
-    borderRadius: borderRadius['--t-border-radius-xs'],
-    borderStyle: 'none',
     color: {
       default: fontColor['--t-font-color-tertiary'],
       ':hover': fontColor['--t-font-color-primary'],
@@ -37,8 +39,6 @@ const styles = stylex.create({
     cursor: 'pointer',
     fontSize: fontSize['--t-font-size-xs'],
     fontWeight: fontWeight['--t-font-weight-regular'],
-    paddingBlock: spacing['--t-spacing-0_5'],
-    paddingInline: spacing['--t-spacing-1'],
   },
   tabActive: {
     backgroundColor: background['--t-background-secondary'],
@@ -49,17 +49,17 @@ const styles = stylex.create({
     color: color['--t-color-red'],
   },
   outputArea: {
+    padding: spacing['--t-spacing-2'],
     backgroundColor: background['--t-background-tertiary'],
     color: fontColor['--t-font-color-primary'],
-    fontFamily: MONOSPACE_FONT_FAMILY,
+    fontFamily: monospaceFont.family,
     fontSize: fontSize['--t-font-size-sm'],
     lineHeight: 1.5,
+    whiteSpace: 'pre-wrap',
+    wordBreak: 'break-word',
     maxHeight: '300px',
     minHeight: '100px',
     overflowY: 'auto',
-    padding: spacing['--t-spacing-2'],
-    whiteSpace: 'pre-wrap',
-    wordBreak: 'break-word',
   },
   outputAreaError: {
     color: color['--t-color-red'],
@@ -71,44 +71,44 @@ const styles = stylex.create({
     animationTimingFunction: 'step-end',
     backgroundColor: fontColor['--t-font-color-primary'],
     display: 'inline-block',
+    verticalAlign: 'text-bottom',
     height: '1em',
     marginLeft: '2px',
-    verticalAlign: 'text-bottom',
     width: '8px',
   },
   container: {
-    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
-    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    overflow: 'hidden',
     display: 'flex',
     flexDirection: 'column',
-    overflow: 'hidden',
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
   },
   header: {
-    alignItems: 'center',
     background: background['--t-background-tertiary'],
-    borderBottomWidth: '1px',
-    borderBottomStyle: 'solid',
-    borderBottomColor: borderColor['--t-border-color-medium'],
-    display: 'flex',
     gap: spacing['--t-spacing-2'],
+    alignItems: 'center',
+    display: 'flex',
     justifyContent: 'space-between',
-    paddingTop: spacing['--t-spacing-1'],
-    paddingRight: spacing['--t-spacing-2'],
+    borderBottomColor: borderColor['--t-border-color-medium'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
     paddingBottom: spacing['--t-spacing-1'],
     paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-1'],
   },
   headerLeft: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     color: fontColor['--t-font-color-secondary'],
     display: 'flex',
     fontSize: fontSize['--t-font-size-sm'],
-    gap: spacing['--t-spacing-1'],
   },
   tabContainer: {
-    display: 'flex',
     gap: spacing['--t-spacing-1'],
+    display: 'flex',
   },
   emptyMessage: {
     color: fontColor['--t-font-color-tertiary'],

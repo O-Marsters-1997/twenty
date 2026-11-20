@@ -13,17 +13,17 @@ import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   cardGrid: {
-    display: 'grid',
     gap: spacing['--t-spacing-4'],
+    display: 'grid',
     gridTemplateColumns: '1fr',
   },
   image: {
-    borderBottomWidth: '1px',
-    borderBottomStyle: 'solid',
-    borderBottomColor: borderColor['--t-border-color-medium'],
     display: 'flex',
-    height: '120px',
     objectFit: 'cover',
+    borderBottomColor: borderColor['--t-border-color-medium'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
+    height: '120px',
     width: '100%',
   },
 });

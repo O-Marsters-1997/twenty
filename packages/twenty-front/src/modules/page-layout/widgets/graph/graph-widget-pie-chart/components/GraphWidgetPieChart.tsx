@@ -51,16 +51,16 @@ const emptyStateData: PieChartDataItemWithColor[] = [
 const styles = stylex.create({
   wrapper: {
     containerType: 'size',
-    height: '100%',
     position: 'relative',
+    height: '100%',
     width: '100%',
   },
   container: {
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'column',
-    height: '100%',
     justifyContent: 'center',
+    height: '100%',
     width: '100%',
   },
 });

@@ -18,24 +18,24 @@ import {
 
 const styles = stylex.create({
   colorButton: {
-    alignItems: 'center',
     background: {
       default: 'transparent',
       ':hover': backgroundTransparent['--t-background-transparent-light'],
     },
     borderStyle: 'none',
-    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
-    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    alignItems: 'center',
     cursor: 'pointer',
     display: 'flex',
-    height: '24px',
     justifyContent: 'center',
-    paddingTop: spacing['--t-spacing-1'],
-    paddingRight: spacing['--t-spacing-1'],
+    borderBottomLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-sm'],
+    borderTopLeftRadius: borderRadius['--t-border-radius-sm'],
+    borderTopRightRadius: borderRadius['--t-border-radius-sm'],
+    height: '24px',
     paddingBottom: spacing['--t-spacing-1'],
     paddingLeft: spacing['--t-spacing-1'],
+    paddingRight: spacing['--t-spacing-1'],
+    paddingTop: spacing['--t-spacing-1'],
     width: '24px',
   },
 });

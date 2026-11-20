@@ -30,19 +30,19 @@ type CalendarEventRowProps = {
 
 const styles = stylex.create({
   container: {
+    gap: spacing['--t-spacing-3'],
     alignItems: 'center',
     cursor: 'not-allowed',
     display: 'flex',
-    gap: spacing['--t-spacing-3'],
-    height: spacing['--t-spacing-6'],
     position: 'relative',
+    height: spacing['--t-spacing-6'],
   },
   containerClickable: {
     cursor: 'pointer',
   },
   attendanceIndicator: {
-    backgroundColor: tagBackground['--t-tag-background-gray'],
     borderRadius: borderRadius['--t-border-radius-xs'],
+    backgroundColor: tagBackground['--t-tag-background-gray'],
     height: '100%',
     width: spacing['--t-spacing-1'],
   },
@@ -50,11 +50,13 @@ const styles = stylex.create({
     backgroundColor: tagBackground['--t-tag-background-red'],
   },
   title: {
-    color: 'inherit',
-    flex: '1 0 auto',
-    fontWeight: 'inherit',
     overflow: 'hidden',
     textDecoration: 'none',
+    color: 'inherit',
+    flexBasis: 'auto',
+    flexGrow: '1',
+    flexShrink: '0',
+    fontWeight: 'inherit',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
     width: spacing['--t-spacing-10'],
@@ -67,17 +69,19 @@ const styles = stylex.create({
     textDecoration: 'line-through',
   },
   labels: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     color: fontColor['--t-font-color-primary'],
     display: 'flex',
-    flex: '1 0 auto',
-    gap: spacing['--t-spacing-2'],
+    flexBasis: 'auto',
+    flexGrow: '1',
+    flexShrink: '0',
   },
   time: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
     width: spacing['--t-spacing-26'],
   },
 });

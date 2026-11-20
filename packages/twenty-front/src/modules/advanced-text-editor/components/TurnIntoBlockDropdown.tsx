@@ -19,26 +19,26 @@ import {
 
 const styles = stylex.create({
   menuItem: {
-    alignItems: 'center',
-    backgroundColor: {
-      default: 'transparent',
-      ':hover': backgroundTransparent['--t-background-transparent-medium'],
-    },
-    borderStyle: 'none',
     borderRadius: spacing['--t-spacing-1_5'],
-    color: fontColor['--t-font-color-tertiary'],
-    cursor: 'pointer',
-    display: 'flex',
-    fontSize: fontSize['--t-font-size-sm'],
-    fontWeight: fontWeight['--t-font-weight-regular'],
+    borderStyle: 'none',
     gap: spacing['--t-spacing-1'],
-    height: spacing['--t-spacing-6'],
     outline: {
       default: null,
       ':focus': 'none',
     },
     paddingBlock: 0,
     paddingInline: 0,
+    alignItems: 'center',
+    backgroundColor: {
+      default: 'transparent',
+      ':hover': backgroundTransparent['--t-background-transparent-medium'],
+    },
+    color: fontColor['--t-font-color-tertiary'],
+    cursor: 'pointer',
+    display: 'flex',
+    fontSize: fontSize['--t-font-size-sm'],
+    fontWeight: fontWeight['--t-font-weight-regular'],
+    height: spacing['--t-spacing-6'],
     width: '100%',
   },
 });

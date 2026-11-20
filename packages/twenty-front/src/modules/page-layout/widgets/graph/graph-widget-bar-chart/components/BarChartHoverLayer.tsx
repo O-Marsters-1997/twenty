@@ -16,8 +16,8 @@ type BarChartHoverLayerProps = {
 const styles = stylex.create({
   hoverCanvas: {
     display: 'block',
-    left: '0',
     position: 'absolute',
+    left: '0',
     top: '0',
   },
 });

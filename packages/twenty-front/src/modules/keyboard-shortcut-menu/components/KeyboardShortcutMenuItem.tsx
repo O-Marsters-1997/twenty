@@ -12,13 +12,13 @@ const styles = stylex.create({
     display: 'flex',
     flexDirection: 'row',
     fontWeight: fontWeight['--t-font-weight-regular'],
-    height: '24px',
     justifyContent: 'space-between',
+    height: '24px',
   },
   shortcuts: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     display: 'inline-flex',
-    gap: spacing['--t-spacing-1'],
   },
 });
 

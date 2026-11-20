@@ -15,10 +15,10 @@ import { fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     color: fontColor['--t-font-color-secondary'],
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
     minWidth: '0',
   },
 });

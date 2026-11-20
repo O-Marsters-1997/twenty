@@ -45,8 +45,8 @@ const styles = stylex.create({
     minWidth: { default: null, [media.mobile]: '520px' },
   },
   scrollWrapper: {
-    overflowX: { default: null, [media.mobile]: 'auto' },
     WebkitOverflowScrolling: { default: null, [media.mobile]: 'touch' },
+    overflowX: { default: null, [media.mobile]: 'auto' },
   },
 });
 

@@ -25,13 +25,13 @@ import {
 
 const styles = stylex.create({
   container: {
+    gap: spacing['--t-spacing-3'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-3'],
-    paddingTop: spacing['--t-spacing-4'],
-    paddingRight: spacing['--t-spacing-4'],
     paddingBottom: spacing['--t-spacing-4'],
     paddingLeft: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingTop: spacing['--t-spacing-4'],
   },
   groupTitle: {
     color: fontColor['--t-font-color-primary'],
@@ -45,10 +45,10 @@ const styles = stylex.create({
   hint: {
     color: fontColor['--t-font-color-tertiary'],
     fontSize: fontSize['--t-font-size-sm'],
-    paddingTop: spacing['--t-spacing-4'],
-    paddingRight: spacing['--t-spacing-4'],
     paddingBottom: spacing['--t-spacing-4'],
     paddingLeft: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingTop: spacing['--t-spacing-4'],
   },
 });
 

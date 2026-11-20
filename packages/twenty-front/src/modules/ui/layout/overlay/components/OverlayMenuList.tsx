@@ -17,19 +17,19 @@ const styles = stylex.create({
   scrollable: {
     boxSizing: 'border-box',
     display: 'flex',
-    maxHeight: layoutSize.dropdownMenuItemsContainerMaxHeight,
-    overflowY: 'auto',
     scrollbarColor: `${borderColor['--t-border-color-medium']} transparent`,
     scrollbarWidth: 'thin',
+    maxHeight: layoutSize.dropdownMenuItemsContainerMaxHeight,
+    overflowY: 'auto',
     width: '100%',
   },
   items: {
+    padding: spacing['--t-spacing-1'],
+    gap: general['--t-between-siblings-gap'],
     boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',
-    gap: general['--t-between-siblings-gap'],
     height: 'fit-content',
-    padding: spacing['--t-spacing-1'],
     width: '100%',
   },
 });

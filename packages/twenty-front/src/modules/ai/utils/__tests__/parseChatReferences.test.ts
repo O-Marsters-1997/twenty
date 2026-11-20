@@ -211,7 +211,6 @@ describe('parseChatReferences', () => {
       'Alice',
       'Stage',
       'Admin',
-      'Twenty',
       'Workflow building',
     ]);
   });

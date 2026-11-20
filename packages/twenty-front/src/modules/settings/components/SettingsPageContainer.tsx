@@ -25,10 +25,10 @@ const getMatchingSettingsPath = (pathname: string) =>
 
 const styles = stylex.create({
   root: {
+    gap: spacing['--t-spacing-8'],
     boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-8'],
     marginBottom: 0,
     marginLeft: 'auto',
     marginRight: 'auto',

@@ -1,5 +1,11 @@
 import * as stylex from '@stylexjs/stylex';
-import { backgroundTransparent, borderColor, borderRadius, fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  backgroundTransparent,
+  borderColor,
+  borderRadius,
+  fontColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 import { type ReactNode } from 'react';
 
 type SubMatchingSelectControlContainerProps = {
@@ -16,20 +22,21 @@ export const SubMatchingSelectControlContainer = ({
 
 const styles = stylex.create({
   root: {
-    alignItems: 'center',
-    backgroundColor: backgroundTransparent['--t-background-transparent-lighter'],
-    borderWidth: '1px',
-    borderStyle: 'solid',
     borderColor: borderColor['--t-border-color-medium'],
     borderRadius: borderRadius['--t-border-radius-sm'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    gap: spacing['--t-spacing-1'],
+    paddingBlock: 0,
+    paddingInline: spacing['--t-spacing-2'],
+    alignItems: 'center',
+    backgroundColor:
+      backgroundTransparent['--t-background-transparent-lighter'],
     boxSizing: 'border-box',
     color: fontColor['--t-font-color-primary'],
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
-    height: spacing['--t-spacing-8'],
     justifyContent: 'space-between',
-    paddingBlock: 0,
-    paddingInline: spacing['--t-spacing-2'],
+    height: spacing['--t-spacing-8'],
     width: '100%',
   },
   pointer: {

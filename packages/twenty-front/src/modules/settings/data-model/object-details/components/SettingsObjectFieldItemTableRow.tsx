@@ -35,10 +35,10 @@ export const OBJECT_FIELD_TABLE_ROW_GRID_TEMPLATE_COLUMNS =
 
 const styles = stylex.create({
   nameContainer: {
-    alignItems: 'center',
-    display: 'flex',
     flex: '1',
     gap: spacing['--t-spacing-1'],
+    alignItems: 'center',
+    display: 'flex',
     minWidth: '0',
   },
   nameLabel: {

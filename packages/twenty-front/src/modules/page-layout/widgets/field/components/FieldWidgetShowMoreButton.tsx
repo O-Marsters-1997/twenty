@@ -18,9 +18,11 @@ type FieldWidgetShowMoreButtonProps = {
 
 const styles = stylex.create({
   button: {
-    alignItems: 'center',
     background: 'transparent',
     borderStyle: 'none',
+    gap: spacing['--t-spacing-1'],
+    transition: `color ${animationDuration['--t-animation-duration-instant']}s ease`,
+    alignItems: 'center',
     boxSizing: 'border-box',
     color: {
       default: fontColor['--t-font-color-tertiary'],
@@ -30,13 +32,11 @@ const styles = stylex.create({
     display: 'flex',
     fontFamily: font['--t-font-family'],
     fontWeight: fontWeight['--t-font-weight-regular'],
-    gap: spacing['--t-spacing-1'],
     height: '24px',
-    paddingTop: '0',
-    paddingRight: '0',
     paddingBottom: '0',
     paddingLeft: '0',
-    transition: `color ${animationDuration['--t-animation-duration-instant']}s ease`,
+    paddingRight: '0',
+    paddingTop: '0',
     width: '100%',
   },
 });

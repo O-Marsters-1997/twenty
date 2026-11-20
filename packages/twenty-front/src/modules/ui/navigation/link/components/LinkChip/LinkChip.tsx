@@ -9,12 +9,12 @@ import { Chip } from 'twenty-ui/primitives/data-display';
 const styles = stylex.create({
   linkContainer: {
     display: 'inline-flex',
-    minWidth: 0,
     verticalAlign: 'middle',
+    minWidth: 0,
   },
   chip: {
-    minWidth: 0,
     textDecoration: 'none',
+    minWidth: 0,
   },
 });
 

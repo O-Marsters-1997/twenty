@@ -34,46 +34,46 @@ import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   root: {
+    flex: '1',
+    gap: spacing['--t-spacing-6'],
     boxSizing: 'border-box',
     display: 'flex',
-    flex: '1',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-6'],
-    marginTop: '0',
-    marginRight: 'auto',
     marginBottom: '0',
     marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: '0',
     maxWidth: '760px',
     minHeight: '0',
-    paddingTop: spacing['--t-spacing-6'],
-    paddingRight: spacing['--t-spacing-8'],
     paddingBottom: spacing['--t-spacing-8'],
     paddingLeft: spacing['--t-spacing-8'],
+    paddingRight: spacing['--t-spacing-8'],
+    paddingTop: spacing['--t-spacing-6'],
     width: '100%',
   },
   cardContent: {
+    gap: spacing['--t-spacing-4'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-4'],
-    paddingTop: spacing['--t-spacing-4'],
-    paddingRight: spacing['--t-spacing-4'],
     paddingBottom: spacing['--t-spacing-4'],
     paddingLeft: spacing['--t-spacing-4'],
+    paddingRight: spacing['--t-spacing-4'],
+    paddingTop: spacing['--t-spacing-4'],
   },
   selectorRow: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'flex-end',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
   },
   selectorGrow: {
     flex: '1',
     minWidth: '0',
   },
   results: {
-    display: 'flex',
     flex: '1',
-    flexDirection: 'column',
     gap: spacing['--t-spacing-2'],
+    display: 'flex',
+    flexDirection: 'column',
     minHeight: '0',
   },
   recordCount: {
@@ -83,8 +83,8 @@ const styles = stylex.create({
   },
   tableWrapper: {
     flex: '1',
-    minHeight: '0',
     overflow: 'hidden',
+    minHeight: '0',
   },
 });
 

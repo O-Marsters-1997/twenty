@@ -38,27 +38,27 @@ export const WidgetCardHeaderActionLink = ({
 
 const styles = stylex.create({
   link: {
+    padding: spacing['--t-spacing-1'],
+    borderRadius: borderRadius['--t-border-radius-md'],
+    textDecoration: 'none',
     alignItems: 'center',
     backgroundColor: {
       default: null,
       ':hover': backgroundTransparent['--t-background-transparent-light'],
       ':active': backgroundTransparent['--t-background-transparent-medium'],
     },
-    borderRadius: borderRadius['--t-border-radius-md'],
     color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
-    height: spacing['--t-spacing-6'],
     justifyContent: 'center',
-    minWidth: spacing['--t-spacing-6'],
     outlineColor: { default: null, ':focus-visible': color['--t-color-blue'] },
     outlineOffset: { default: null, ':focus-visible': 1 },
     outlineStyle: { default: null, ':focus-visible': 'solid' },
     outlineWidth: { default: null, ':focus-visible': 2 },
-    padding: spacing['--t-spacing-1'],
-    textDecoration: 'none',
     transitionDuration: `calc(${animationDuration['--t-animation-duration-fast']} * 1s)`,
     transitionProperty: 'background',
     transitionTimingFunction: 'ease',
+    height: spacing['--t-spacing-6'],
+    minWidth: spacing['--t-spacing-6'],
     width: spacing['--t-spacing-6'],
   },
 });

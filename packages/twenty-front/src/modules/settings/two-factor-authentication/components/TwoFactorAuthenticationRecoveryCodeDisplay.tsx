@@ -10,13 +10,13 @@ import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   container: {
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
   },
   codeRow: {
-    display: 'flex',
     gap: spacing['--t-spacing-2'],
+    display: 'flex',
   },
   codeInputContainer: {
     flex: '1',

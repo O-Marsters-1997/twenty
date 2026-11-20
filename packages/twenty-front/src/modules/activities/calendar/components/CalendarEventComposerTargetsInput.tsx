@@ -22,10 +22,10 @@ import { fontColor, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   clickableContainer: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     cursor: 'pointer',
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
     minHeight: '24px',
     minWidth: '0',
     width: '100%',

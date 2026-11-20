@@ -33,7 +33,8 @@ export const getActorSourceIcon = ({
   source,
   context,
 }: Pick<Partial<FieldActorValue>, 'source' | 'context'>):
-  IconComponent | undefined => {
+  | IconComponent
+  | undefined => {
   switch (source) {
     case 'API':
       return IconApi;

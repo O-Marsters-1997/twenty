@@ -15,14 +15,14 @@ const styles = stylex.create({
     width: '100%',
   },
   leftActions: {
+    gap: spacing['--t-spacing-0_5'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-0_5'],
   },
   rightActions: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
   },
 });
 

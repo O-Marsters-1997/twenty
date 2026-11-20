@@ -22,14 +22,14 @@ import { color, fontSize, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   formContainer: {
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
   },
   iconNameRow: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'flex-start',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
   },
   nameContainer: {
     flex: '1',

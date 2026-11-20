@@ -7,18 +7,18 @@ import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 const styles = stylex.create({
   secondaryBar: {
     alignItems: 'center',
-    borderBottomWidth: '1px',
-    borderBottomStyle: 'solid',
-    borderBottomColor: borderColor['--t-border-color-light'],
     boxSizing: 'border-box',
     display: 'flex',
     flexShrink: '0',
     justifyContent: 'space-between',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
     minHeight: spacing['--t-spacing-10'],
-    paddingTop: '0',
-    paddingRight: spacing['--t-spacing-3'],
     paddingBottom: '0',
     paddingLeft: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingTop: '0',
   },
 });
 

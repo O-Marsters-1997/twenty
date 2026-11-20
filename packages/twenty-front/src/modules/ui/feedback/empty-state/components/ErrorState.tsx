@@ -10,20 +10,20 @@ import {
 
 const styles = stylex.create({
   root: {
+    gap: spacing['--t-spacing-8'],
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-8'],
-    height: '100%',
     justifyContent: 'center',
     textAlign: 'center',
+    height: '100%',
     width: '100%',
   },
   content: {
+    gap: spacing['--t-spacing-4'],
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-4'],
     justifyContent: 'center',
     textAlign: 'center',
     width: '100%',
@@ -35,12 +35,12 @@ const styles = stylex.create({
     lineHeight: textLineHeight['--t-text-line-height-lg'],
   },
   description: {
+    overflow: 'hidden',
     color: fontColor['--t-font-color-tertiary'],
     fontSize: fontSize['--t-font-size-xs'],
     fontWeight: fontWeight['--t-font-weight-regular'],
     lineHeight: textLineHeight['--t-text-line-height-md'],
     maxHeight: '2.4em',
-    overflow: 'hidden',
   },
 });
 
@@ -48,19 +48,19 @@ type ErrorStateSectionProps = {
   children?: ReactNode;
 };
 
-const ErrorStateRoot = ({ children }: ErrorStateSectionProps) => (
+const ErrorStateRoot = ({ children }: ErrorStateRootProps) => (
   <div {...stylex.props(styles.root)}>{children}</div>
 );
 
-const ErrorStateContent = ({ children }: ErrorStateSectionProps) => (
+const ErrorStateContent = ({ children }: ErrorStateContentProps) => (
   <div {...stylex.props(styles.content)}>{children}</div>
 );
 
-const ErrorStateTitle = ({ children }: ErrorStateSectionProps) => (
+const ErrorStateTitle = ({ children }: ErrorStateTitleProps) => (
   <div {...stylex.props(styles.title)}>{children}</div>
 );
 
-const ErrorStateDescription = ({ children }: ErrorStateSectionProps) => (
+const ErrorStateDescription = ({ children }: ErrorStateDescriptionProps) => (
   <div {...stylex.props(styles.description)}>{children}</div>
 );
 

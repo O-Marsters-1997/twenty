@@ -8,10 +8,10 @@ import { media } from 'twenty-ui/theme/constants.stylex';
 
 const styles = stylex.create({
   container: {
-    display: 'flex',
     flex: '1',
-    justifyContent: { default: 'space-between', [media.mobile]: 'center' },
     alignItems: { default: null, [media.mobile]: 'center' },
+    display: 'flex',
+    justifyContent: { default: 'space-between', [media.mobile]: 'center' },
   },
 });
 

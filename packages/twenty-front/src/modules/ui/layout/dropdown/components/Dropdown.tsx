@@ -44,8 +44,8 @@ const styles = stylex.create({
     width,
   }),
   dropdownFallbackAnchor: {
-    left: '0',
     position: 'fixed',
+    left: '0',
     top: '0',
   },
 });

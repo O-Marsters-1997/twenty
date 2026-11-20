@@ -27,11 +27,11 @@ export const RecordTableRowDiv = ({
 
 const styles = stylex.create({
   row: {
-    borderBottomStyle: 'none',
-    borderTopStyle: 'none',
     display: 'flex',
     flexDirection: 'row',
     position: 'relative',
+    borderBottomStyle: 'none',
+    borderTopStyle: 'none',
   },
   dragging: {
     borderBottomColor: borderColor['--t-border-color-medium'],

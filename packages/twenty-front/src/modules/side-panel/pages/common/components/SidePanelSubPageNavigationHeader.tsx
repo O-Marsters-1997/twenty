@@ -11,17 +11,17 @@ import {
 
 const styles = stylex.create({
   container: {
-    alignItems: 'center',
-    borderBottomWidth: '1px',
-    borderBottomStyle: 'solid',
-    borderBottomColor: borderColor['--t-border-color-light'],
-    display: 'flex',
     gap: spacing['--t-spacing-1'],
+    alignItems: 'center',
+    display: 'flex',
+    borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
     height: '40px',
-    paddingTop: '0',
-    paddingRight: spacing['--t-spacing-2'],
     paddingBottom: '0',
     paddingLeft: spacing['--t-spacing-2'],
+    paddingRight: spacing['--t-spacing-2'],
+    paddingTop: '0',
   },
   text: {
     color: fontColor['--t-font-color-tertiary'],

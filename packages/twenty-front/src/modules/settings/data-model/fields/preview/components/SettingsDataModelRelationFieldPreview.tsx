@@ -32,31 +32,31 @@ type SettingsDataModelRelationFieldPreviewProps = {
 
 const styles = stylex.create({
   fieldPreview: {
-    alignItems: 'center',
-    backgroundColor: background['--t-background-primary'],
     borderColor: borderColor['--t-border-color-medium'],
     borderRadius: borderRadius['--t-border-radius-sm'],
     borderStyle: 'solid',
     borderWidth: 1,
-    display: 'flex',
     gap: spacing['--t-spacing-2'],
-    height: 'fit-content',
-    lineHeight: '24px',
-    marginTop: spacing['--t-spacing-2'],
     overflow: 'hidden',
-    paddingBottom: spacing['--t-spacing-2'],
     paddingInline: spacing['--t-spacing-2'],
-    paddingTop: spacing['--t-spacing-2'],
+    alignItems: 'center',
+    backgroundColor: background['--t-background-primary'],
+    display: 'flex',
+    lineHeight: '24px',
     whiteSpace: 'nowrap',
+    height: 'fit-content',
+    marginTop: spacing['--t-spacing-2'],
+    paddingBottom: spacing['--t-spacing-2'],
+    paddingTop: spacing['--t-spacing-2'],
   },
   fieldPreviewShrink: {
     paddingInline: spacing['--t-spacing-1'],
   },
   fieldLabel: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
   },
 });
 

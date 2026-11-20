@@ -110,10 +110,10 @@ export const RecordTableDraggableTr = ({
 
 const styles = stylex.create({
   rowDropTargetSlot: {
-    left: 0,
     position: 'absolute',
+    zIndex: recordTableZIndex.rowDropLine,
+    left: 0,
     right: 0,
     top: -1,
-    zIndex: recordTableZIndex.rowDropLine,
   },
 });

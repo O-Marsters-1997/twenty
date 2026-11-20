@@ -231,7 +231,10 @@ export const PasswordReset = () => {
                 highlightColor={themeCssVariables.background.secondary}
               />
             ) : (
-              <form onSubmit={handleSubmit(onSubmit)} {...stylex.props(styles.form)}>
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                {...stylex.props(styles.form)}
+              >
                 <div {...stylex.props(styles.fullWidthContainer)}>
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}

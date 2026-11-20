@@ -48,8 +48,8 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 const DELETE_FIELD_MODAL_ID = 'delete-field-confirmation-modal';
 const styles = stylex.create({
   dangerButtons: {
-    display: 'flex',
     gap: spacing['--t-spacing-2'],
+    display: 'flex',
   },
 });
 

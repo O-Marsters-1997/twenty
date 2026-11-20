@@ -18,10 +18,10 @@ const styles = stylex.create({
     paddingRight: spacing['--t-spacing-0_5'],
   },
   rowsContainer: {
+    gap: spacing['--t-spacing-1'],
     boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-1'],
     paddingLeft: spacing['--t-spacing-1'],
     width: '100%',
   },

@@ -24,8 +24,8 @@ const styles = stylex.create({
     flexDirection: 'column',
   },
   scrollWrapperContainer: {
-    backgroundColor: background['--t-background-secondary'],
     overflow: 'hidden',
+    backgroundColor: background['--t-background-secondary'],
   },
 });
 

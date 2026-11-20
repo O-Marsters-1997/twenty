@@ -1,5 +1,12 @@
 import * as stylex from '@stylexjs/stylex';
-import { accent, animationDuration, backgroundTransparent, color, fontColor, spacing } from 'twenty-ui/theme/tokens.stylex';
+import {
+  accent,
+  animationDuration,
+  backgroundTransparent,
+  color,
+  fontColor,
+  spacing,
+} from 'twenty-ui/theme/tokens.stylex';
 import { isDefined } from 'twenty-shared/utils';
 import { Banner } from 'twenty-ui/primitives/feedback';
 import { IconChevronDown, IconInfoCircle } from 'twenty-ui/icon';
@@ -87,10 +94,10 @@ const styles = stylex.create({
     width: '100%',
   },
   text: {
+    overflow: 'hidden',
     flexBasis: '0%',
     flexGrow: 1,
     flexShrink: 1,
-    overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   },

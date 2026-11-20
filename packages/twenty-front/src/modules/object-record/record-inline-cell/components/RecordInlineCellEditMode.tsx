@@ -34,11 +34,11 @@ const INLINE_FIELD_INPUT_COLLISION_PADDING = 8;
 
 const styles = stylex.create({
   inlineCellEditModeContainer: {
-    alignItems: 'center',
     background: 'transparent',
+    alignItems: 'center',
     display: 'flex',
-    height: '24px',
     position: 'absolute',
+    height: '24px',
     width: '100%',
   },
 });

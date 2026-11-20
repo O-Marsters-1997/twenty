@@ -80,14 +80,14 @@ const styles = stylex.create({
   container: {
     '--record-card-background-color': background['--t-background-secondary'],
     backgroundColor: 'var(--record-card-background-color)',
-    borderBottomLeftRadius: 8,
-    borderRightColor: borderColor['--t-border-color-medium'],
-    borderRightStyle: 'solid',
-    borderRightWidth: 1,
     boxSizing: 'border-box',
     display: 'grid',
     gridTemplateColumns: 'minmax(0, 1fr)',
     gridTemplateRows: 'minmax(0, 1fr)',
+    borderBottomLeftRadius: 8,
+    borderRightColor: borderColor['--t-border-color-medium'],
+    borderRightStyle: 'solid',
+    borderRightWidth: 1,
     height: '100%',
   },
 });

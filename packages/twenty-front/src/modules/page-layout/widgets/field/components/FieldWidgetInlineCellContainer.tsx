@@ -9,20 +9,20 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   base: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     boxSizing: 'border-box',
     display: 'flex',
-    gap: spacing['--t-spacing-1'],
-    height: 'fit-content',
     userSelect: 'none',
+    height: 'fit-content',
     width: '100%',
   },
   readonly: { cursor: 'default' },
   editable: { cursor: 'pointer' },
   valueContainer: {
     display: 'flex',
-    minWidth: '0',
     position: 'relative',
+    minWidth: '0',
     width: '100%',
   },
 });

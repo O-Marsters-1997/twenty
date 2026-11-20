@@ -18,14 +18,14 @@ import { spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   list: {
+    gap: spacing['--t-spacing-3'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-3'],
   },
   row: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'flex',
-    gap: spacing['--t-spacing-2'],
     justifyContent: 'space-between',
   },
   origin: {
@@ -98,7 +98,10 @@ export const SettingsSecurityIframeOrigins = () => {
       <div {...stylex.props(styles.list)}>
         {isDefined(policyError) && (
           <>
-            <span role="alert" {...stylex.props(styles.origin)}>{t`Unable to load embedding settings.`}</span>
+            <span
+              role="alert"
+              {...stylex.props(styles.origin)}
+            >{t`Unable to load embedding settings.`}</span>
             <Button onClick={() => refetch()}>{t`Retry`}</Button>
           </>
         )}

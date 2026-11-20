@@ -14,10 +14,10 @@ import { media } from 'twenty-ui/theme/constants.stylex';
 
 const styles = stylex.create({
   eventRowDate: {
-    display: { default: null, [media.mobile]: 'none' },
-    color: fontColor['--t-font-color-tertiary'],
     paddingBlock: '0',
     paddingInline: spacing['--t-spacing-1'],
+    color: fontColor['--t-font-color-tertiary'],
+    display: { default: null, [media.mobile]: 'none' },
     whiteSpace: 'nowrap',
   },
 });

@@ -13,12 +13,12 @@ import { fontColor, fontWeight, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   breadcrumb: {
+    gap: spacing['--t-spacing-1'],
     alignItems: 'center',
     color: fontColor['--t-font-color-tertiary'],
     display: 'flex',
     flexShrink: '0',
     fontWeight: fontWeight['--t-font-weight-medium'],
-    gap: spacing['--t-spacing-1'],
     whiteSpace: 'nowrap',
   },
 });

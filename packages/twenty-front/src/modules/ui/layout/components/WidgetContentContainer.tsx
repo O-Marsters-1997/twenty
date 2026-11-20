@@ -11,15 +11,17 @@ const styles = stylex.create({
     width: '100%',
   },
   scroll: {
-    flex: 1,
     overflow: 'var(--widget-scroll-overflow, auto)',
+    flexBasis: '0%',
+    flexGrow: 1,
+    flexShrink: 1,
   },
 });
 
 export const StyledWidgetContentContainer = ({
   className,
   ...props
-}: ComponentProps<'div'>) => {
+}: StyledWidgetContentContainerProps<'div'>) => {
   const rootProps = stylex.props(styles.container);
 
   return (
@@ -34,7 +36,7 @@ export const StyledWidgetContentContainer = ({
 export const StyledWidgetScrollContainer = ({
   className,
   ...props
-}: ComponentProps<'div'>) => {
+}: StyledWidgetScrollContainerProps<'div'>) => {
   const rootProps = stylex.props(styles.container, styles.scroll);
 
   return (

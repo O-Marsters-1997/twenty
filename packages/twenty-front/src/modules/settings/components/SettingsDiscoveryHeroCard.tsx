@@ -14,32 +14,32 @@ const DEFAULT_COVER_HEIGHT = 150;
 const styles = stylex.create({
   cover: (coverHeight: number) => ({
     background: background['--t-background-secondary'],
-    boxSizing: 'border-box',
-    height: `${coverHeight}px`,
     overflow: 'hidden',
+    boxSizing: 'border-box',
     position: 'relative',
+    height: `${coverHeight}px`,
   }),
   image: {
-    display: 'block',
-    height: '100%',
     inset: '0',
+    display: 'block',
     objectFit: 'cover',
     objectPosition: 'center top',
     position: 'absolute',
+    height: '100%',
     width: '100%',
   },
   overlay: {
+    inset: '0',
     alignItems: 'center',
     display: 'flex',
-    inset: '0',
     justifyContent: 'center',
     position: 'absolute',
   },
   footer: {
     background: background['--t-background-secondary'],
-    borderTopWidth: '1px',
-    borderTopStyle: 'solid',
     borderTopColor: borderColor['--t-border-color-medium'],
+    borderTopStyle: 'solid',
+    borderTopWidth: '1px',
   },
 });
 

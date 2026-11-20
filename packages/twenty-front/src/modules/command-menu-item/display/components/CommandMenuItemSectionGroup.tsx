@@ -17,15 +17,15 @@ import {
 
 const styles = stylex.create({
   heading: {
-    alignItems: 'center',
-    borderBottomWidth: '1px',
-    borderBottomStyle: 'solid',
-    borderBottomColor: borderColor['--t-border-color-medium'],
-    display: 'flex',
     gap: spacing['--t-spacing-2'],
+    alignItems: 'center',
+    display: 'flex',
+    userSelect: 'none',
+    borderBottomColor: borderColor['--t-border-color-medium'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
     height: spacing['--t-spacing-8'],
     paddingLeft: spacing['--t-spacing-1'],
-    userSelect: 'none',
   },
   headingIcon: {
     alignItems: 'center',
@@ -42,18 +42,18 @@ const styles = stylex.create({
     minWidth: '0',
   },
   section: {
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
     marginTop: {
       default: spacing['--t-spacing-3'],
       ':first-child': 0,
     },
   },
   group: {
+    gap: spacing['--t-spacing-0_5'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-0_5'],
   },
 });
 

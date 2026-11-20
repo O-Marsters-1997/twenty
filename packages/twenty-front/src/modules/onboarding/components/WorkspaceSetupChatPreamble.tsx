@@ -27,9 +27,9 @@ const styles = stylex.create({
     opacity: 0,
   },
   singleLineHandoffRun: {
+    gap: spacing['--t-spacing-2'],
     alignItems: 'center',
     display: 'inline-flex',
-    gap: spacing['--t-spacing-2'],
     whiteSpace: 'nowrap',
   },
   singleLineHandoffRunRevealing: {

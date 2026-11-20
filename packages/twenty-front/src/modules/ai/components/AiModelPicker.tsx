@@ -28,24 +28,24 @@ import {
 
 const styles = stylex.create({
   container: {
+    gap: spacing['--t-spacing-2'],
     display: 'flex',
     flexDirection: 'column',
-    gap: spacing['--t-spacing-2'],
   },
   sliderCard: {
     background: background['--t-background-secondary'],
-    borderWidth: '1px',
-    borderStyle: 'solid',
     borderColor: borderColor['--t-border-color-medium'],
+    borderStyle: 'solid',
+    borderWidth: '1px',
+    cornerShape: 'round',
+    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
+    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
     borderTopLeftRadius: borderRadius['--t-border-radius-md'],
     borderTopRightRadius: borderRadius['--t-border-radius-md'],
-    borderBottomRightRadius: borderRadius['--t-border-radius-md'],
-    borderBottomLeftRadius: borderRadius['--t-border-radius-md'],
-    cornerShape: 'round',
-    paddingTop: spacing['--t-spacing-3'],
-    paddingRight: spacing['--t-spacing-3'],
     paddingBottom: spacing['--t-spacing-3'],
     paddingLeft: spacing['--t-spacing-3'],
+    paddingRight: spacing['--t-spacing-3'],
+    paddingTop: spacing['--t-spacing-3'],
   },
   footer: {
     alignItems: 'center',

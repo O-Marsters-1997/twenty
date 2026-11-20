@@ -13,11 +13,11 @@ import * as stylex from '@stylexjs/stylex';
 
 const styles = stylex.create({
   notesContainer: {
-    display: 'flex',
     flex: '1',
+    overflow: 'auto',
+    display: 'flex',
     flexDirection: 'column',
     height: '100%',
-    overflow: 'auto',
   },
 });
 

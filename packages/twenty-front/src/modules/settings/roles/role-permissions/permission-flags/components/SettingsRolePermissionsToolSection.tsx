@@ -17,9 +17,9 @@ import { borderColor, spacing } from 'twenty-ui/theme/tokens.stylex';
 
 const styles = stylex.create({
   table: {
-    borderBottomWidth: '1px',
-    borderBottomStyle: 'solid',
     borderBottomColor: borderColor['--t-border-color-light'],
+    borderBottomStyle: 'solid',
+    borderBottomWidth: '1px',
   },
   tableRows: {
     paddingBottom: spacing['--t-spacing-2'],

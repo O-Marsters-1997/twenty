@@ -90,9 +90,7 @@ export const SelectHeaderStep = ({
 
   return (
     <>
-      <Dialog.Body
-        {...stylex.props(styles.dialogBody)}
-      >
+      <Dialog.Body {...stylex.props(styles.dialogBody)}>
         <div {...stylex.props(styles.headingContainer)}>
           <Heading title={t`Select header row`} />
         </div>
@@ -116,13 +114,13 @@ export const SelectHeaderStep = ({
 
 const styles = stylex.create({
   dialogBody: {
-    display: 'flex',
-    flexBasis: '0%',
-    flexGrow: 1,
-    flexShrink: 1,
-    flexDirection: 'column',
     paddingBlock: spacing['--t-spacing-10'],
     paddingInline: spacing['--t-spacing-10'],
+    display: 'flex',
+    flexBasis: '0%',
+    flexDirection: 'column',
+    flexGrow: 1,
+    flexShrink: 1,
   },
   headingContainer: {
     marginBottom: spacing['--t-spacing-8'],

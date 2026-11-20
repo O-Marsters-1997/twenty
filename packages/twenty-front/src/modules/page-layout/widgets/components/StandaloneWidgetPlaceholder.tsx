@@ -25,13 +25,13 @@ export const StandaloneWidgetPlaceholder = () => {
 
 const styles = stylex.create({
   container: {
+    padding: spacing['--t-spacing-2'],
     backgroundColor: background['--t-background-secondary'],
     boxSizing: 'border-box',
     display: 'flex',
     flexDirection: 'column',
-    height: '100%',
-    padding: spacing['--t-spacing-2'],
     position: 'relative',
+    height: '100%',
     width: '100%',
   },
 });
