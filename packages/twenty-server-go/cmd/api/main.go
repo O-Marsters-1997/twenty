@@ -133,6 +133,7 @@ func run() error {
 			Queue:     queue.Enqueue,
 		}, logger),
 		authHandler,
+		workspaceSettingsHandler(pool, cfg, passwordLogins, logger),
 		agentgql.Operations,
 	))
 

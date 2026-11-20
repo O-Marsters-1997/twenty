@@ -1,0 +1,32 @@
+schema:
+  - "*.graphqls"
+exec:
+  filename: generated.go
+  package: workspacegql
+model:
+  filename: models_gen.go
+  package: workspacegql
+models:
+  UUID:
+    model: github.com/99designs/gqlgen/graphql.String
+  JSON:
+    model: github.com/99designs/gqlgen/graphql.Map
+  WorkspaceDiscoverability:
+    model: github.com/99designs/gqlgen/graphql.String
+  AiModelTier:
+    model: github.com/99designs/gqlgen/graphql.String
+  UpdateWorkspaceInput:
+    model: map[string]interface{}
+  Workspace:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workspace.Workspace
+    fields:
+      logo:
+        resolver: true
+      defaultRole:
+        resolver: true
+      isGoogleAuthEnabled:
+        resolver: true
+      isPasswordAuthEnabled:
+        resolver: true
+  Role:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workspace.Role
