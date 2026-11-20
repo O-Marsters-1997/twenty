@@ -4,4 +4,5 @@ export const AMBIGUOUS_ENGINE_COMPONENT_KEYS = [
   EngineComponentKey.COMPOSE_EMAIL,
   EngineComponentKey.COMPOSE_CAMPAIGN,
   EngineComponentKey.TRIGGER_WORKFLOW_VERSION,
+  EngineComponentKey.FRONT_COMPONENT_RENDERER,
 ] as const;
