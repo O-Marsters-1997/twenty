@@ -273,6 +273,12 @@ const generateModulePackageExports = (moduleDirectories: string[]) => {
   );
 };
 
+const STYLEX_SOURCE_EXPORTS = {
+  './theme/tokens.stylex': './src/theme/tokens.stylex.ts',
+  './theme/themes.stylex': './src/theme/themes.stylex.ts',
+  './theme/constants.stylex': './src/theme/constants.stylex.ts',
+};
+
 const computePackageJsonFilesAndExportsConfig = (
   moduleDirectories: string[],
 ) => {
@@ -284,6 +290,7 @@ const computePackageJsonFilesAndExportsConfig = (
       require: './dist/index.cjs',
     },
     ...generateModulePackageExports(moduleDirectories),
+    ...STYLEX_SOURCE_EXPORTS,
   } satisfies ExportsConfig;
 
   const typesVersionsEntries = entrypoints.reduce<Record<string, string[]>>(
@@ -299,6 +306,7 @@ const computePackageJsonFilesAndExportsConfig = (
     typesVersions: { '*': typesVersionsEntries },
     files: [
       'dist',
+      'src/theme/*.stylex.ts',
       'LICENSE',
       '!dist/individual',
       '!dist/individual/**',
@@ -318,6 +326,7 @@ const EXCLUDED_EXTENSIONS = [
   '**/*.spec.tsx',
   '**/*.stories.ts',
   '**/*.stories.tsx',
+  '**/*.stylex.ts',
 ] as const;
 const EXCLUDED_DIRECTORIES = [
   '**/__tests__/**',
