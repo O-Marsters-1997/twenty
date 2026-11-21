@@ -397,8 +397,9 @@ func TestUpdatePageLayoutWidget_Rejects(t *testing.T) {
 			if code := errorCode(h.send(t, h.handler(tt.caller), tt.query, nil)); code != tt.wantCode {
 				t.Errorf("error code = %v, want %s", code, tt.wantCode)
 			}
-			if _, overrides := h.widgetState(t, widgetFields); overrides == nil {
-				t.Error("rejected request changed the widget's overrides")
+			wantOverrides := map[string]any{customApp: map[string]any{"isActive": false}}
+			if _, overrides := h.widgetState(t, widgetFields); !cmp.Equal(wantOverrides, overrides) {
+				t.Errorf("rejected request changed the widget's overrides to %v", overrides)
 			}
 		})
 	}

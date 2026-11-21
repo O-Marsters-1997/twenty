@@ -20,6 +20,16 @@ var (
 	ErrPermissionDenied = errors.New("entity performing the request does not have permission")
 )
 
+type notFoundError struct{ message string }
+
+func (e notFoundError) Error() string { return e.message }
+
+func (notFoundError) Is(target error) bool { return target == ErrNotFound }
+
+func notFound(kind, id string) error {
+	return notFoundError{message: fmt.Sprintf("%s with ID %q not found", kind, id)}
+}
+
 type Layout struct {
 	ID, Name, Type, ApplicationID, UniversalIdentifier string
 	ObjectMetadataID, DefaultTabID                     *string
@@ -96,7 +106,7 @@ func (s *Store) Layouts(ctx context.Context, workspaceID, layoutType, objectMeta
 
 func (s *Store) Layout(ctx context.Context, workspaceID, id string) (Layout, error) {
 	if _, err := uuid.Parse(id); err != nil {
-		return Layout{}, fmt.Errorf("page layout with ID %q not found: %w", id, ErrNotFound)
+		return Layout{}, notFound("Page layout", id)
 	}
 	layouts, err := s.Layouts(ctx, workspaceID, "", "")
 	if err != nil {
@@ -104,7 +114,7 @@ func (s *Store) Layout(ctx context.Context, workspaceID, id string) (Layout, err
 	}
 	index := slices.IndexFunc(layouts, func(layout Layout) bool { return layout.ID == id })
 	if index < 0 {
-		return Layout{}, fmt.Errorf("page layout with ID %q not found: %w", id, ErrNotFound)
+		return Layout{}, notFound("Page layout", id)
 	}
 	return layouts[index], nil
 }
@@ -203,7 +213,7 @@ func (s *Store) HasLayoutsPermission(ctx context.Context, userWorkspaceID, apiKe
 
 func (s *Store) SetWidgetIsActive(ctx context.Context, workspaceID, id string, isActive bool) (Widget, error) {
 	if _, err := uuid.Parse(id); err != nil {
-		return Widget{}, fmt.Errorf("page layout widget with ID %q not found: %w", id, ErrNotFound)
+		return Widget{}, notFound("Page layout widget", id)
 	}
 	err := pgx.BeginFunc(ctx, s.pool, func(tx pgx.Tx) error {
 		var (
@@ -221,7 +231,7 @@ func (s *Store) SetWidgetIsActive(ctx context.Context, workspaceID, id string, i
 			 WHERE w.id = $1::uuid AND w."workspaceId" = $2::uuid AND w."deletedAt" IS NULL FOR UPDATE OF w`,
 			id, workspaceID).Scan(&raw, &columnIsActive, &isSystemSideEffect, &owner, &custom, &tabID)
 		if errors.Is(err, pgx.ErrNoRows) {
-			return fmt.Errorf("page layout widget with ID %q not found: %w", id, ErrNotFound)
+			return notFound("Page layout widget", id)
 		}
 		if err != nil {
 			return fmt.Errorf("load page layout widget: %w", err)

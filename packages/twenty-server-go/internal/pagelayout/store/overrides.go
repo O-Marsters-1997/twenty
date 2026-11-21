@@ -3,7 +3,6 @@ package store
 import (
 	"encoding/json"
 	"maps"
-	"reflect"
 	"slices"
 )
 
@@ -67,7 +66,7 @@ func (o overrides) withIsActive(isActive bool, owner, customApplication string, 
 	if entry == nil {
 		entry = map[string]any{}
 	}
-	if reflect.DeepEqual(isActive, beneath) {
+	if isActive == beneath {
 		delete(entry, "isActive")
 	} else {
 		entry["isActive"] = isActive
