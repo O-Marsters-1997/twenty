@@ -18,11 +18,11 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 `
 
 type CreateWorkflowVersionParams struct {
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfWorkflowVersionCreatedBySourceEnum
+	CreatedBySource            string
 	CreatedByWorkspaceMemberId pgtype.UUID
 	CreatedByName              string
 	CreatedByContext           []byte
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfWorkflowVersionUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte
@@ -30,7 +30,7 @@ type CreateWorkflowVersionParams struct {
 	Trigger                    []byte
 	Steps                      []byte
 	CoreWorkflowVersionId      pgtype.UUID
-	Status                     Workspace2abogkkt2zd45pa9aun09djpfWorkflowVersionStatusEnum
+	Status                     string
 	Position                   float64
 	WorkflowId                 pgtype.UUID
 }
@@ -164,7 +164,7 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 `
 
 type UpdateWorkflowVersionParams struct {
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfWorkflowVersionUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte
@@ -172,7 +172,7 @@ type UpdateWorkflowVersionParams struct {
 	Trigger                    []byte
 	Steps                      []byte
 	CoreWorkflowVersionId      pgtype.UUID
-	Status                     Workspace2abogkkt2zd45pa9aun09djpfWorkflowVersionStatusEnum
+	Status                     string
 	Position                   float64
 	WorkflowId                 pgtype.UUID
 	ID                         pgtype.UUID

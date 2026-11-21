@@ -1,13 +1,11 @@
 import { currentUserWorkspaceState } from '@/auth/states/currentUserWorkspaceState';
 import { AGENT_CHAT_THREAD_LIST_FILTER } from '@/ai/constants/AgentChatThreadListFilter';
 import { AGENT_CHAT_THREAD_LIST_RECORD_GQL_FIELDS } from '@/ai/constants/AgentChatThreadListRecordGqlFields';
-import { useRefreshAgentChatThreadPermissions } from '@/ai/hooks/useRefreshAgentChatThreadPermissions';
 import { agentChatThreadListState } from '@/ai/states/agentChatThreadListState';
 import { agentChatThreadParticipantsState } from '@/ai/states/agentChatThreadParticipantsState';
 import { agentChatThreadRecordUpdateCountState } from '@/ai/states/agentChatThreadRecordUpdateCountState';
 import { agentChatThreadStreamedParticipantsState } from '@/ai/states/agentChatThreadStreamedParticipantsState';
 import { agentChatUsageFamilyState } from '@/ai/states/agentChatUsageFamilyState';
-import { currentAiChatThreadState } from '@/ai/states/currentAiChatThreadState';
 import { type AgentChatThreadRecord } from '@/ai/types/AgentChatThreadRecord';
 import { getAgentChatThreadParticipantFromRecord } from '@/ai/utils/getAgentChatThreadParticipantFromRecord';
 import { getAgentChatUsageFromThread } from '@/ai/utils/getAgentChatUsageFromThread';
@@ -31,7 +29,7 @@ import {
   CoreObjectNameSingular,
   type RecordGqlOperationFilter,
 } from 'twenty-shared/types';
-import { isDefined, isValidUuid } from 'twenty-shared/utils';
+import { isDefined } from 'twenty-shared/utils';
 
 import { type AgentChatThreadParticipantFieldsFragment } from '~/generated-metadata/graphql';
 
@@ -40,8 +38,6 @@ export const useRefreshAgentChatThreads = () => {
   const store = useStore();
   const { objectPermissionsByObjectMetadataId } = useObjectPermissions();
   const { upsertRecordsInStore } = useUpsertRecordsInStore();
-  const { refreshAgentChatThreadPermissions } =
-    useRefreshAgentChatThreadPermissions();
   const { addAgentChatThread } = useApplyAgentChatThreadUpdate();
 
   const fetchAgentChatThreadsPage = useCallback(
@@ -177,14 +173,6 @@ export const useRefreshAgentChatThreads = () => {
           continue;
         }
 
-        const selectedThreadId = store.get(currentAiChatThreadState.atom);
-        await refreshAgentChatThreadPermissions([
-          ...page.threads.map(({ id }) => id),
-          ...(isDefined(selectedThreadId) && isValidUuid(selectedThreadId)
-            ? [selectedThreadId]
-            : []),
-        ]);
-
         if (!isSameSession() || hasChangedSinceRequest()) {
           continue;
         }
@@ -215,7 +203,6 @@ export const useRefreshAgentChatThreads = () => {
     [
       addAgentChatThreadParticipants,
       fetchAgentChatThreadsPage,
-      refreshAgentChatThreadPermissions,
       store,
       upsertRecordsInStore,
     ],
@@ -253,8 +240,6 @@ export const useRefreshAgentChatThreads = () => {
           return null;
         }
 
-        await refreshAgentChatThreadPermissions([thread.id]);
-
         if (
           store.get(agentChatThreadRecordUpdateCountState.atom) !==
           updateCountBeforeRequest
@@ -283,7 +268,6 @@ export const useRefreshAgentChatThreads = () => {
       addAgentChatThread,
       addAgentChatThreadParticipants,
       fetchAgentChatThreadsPage,
-      refreshAgentChatThreadPermissions,
       store,
     ],
   );

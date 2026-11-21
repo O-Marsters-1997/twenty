@@ -18,17 +18,17 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 `
 
 type CreateBlocklistParams struct {
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfBlocklistCreatedBySourceEnum
+	CreatedBySource            string
 	CreatedByWorkspaceMemberId pgtype.UUID
 	CreatedByName              string
 	CreatedByContext           []byte
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfBlocklistUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte
 	Position                   float64
 	Handle                     pgtype.Text
-	Scope                      Workspace2abogkkt2zd45pa9aun09djpfBlocklistScopeEnum
+	Scope                      string
 	WorkspaceMemberId          pgtype.UUID
 }
 
@@ -152,13 +152,13 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 `
 
 type UpdateBlocklistParams struct {
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfBlocklistUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte
 	Position                   float64
 	Handle                     pgtype.Text
-	Scope                      Workspace2abogkkt2zd45pa9aun09djpfBlocklistScopeEnum
+	Scope                      string
 	WorkspaceMemberId          pgtype.UUID
 	ID                         pgtype.UUID
 }

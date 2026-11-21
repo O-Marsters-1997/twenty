@@ -18,16 +18,16 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 `
 
 type CreateWorkflowAutomatedTriggerParams struct {
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfWorkflowAutomatedTriggerCreatedBySourceEnum
+	CreatedBySource            string
 	CreatedByWorkspaceMemberId pgtype.UUID
 	CreatedByName              string
 	CreatedByContext           []byte
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfWorkflowAutomatedTriggerUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte
 	Position                   float64
-	Type                       Workspace2abogkkt2zd45pa9aun09djpfWorkflowAutomatedTriggerTypeEnum
+	Type                       string
 	Settings                   []byte
 	WorkflowId                 pgtype.UUID
 }
@@ -152,12 +152,12 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 `
 
 type UpdateWorkflowAutomatedTriggerParams struct {
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfWorkflowAutomatedTriggerUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte
 	Position                   float64
-	Type                       Workspace2abogkkt2zd45pa9aun09djpfWorkflowAutomatedTriggerTypeEnum
+	Type                       string
 	Settings                   []byte
 	WorkflowId                 pgtype.UUID
 	ID                         pgtype.UUID

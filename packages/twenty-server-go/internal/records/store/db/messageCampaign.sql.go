@@ -18,11 +18,11 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 `
 
 type CreateMessageCampaignParams struct {
-	CreatedBySource             Workspace2abogkkt2zd45pa9aun09djpfMessageCampaignCreatedBySourceEnum
+	CreatedBySource             string
 	CreatedByWorkspaceMemberId  pgtype.UUID
 	CreatedByName               string
 	CreatedByContext            []byte
-	UpdatedBySource             Workspace2abogkkt2zd45pa9aun09djpfMessageCampaignUpdatedBySourceEnum
+	UpdatedBySource             string
 	UpdatedByWorkspaceMemberId  pgtype.UUID
 	UpdatedByName               string
 	UpdatedByContext            []byte
@@ -32,7 +32,7 @@ type CreateMessageCampaignParams struct {
 	BodyTemplate                pgtype.Text
 	FromAddressPrimaryEmail     pgtype.Text
 	FromAddressAdditionalEmails []byte
-	Status                      Workspace2abogkkt2zd45pa9aun09djpfMessageCampaignStatusEnum
+	Status                      string
 	ScheduledAt                 pgtype.Timestamptz
 	SentAt                      pgtype.Timestamptz
 	SentCount                   float64
@@ -220,7 +220,7 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 `
 
 type UpdateMessageCampaignParams struct {
-	UpdatedBySource             Workspace2abogkkt2zd45pa9aun09djpfMessageCampaignUpdatedBySourceEnum
+	UpdatedBySource             string
 	UpdatedByWorkspaceMemberId  pgtype.UUID
 	UpdatedByName               string
 	UpdatedByContext            []byte
@@ -230,7 +230,7 @@ type UpdateMessageCampaignParams struct {
 	BodyTemplate                pgtype.Text
 	FromAddressPrimaryEmail     pgtype.Text
 	FromAddressAdditionalEmails []byte
-	Status                      Workspace2abogkkt2zd45pa9aun09djpfMessageCampaignStatusEnum
+	Status                      string
 	ScheduledAt                 pgtype.Timestamptz
 	SentAt                      pgtype.Timestamptz
 	SentCount                   float64

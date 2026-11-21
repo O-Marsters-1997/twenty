@@ -13,7 +13,7 @@ describe('useGetBrowsingContext', () => {
     window.history.pushState(
       {},
       '',
-      '/settings/objects/opportunities/validation-rules/rule-1',
+      '/settings/objects/opportunities/indexes/index-1',
     );
     const store = createStore();
 
@@ -25,7 +25,7 @@ describe('useGetBrowsingContext', () => {
 
     expect(result.current.getBrowsingContext()).toEqual({
       type: 'settingsPage',
-      path: '/settings/objects/opportunities/validation-rules/rule-1',
+      path: '/settings/objects/opportunities/indexes/index-1',
     });
   });
 });

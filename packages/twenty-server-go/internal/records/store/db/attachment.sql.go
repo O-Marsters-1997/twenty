@@ -21,12 +21,12 @@ type CreateAttachmentParams struct {
 	Name                       pgtype.Text
 	File                       []byte
 	FullPath                   pgtype.Text
-	FileCategory               Workspace2abogkkt2zd45pa9aun09djpfAttachmentFileCategoryEnum
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfAttachmentCreatedBySourceEnum
+	FileCategory               string
+	CreatedBySource            string
 	CreatedByWorkspaceMemberId pgtype.UUID
 	CreatedByName              string
 	CreatedByContext           []byte
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfAttachmentUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte
@@ -191,8 +191,8 @@ type UpdateAttachmentParams struct {
 	Name                       pgtype.Text
 	File                       []byte
 	FullPath                   pgtype.Text
-	FileCategory               Workspace2abogkkt2zd45pa9aun09djpfAttachmentFileCategoryEnum
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfAttachmentUpdatedBySourceEnum
+	FileCategory               string
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte

@@ -18,11 +18,11 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 `
 
 type CreateCalendarEventParams struct {
-	CreatedBySource                Workspace2abogkkt2zd45pa9aun09djpfCalendarEventCreatedBySourceEnum
+	CreatedBySource                string
 	CreatedByWorkspaceMemberId     pgtype.UUID
 	CreatedByName                  string
 	CreatedByContext               []byte
-	UpdatedBySource                Workspace2abogkkt2zd45pa9aun09djpfCalendarEventUpdatedBySourceEnum
+	UpdatedBySource                string
 	UpdatedByWorkspaceMemberId     pgtype.UUID
 	UpdatedByName                  string
 	UpdatedByContext               []byte
@@ -196,7 +196,7 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 `
 
 type UpdateCalendarEventParams struct {
-	UpdatedBySource                Workspace2abogkkt2zd45pa9aun09djpfCalendarEventUpdatedBySourceEnum
+	UpdatedBySource                string
 	UpdatedByWorkspaceMemberId     pgtype.UUID
 	UpdatedByName                  string
 	UpdatedByContext               []byte

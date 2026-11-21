@@ -93,6 +93,8 @@ var PublicWorkspaceOperations = []string{
 
 var WorkspaceDataOperations = []string{"GetWorkspaceCreationDefaults", "CheckWorkspaceSubdomainAvailability", "GetWorkspaceIframeOrigins"}
 
+var WorkspaceSettingsOperations = []string{"UpdateWorkspace", "UpdateWorkspaceAllowedIframeOrigins", "ActivateWorkspace"}
+
 var blockedMetadataOperations = []string{
 	"CreateOneObjectMetadataItem", "UpdateOneObjectMetadataItem", "DeleteOneObjectMetadataItem",
 	"CreateOneFieldMetadataItem", "UpdateOneFieldMetadataItem", "DeleteOneFieldMetadataItem",

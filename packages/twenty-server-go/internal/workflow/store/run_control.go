@@ -25,7 +25,7 @@ func (s *Store) Retry(ctx context.Context, id string) (previous, current Run, re
 		if previous.Status != StatusFailed {
 			return nil
 		}
-		rows, err = tx.Query(ctx, `UPDATE `+table("workflowRun")+` SET status = 'RUNNING'::text::`+table("workflowRun_status_enum")+`,
+		rows, err = tx.Query(ctx, `UPDATE `+table("workflowRun")+` SET status = 'RUNNING',
 				"endedAt" = NULL, "updatedAt" = now(), `+clearFailedSteps+` WHERE id = $1 RETURNING `+runColumns, id)
 		if err != nil {
 			return fmt.Errorf("retry run: %w", err)
@@ -38,7 +38,7 @@ func (s *Store) Retry(ctx context.Context, id string) (previous, current Run, re
 }
 
 func (s *Store) Revert(ctx context.Context, previous Run) error {
-	_, err := s.pool.Exec(ctx, `UPDATE `+table("workflowRun")+` SET status = $2::text::`+table("workflowRun_status_enum")+`,
+	_, err := s.pool.Exec(ctx, `UPDATE `+table("workflowRun")+` SET status = $2,
 			state = $3, "endedAt" = $4, "updatedAt" = now() WHERE id = $1`, previous.ID, previous.Status, previous.State, previous.EndedAt)
 	if err != nil {
 		return fmt.Errorf("revert run: %w", err)

@@ -1,4 +1,3 @@
-import { useRefreshAgentChatThreadPermissions } from '@/ai/hooks/useRefreshAgentChatThreadPermissions';
 import { currentUserWorkspaceState } from '@/auth/states/currentUserWorkspaceState';
 import { isGraphqlErrorOfType } from '~/utils/is-graphql-error-of-type.util';
 import { agentChatFetchedMessagesFamilyState } from '@/ai/states/agentChatFetchedMessagesFamilyState';
@@ -47,15 +46,12 @@ import {
 } from '~/generated-metadata/graphql';
 
 const THROTTLE_MS = 100;
-const PERMISSIONS_REFRESH_INTERVAL_MS = 30_000;
 const MAX_SILENT_RECOVERY_ATTEMPTS = 3;
 
 export const useAgentChatSubscription = (threadId: string | null) => {
   const store = useStore();
   // Only a resubscribe trigger: an access denial ends the subscription until the member's permissions change
   const currentUserWorkspace = useAtomStateValue(currentUserWorkspaceState);
-  const { refreshAgentChatThreadPermissions } =
-    useRefreshAgentChatThreadPermissions();
   const { refreshAgentChatThreads } = useRefreshAgentChatThreads();
   const { applyAgentChatThreadUpdate } = useApplyAgentChatThreadUpdate();
   const sseClient = useAtomStateValue(sseClientState);
@@ -92,7 +88,6 @@ export const useAgentChatSubscription = (threadId: string | null) => {
     let writer: WritableStreamDefaultWriter<UIMessageChunk> | null = null;
     let disposed = false;
     let accessDenied = false;
-    let lastPermissionsRefreshAt: number | undefined;
     let lastBroadcastAt = Date.now();
     let hasReceivedInitialKeepalive = false;
 
@@ -264,15 +259,6 @@ export const useAgentChatSubscription = (threadId: string | null) => {
         }
 
         case 'keepalive': {
-          // The reconnect heartbeat also reloads shared link access, catching edit downgrades without polling.
-          if (
-            !isDefined(lastPermissionsRefreshAt) ||
-            Date.now() - lastPermissionsRefreshAt >=
-              PERMISSIONS_REFRESH_INTERVAL_MS
-          ) {
-            lastPermissionsRefreshAt = Date.now();
-            void refreshAgentChatThreadPermissions([threadId]);
-          }
           break;
         }
 
@@ -433,7 +419,6 @@ export const useAgentChatSubscription = (threadId: string | null) => {
     resubscribeNonce,
     store,
     refreshAgentChatThreads,
-    refreshAgentChatThreadPermissions,
     applyAgentChatThreadUpdate,
     currentUserWorkspace,
   ]);

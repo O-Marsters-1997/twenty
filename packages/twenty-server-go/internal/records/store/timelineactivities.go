@@ -80,9 +80,9 @@ func (t *TimelineActivities) Create(ctx context.Context, actor records.Actor, in
 		return records.TimelineActivity{}, err
 	}
 	row, err := t.queries.CreateTimelineActivity(ctx, db.CreateTimelineActivityParams{
-		CreatedBySource:            db.Workspace2abogkkt2zd45pa9aun09djpfTimelineActivityCreatedBySourceEnum(actor.Source),
+		CreatedBySource:            actor.Source,
 		CreatedByWorkspaceMemberId: memberID, CreatedByName: actor.Name,
-		UpdatedBySource:            db.Workspace2abogkkt2zd45pa9aun09djpfTimelineActivityUpdatedBySourceEnum(actor.Source),
+		UpdatedBySource:            actor.Source,
 		UpdatedByWorkspaceMemberId: memberID, UpdatedByName: actor.Name,
 		Position: position, HappensAt: merged.HappensAt, TimelineActivityTypeId: merged.TimelineActivityTypeId,
 		TimelineActivityTypeSnapshot: merged.TimelineActivityTypeSnapshot, Properties: merged.Properties,
@@ -125,7 +125,7 @@ func (t *TimelineActivities) Update(ctx context.Context, actor records.Actor, id
 		return records.TimelineActivity{}, err
 	}
 	row, err := t.queries.WithTx(tx).UpdateTimelineActivity(ctx, db.UpdateTimelineActivityParams{
-		UpdatedBySource:            db.Workspace2abogkkt2zd45pa9aun09djpfTimelineActivityUpdatedBySourceEnum(actor.Source),
+		UpdatedBySource:            actor.Source,
 		UpdatedByWorkspaceMemberId: memberID, UpdatedByName: actor.Name, UpdatedByContext: current.UpdatedByContext,
 		Position: current.Position, HappensAt: merged.HappensAt, TimelineActivityTypeId: merged.TimelineActivityTypeId,
 		TimelineActivityTypeSnapshot: merged.TimelineActivityTypeSnapshot, Properties: merged.Properties,

@@ -94,7 +94,7 @@ func (p *PublicData) findWorkspace(ctx context.Context, condition string, arg an
 func (p *PublicData) withSignedLogo(ctx context.Context, row publicWorkspaceRow) (PublicWorkspace, error) {
 	workspace := row.PublicWorkspace
 	if row.logoFileID != nil {
-		logo, err := p.login.logoURL(ctx, row.ID, *row.logoFileID)
+		logo, err := p.login.LogoURL(ctx, row.ID, *row.logoFileID)
 		if err != nil {
 			return PublicWorkspace{}, err
 		}

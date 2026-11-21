@@ -6,11 +6,6 @@ exec:
 model:
   filename: models_gen.go
   package: accessgql
-resolver:
-  layout: single-file
-  filename: resolver.go
-  package: accessgql
-  type: Resolver
 models:
   UUID:
     model: github.com/99designs/gqlgen/graphql.String

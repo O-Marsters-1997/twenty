@@ -1,12 +1,11 @@
 import { type Meta, type StoryObj } from '@storybook/react-vite';
 import { createStore, Provider } from 'jotai';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { expect, userEvent, within } from 'storybook/test';
 import { ComponentDecorator } from 'twenty-ui/testing';
 
 import { setAgentChatThreadList } from '@/ai/testing/setAgentChatThreadList';
-import { setAgentChatThreadPermissions } from '@/ai/testing/setAgentChatThreadPermissions';
 import { currentUserWorkspaceState } from '@/auth/states/currentUserWorkspaceState';
 import { MainNavigationDrawerContent } from '@/navigation/components/MainNavigationDrawerContent';
 import { isNavigationDrawerExpandedState } from '@/ui/navigation/states/isNavigationDrawerExpanded';
@@ -14,13 +13,6 @@ import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
 import { PermissionFlagType } from '~/generated-metadata/graphql';
 import { IconsProviderDecorator } from '~/testing/decorators/IconsProviderDecorator';
 import { ToastDecorator } from '~/testing/decorators/ToastDecorator';
-
-const THREAD_PERMISSIONS = {
-  canRead: true,
-  canUpdate: true,
-  canDelete: true,
-  canSoftDelete: true,
-};
 
 const THREAD = {
   __typename: 'AgentChatThread',
@@ -58,11 +50,6 @@ const AiNavigationContent = () => {
     setAgentChatThreadList(initialStore, [THREAD]);
     return initialStore;
   });
-
-  // Persisted auth atoms must hydrate before capturing the permission snapshot.
-  useEffect(() => {
-    setAgentChatThreadPermissions(store, THREAD.id, THREAD_PERMISSIONS);
-  }, [store]);
 
   return (
     <Provider store={store}>

@@ -142,6 +142,7 @@ func run() error {
 			Tokens:       stack.issuer,
 		}, logger),
 		authHandler,
+		workspaceSettingsHandler(pool, cfg, passwordLogins, logger),
 		agentgql.Operations,
 	))
 

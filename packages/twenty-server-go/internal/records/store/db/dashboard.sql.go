@@ -21,11 +21,11 @@ type CreateDashboardParams struct {
 	Title                      pgtype.Text
 	Position                   float64
 	PageLayoutId               pgtype.UUID
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfDashboardCreatedBySourceEnum
+	CreatedBySource            string
 	CreatedByWorkspaceMemberId pgtype.UUID
 	CreatedByName              string
 	CreatedByContext           []byte
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfDashboardUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte
@@ -151,7 +151,7 @@ type UpdateDashboardParams struct {
 	Title                      pgtype.Text
 	Position                   float64
 	PageLayoutId               pgtype.UUID
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfDashboardUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte
