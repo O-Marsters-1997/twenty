@@ -51,7 +51,7 @@ var WorkflowAuthoringOperations = []string{
 }
 
 var agentOperations = []string{
-	"FindManyAgents", "FindOneAgent", "CreateOneAgent", "UpdateOneAgent", "DeleteOneAgent", "AssignRoleToAgent",
+	"FindManyAgents", "FindOneAgent", "CreateOneAgent", "UpdateOneAgent", "DeleteOneAgent", "AssignRoleToAgent", "GetAgentRuns",
 }
 
 var MessagingOperations = []string{

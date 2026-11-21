@@ -237,12 +237,6 @@ const SettingsSkillForm = lazy(() =>
   })),
 );
 
-const SettingsAiPrompts = lazy(() =>
-  import('~/pages/settings/ai/SettingsAiPrompts').then((module) => ({
-    default: module.SettingsAiPrompts,
-  })),
-);
-
 const SettingsWorkspaceMembers = lazy(() =>
   import('~/pages/settings/members/SettingsWorkspaceMembers').then(
     (module) => ({
@@ -485,7 +479,6 @@ const createSettingsRouteElements = () => (
       }
     >
       <Route path={SettingsPath.AI} element={<SettingsAI />} />
-      <Route path={SettingsPath.AiPrompts} element={<SettingsAiPrompts />} />
       <Route
         path={SettingsPath.AiNewSkill}
         element={<SettingsSkillForm mode="create" />}

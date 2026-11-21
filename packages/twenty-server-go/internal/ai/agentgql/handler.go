@@ -17,10 +17,10 @@ import (
 )
 
 // Operations are the /metadata operations this handler serves.
-var Operations = []string{"FindManyAgents", "FindOneAgent", "CreateOneAgent", "UpdateOneAgent", "DeleteOneAgent", "AssignRoleToAgent"}
+var Operations = []string{"FindManyAgents", "FindOneAgent", "CreateOneAgent", "UpdateOneAgent", "DeleteOneAgent", "AssignRoleToAgent", "GetAgentRuns"}
 
-func NewHandler(agents *store.Agents, logger *slog.Logger) http.Handler {
-	server := handler.New(NewExecutableSchema(Config{Resolvers: &Resolver{Agents: agents}}))
+func NewHandler(agents *store.Agents, runs *store.Runs, logger *slog.Logger) http.Handler {
+	server := handler.New(NewExecutableSchema(Config{Resolvers: &Resolver{Agents: agents, Runs: runs}}))
 	server.AddTransport(transport.POST{})
 	server.SetErrorPresenter(func(ctx context.Context, err error) *gqlerror.Error {
 		presented := graphql.DefaultErrorPresenter(ctx, err)

@@ -9,6 +9,22 @@ import (
 
 type Resolver struct {
 	Agents *store.Agents
+	Runs   *store.Runs
+}
+
+func (r *queryResolver) AgentRuns(ctx context.Context, agentID string, limit *int) ([]*ai.AgentRun, error) {
+	if _, err := r.Agents.Get(ctx, agentID); err != nil {
+		return nil, err
+	}
+	runs, err := r.Runs.List(ctx, agentID, limit)
+	if err != nil {
+		return nil, err
+	}
+	listed := make([]*ai.AgentRun, len(runs))
+	for i := range runs {
+		listed[i] = &runs[i]
+	}
+	return listed, nil
 }
 
 func (r *mutationResolver) CreateOneAgent(ctx context.Context, input map[string]any) (*ai.AgentRecord, error) {
