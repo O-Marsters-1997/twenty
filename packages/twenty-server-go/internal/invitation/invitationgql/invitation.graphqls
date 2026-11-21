@@ -1,0 +1,30 @@
+scalar UUID
+scalar DateTime
+
+type WorkspaceInvitation {
+  id: UUID!
+  email: String!
+  roleId: UUID
+  expiresAt: DateTime!
+}
+
+type ApprovedAccessDomain {
+  id: UUID!
+  domain: String!
+  isValidated: Boolean!
+  createdAt: DateTime!
+}
+
+input DeleteApprovedAccessDomainInput {
+  id: UUID!
+}
+
+extend type Query {
+  findWorkspaceInvitations: [WorkspaceInvitation!]!
+  getApprovedAccessDomains: [ApprovedAccessDomain!]!
+}
+
+extend type Mutation {
+  deleteWorkspaceInvitation(appTokenId: String!): String!
+  deleteApprovedAccessDomain(input: DeleteApprovedAccessDomainInput!): Boolean!
+}

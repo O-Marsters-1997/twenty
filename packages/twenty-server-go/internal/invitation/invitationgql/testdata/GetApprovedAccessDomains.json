@@ -1,0 +1,15 @@
+{
+  "name": "GetApprovedAccessDomains",
+  "operation": "GetApprovedAccessDomains",
+  "fixture": "workspace with a validated and an unvalidated approved access domain and another workspace's domain",
+  "endpoint": "/metadata",
+  "query": "query GetApprovedAccessDomains { getApprovedAccessDomains { id createdAt domain isValidated } }",
+  "response": {
+    "data": {
+      "getApprovedAccessDomains": [
+        {"id": "b1000000-0000-4000-8000-000000000001", "createdAt": "2026-01-01T00:00:00.000Z", "domain": "example.com", "isValidated": true},
+        {"id": "b1000000-0000-4000-8000-000000000002", "createdAt": "2026-01-02T00:00:00.000Z", "domain": "acme.test", "isValidated": false}
+      ]
+    }
+  }
+}
