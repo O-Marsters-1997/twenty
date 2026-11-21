@@ -16,6 +16,8 @@ import (
 	"github.com/riverqueue/river"
 	"github.com/riverqueue/river/riverdriver/riverpgxv5"
 
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/access/accessgql"
+	accessstore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/access/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai/agentgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai/aigql"
@@ -133,6 +135,13 @@ func run() error {
 			Campaigns: messagingstore.NewCampaigns(pool),
 			Renderer:  messaging.GoRenderer{},
 			Queue:     queue.Enqueue,
+		}, logger),
+		accessgql.NewHandler(&accessgql.Resolver{
+			WebhookStore: accessstore.NewWebhooks(pool),
+			APIKeyStore:  accessstore.NewAPIKeys(pool),
+			RoleStore:    accessstore.NewRoles(pool),
+			Permissions:  accessstore.NewPermissions(pool),
+			Tokens:       stack.issuer,
 		}, logger),
 		authHandler,
 		workspaceSettingsHandler(pool, cfg, passwordLogins, logger),
