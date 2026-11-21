@@ -1,0 +1,19 @@
+{
+  "name": "UpdatePageLayoutWidgetIsActive",
+  "operation": "UpdatePageLayoutWidgetIsActive",
+  "fixture": "standard timeline widget on a record page, hidden by a caller holding the layouts permission",
+  "endpoint": "/metadata",
+  "query": "mutation UpdatePageLayoutWidgetIsActive($id: String!, $isActive: Boolean!) { updatePageLayoutWidget(id: $id, input: { isActive: $isActive }) { id isActive } }",
+  "variables": {
+    "id": "c1000000-0000-4000-8000-000000000002",
+    "isActive": false
+  },
+  "response": {
+    "data": {
+      "updatePageLayoutWidget": {
+        "id": "c1000000-0000-4000-8000-000000000002",
+        "isActive": false
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "FindAllStandalonePageLayouts",
+  "operation": "FindAllStandalonePageLayouts",
+  "fixture": "page layouts of a record page with a renamed tab, a widget hidden and a widget moved through custom-application overrides, a record form, a standalone page, a deleted layout and a dashboard of chart widgets; deleted tabs and widgets are excluded",
+  "endpoint": "/metadata",
+  "query": "query FindAllStandalonePageLayouts { getPageLayouts(pageLayoutType: STANDALONE_PAGE) { id name } }",
+  "response": {
+    "data": {
+      "getPageLayouts": [
+        {
+          "id": "a1000000-0000-4000-8000-000000000003",
+          "name": "Settings home"
+        }
+      ]
+    }
+  }
+}

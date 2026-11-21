@@ -1,0 +1,18 @@
+{
+  "name": "FindOnePageLayoutType",
+  "operation": "FindOnePageLayoutType",
+  "fixture": "page layouts of a record page with a renamed tab, a widget hidden and a widget moved through custom-application overrides, a record form, a standalone page, a deleted layout and a dashboard of chart widgets; deleted tabs and widgets are excluded",
+  "endpoint": "/metadata",
+  "query": "query FindOnePageLayoutType($id: String!) { getPageLayout(id: $id) { id type } }",
+  "variables": {
+    "id": "a1000000-0000-4000-8000-000000000002"
+  },
+  "response": {
+    "data": {
+      "getPageLayout": {
+        "id": "a1000000-0000-4000-8000-000000000002",
+        "type": "RECORD_FORM"
+      }
+    }
+  }
+}
