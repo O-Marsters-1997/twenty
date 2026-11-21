@@ -84,6 +84,8 @@ var InvitationOperations = []string{
 	"GetWorkspaceInvitations", "DeleteWorkspaceInvitation", "GetApprovedAccessDomains", "DeleteApprovedAccessDomain",
 }
 
+var ApplicationOperations = []string{"FindManyApplications", "FindManyApplicationsForToolTable", "FindManyTimelineActivityTypes"}
+
 var blockedMetadataFields = []string{
 	"createOneObject", "updateOneObject", "deleteOneObject",
 	"createOneField", "updateOneField", "deleteOneField",

@@ -1,0 +1,47 @@
+scalar UUID
+scalar DateTime
+
+type Application {
+  id: UUID!
+  name: String!
+  description: String
+  logoUrl: String
+  version: String
+  universalIdentifier: String!
+  createdAt: DateTime!
+  defaultRoleId: String
+}
+
+type TimelineActivityTypeEmitThrough {
+  relationFieldUniversalIdentifier: UUID!
+  triggerFieldUniversalIdentifiers: [UUID!]
+  happensAtFieldUniversalIdentifier: UUID
+}
+
+type TimelineActivityTypeEmit {
+  on: String!
+  objectUniversalIdentifier: UUID
+  through: TimelineActivityTypeEmitThrough
+}
+
+type TimelineActivityType {
+  id: UUID!
+  universalIdentifier: UUID!
+  name: String!
+  label: String!
+  emit: TimelineActivityTypeEmit
+  action: String @deprecated(reason: "Use emit.on")
+  icon: String
+  frontComponentUniversalIdentifier: UUID
+  objectUniversalIdentifier: UUID @deprecated(reason: "Use emit.objectUniversalIdentifier")
+  replacesTimelineActivityTypeUniversalIdentifier: UUID
+  isActive: Boolean!
+  applicationId: UUID
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+extend type Query {
+  findManyApplications: [Application!]!
+  timelineActivityTypes: [TimelineActivityType!]!
+}

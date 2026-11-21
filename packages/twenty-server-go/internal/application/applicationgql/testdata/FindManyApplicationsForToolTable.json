@@ -1,0 +1,16 @@
+{
+  "name": "FindManyApplicationsForToolTable",
+  "operation": "FindManyApplicationsForToolTable",
+  "fixture": "workspace with a custom app, an app with a bundled logo, an app with an absolute logo url, a soft-deleted app and another workspace's app. Hand-written from ApplicationInstallResolver, ApplicationResolver.logoUrl and ApplicationDTO; no Node server was run",
+  "endpoint": "/metadata",
+  "query": "query FindManyApplicationsForToolTable { findManyApplications { id name universalIdentifier logoUrl } }",
+  "response": {
+    "data": {
+      "findManyApplications": [
+        {"id": "c2000000-0000-4000-8000-000000000001", "name": "Custom", "universalIdentifier": "c3000000-0000-4000-8000-000000000001", "logoUrl": null},
+        {"id": "c2000000-0000-4000-8000-000000000002", "name": "Standard", "universalIdentifier": "c3000000-0000-4000-8000-000000000002", "logoUrl": "http://localhost:3000/public-assets/20202020-1c25-4d02-bf25-6aeccf7ea419/c2000000-0000-4000-8000-000000000002/logo.png"},
+        {"id": "c2000000-0000-4000-8000-000000000003", "name": "Hosted", "universalIdentifier": "c3000000-0000-4000-8000-000000000003", "logoUrl": "https://cdn.example.com/hosted.png"}
+      ]
+    }
+  }
+}
