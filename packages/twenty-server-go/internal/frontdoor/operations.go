@@ -73,6 +73,10 @@ var SessionOperations = []string{"getAuthTokensFromLoginToken", "RenewToken", "S
 
 var SessionManagementOperations = []string{"CurrentUserSessions", "RevokeUserSession", "RevokeAllOtherUserSessions", "generateTransientToken"}
 
+var InvitationOperations = []string{
+	"GetWorkspaceInvitations", "DeleteWorkspaceInvitation", "GetApprovedAccessDomains", "DeleteApprovedAccessDomain",
+}
+
 var blockedMetadataFields = []string{
 	"createOneObject", "updateOneObject", "deleteOneObject",
 	"createOneField", "updateOneField", "deleteOneField",

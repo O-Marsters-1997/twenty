@@ -1,0 +1,15 @@
+{
+  "name": "GetWorkspaceInvitations",
+  "operation": "GetWorkspaceInvitations",
+  "fixture": "workspace with an invitation carrying a role, an onboarding invitation, a soft-deleted invitation and another workspace's invitation",
+  "endpoint": "/metadata",
+  "query": "query GetWorkspaceInvitations { findWorkspaceInvitations { id email roleId expiresAt } }",
+  "response": {
+    "data": {
+      "findWorkspaceInvitations": [
+        {"id": "a1000000-0000-4000-8000-000000000001", "email": "ada@example.com", "roleId": "d0000000-0000-4000-8000-000000000003", "expiresAt": "2030-01-01T00:00:00.000Z"},
+        {"id": "a1000000-0000-4000-8000-000000000002", "email": "bob@example.com", "roleId": null, "expiresAt": "2030-01-02T00:00:00.000Z"}
+      ]
+    }
+  }
+}
