@@ -44,7 +44,7 @@ jobs:
           else
             outside_projects='^(\.github|\.moon|scripts)/|^(package\.json|bun\.lock|knip\.json|tsconfig\.base\.json|jest\.preset\.js|\.oxfmtrc\.jsonc|bunfig\.toml)$'
             everything=$(npx moon query changed-files | jq --arg pattern "$outside_projects" '[.files[] | select(test($pattern))] | length > 0')
-            affected=$(npx moon query affected --downstream deep | jq -r '.projects | keys[]')
+            affected=$(npx moon query projects --affected --downstream deep --json | jq -r '.projects[].id')
           fi
           emit() {
             if [ "$everything" = true ] || printf '%s\n' "$affected" | grep -qx "$2"; then
