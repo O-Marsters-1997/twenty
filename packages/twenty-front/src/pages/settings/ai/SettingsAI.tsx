@@ -112,9 +112,7 @@ export const SettingsAI = () => {
             />
           </Section.Root>
         )}
-        {isOverviewTab && (
-          <SettingsAiOverviewTab />
-        )}
+        {isOverviewTab && <SettingsAiOverviewTab />}
         {isModelsTab && <SettingsAiModelsTab />}
         {isSkillsTab && <SettingsAgentSkillsTab />}
         {isToolsTab && <SettingsAgentToolsTab />}
