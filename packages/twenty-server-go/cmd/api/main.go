@@ -35,6 +35,8 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/metadatagql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/metagql"
 	metadatastore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/store"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/pagelayout/pagelayoutgql"
+	pagelayoutstore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/pagelayout/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records/recordsgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records/store"
@@ -146,6 +148,7 @@ func run() error {
 		authHandler,
 		workspaceSettingsHandler(pool, cfg, passwordLogins, logger),
 		invitationgql.NewHandler(&invitationgql.Resolver{Store: invitationstore.New(pool)}, logger),
+		pagelayoutgql.NewHandler(&pagelayoutgql.Resolver{Store: pagelayoutstore.New(pool)}, logger),
 		agentgql.Operations,
 	))
 

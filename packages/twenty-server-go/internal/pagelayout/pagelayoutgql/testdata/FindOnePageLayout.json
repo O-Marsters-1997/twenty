@@ -1,0 +1,278 @@
+{
+  "name": "FindOnePageLayout",
+  "operation": "FindOnePageLayout",
+  "fixture": "page layouts of a record page with a renamed tab, a widget hidden and a widget moved through custom-application overrides, a record form, a standalone page, a deleted layout and a dashboard of chart widgets; deleted tabs and widgets are excluded",
+  "endpoint": "/metadata",
+  "query": "query FindOnePageLayout($id: String!) { getPageLayout(id: $id) { ...PageLayoutFragment } } fragment PageLayoutFragment on PageLayout { id applicationId name objectMetadataId type universalIdentifier isSystemSideEffect isFirstTabPinned defaultTabToFocusOnMobileAndSidePanelId createdAt updatedAt tabs { ...PageLayoutTabFragment } } fragment PageLayoutTabFragment on PageLayoutTab { id applicationId universalIdentifier isSystemSideEffect title icon position layoutMode widgets { ...PageLayoutWidgetFragment } pageLayoutId isActive createdAt updatedAt } fragment PageLayoutWidgetFragment on PageLayoutWidget { id applicationId universalIdentifier isSystemSideEffect title type objectMetadataId createdAt updatedAt isActive deletedAt conditionalDisplay conditionalAvailabilityExpression gridPosition { column columnSpan row rowSpan } position { ... on PageLayoutWidgetGridPosition { layoutMode row column rowSpan columnSpan } ... on PageLayoutWidgetVerticalListPosition { layoutMode index heightBehavior } ... on PageLayoutWidgetCanvasPosition { layoutMode } } configuration { ... on BarChartConfiguration { configurationType aggregateFieldMetadataId aggregateOperation primaryAxisGroupByFieldMetadataId primaryAxisGroupBySubFieldName primaryAxisDateGranularity primaryAxisOrderBy primaryAxisManualSortOrder secondaryAxisGroupByFieldMetadataId secondaryAxisGroupBySubFieldName secondaryAxisGroupByDateGranularity secondaryAxisOrderBy secondaryAxisManualSortOrder omitNullValues axisNameDisplay displayDataLabel displayLegend numberFormat rangeMin rangeMax color description filter groupMode layout isCumulative splitMultiValueFields timezone firstDayOfTheWeek } ... on LineChartConfiguration { configurationType aggregateFieldMetadataId aggregateOperation primaryAxisGroupByFieldMetadataId primaryAxisGroupBySubFieldName primaryAxisDateGranularity primaryAxisOrderBy primaryAxisManualSortOrder secondaryAxisGroupByFieldMetadataId secondaryAxisGroupBySubFieldName secondaryAxisGroupByDateGranularity secondaryAxisOrderBy secondaryAxisManualSortOrder omitNullValues axisNameDisplay displayDataLabel displayLegend numberFormat rangeMin rangeMax color description filter isStacked isCumulative splitMultiValueFields timezone firstDayOfTheWeek } ... on PieChartConfiguration { configurationType groupByFieldMetadataId aggregateFieldMetadataId aggregateOperation groupBySubFieldName dateGranularity orderBy manualSortOrder displayDataLabel showCenterMetric displayLegend numberFormat hideEmptyCategory splitMultiValueFields color description filter timezone firstDayOfTheWeek } ... on AggregateChartConfiguration { configurationType aggregateFieldMetadataId aggregateOperation label displayDataLabel numberFormat description filter prefix suffix timezone firstDayOfTheWeek ratioAggregateConfig { fieldMetadataId optionValue } } ... on IframeConfiguration { configurationType url } ... on StandaloneRichTextConfiguration { configurationType body { blocknote markdown } } ... on CalendarConfiguration { configurationType } ... on EmailsConfiguration { configurationType } ... on EmailThreadConfiguration { configurationType } ... on ChatThreadsConfiguration { configurationType } ... on ChatConfiguration { configurationType } ... on MessageCampaignBodyConfiguration { configurationType } ... on MessageCampaignDetailsConfiguration { configurationType } ... on FieldConfiguration { configurationType fieldDisplayMode fieldMetadataId viewId nestedRelationFieldMetadataId isUIEditable } ... on FieldRichTextConfiguration { configurationType } ... on FieldsConfiguration { configurationType viewId newFieldDefaultVisibility shouldAllowUserToSeeHiddenFields } ... on FormFieldConfiguration { configurationType fieldMetadataId } ... on FilesConfiguration { configurationType } ... on NotesConfiguration { configurationType } ... on TasksConfiguration { configurationType } ... on TimelineConfiguration { configurationType } ... on ViewConfiguration { configurationType } ... on RecordTableConfiguration { configurationType viewId recordLimit isUIEditable } ... on WorkflowConfiguration { configurationType } ... on WorkflowRunConfiguration { configurationType } ... on WorkflowVersionConfiguration { configurationType } } pageLayoutTabId }",
+  "variables": {
+    "id": "a1000000-0000-4000-8000-000000000005"
+  },
+  "response": {
+    "data": {
+      "getPageLayout": {
+        "id": "a1000000-0000-4000-8000-000000000005",
+        "applicationId": "49b628b1-2acf-487e-b40a-4c9f5e53a125",
+        "name": "Sales dashboard",
+        "objectMetadataId": null,
+        "type": "DASHBOARD",
+        "universalIdentifier": "a1000000-0000-4000-8000-000000000005",
+        "isSystemSideEffect": false,
+        "isFirstTabPinned": true,
+        "defaultTabToFocusOnMobileAndSidePanelId": null,
+        "createdAt": "2026-01-05T00:00:00.000Z",
+        "updatedAt": "2026-01-05T00:00:00.000Z",
+        "tabs": [
+          {
+            "id": "b1000000-0000-4000-8000-000000000005",
+            "applicationId": "49b628b1-2acf-487e-b40a-4c9f5e53a125",
+            "universalIdentifier": "b1000000-0000-4000-8000-000000000005",
+            "isSystemSideEffect": false,
+            "title": "Charts",
+            "icon": null,
+            "position": 0,
+            "layoutMode": "GRID",
+            "widgets": [
+              {
+                "id": "c1000000-0000-4000-8000-000000000004",
+                "applicationId": "49b628b1-2acf-487e-b40a-4c9f5e53a125",
+                "universalIdentifier": "c1000000-0000-4000-8000-000000000004",
+                "isSystemSideEffect": false,
+                "title": "Deals by company",
+                "type": "GRAPH",
+                "objectMetadataId": null,
+                "createdAt": "2026-01-01T00:00:04.000Z",
+                "updatedAt": "2026-01-01T00:00:00.000Z",
+                "isActive": true,
+                "deletedAt": null,
+                "conditionalDisplay": null,
+                "conditionalAvailabilityExpression": null,
+                "gridPosition": {
+                  "row": 0,
+                  "column": 0,
+                  "rowSpan": 2,
+                  "columnSpan": 6
+                },
+                "position": {
+                  "layoutMode": "GRID",
+                  "row": 0,
+                  "column": 0,
+                  "rowSpan": 2,
+                  "columnSpan": 6
+                },
+                "configuration": {
+                  "configurationType": "PIE_CHART",
+                  "groupByFieldMetadataId": "44000000-0000-4000-8000-000000000001",
+                  "aggregateFieldMetadataId": "44000000-0000-4000-8000-000000000002",
+                  "aggregateOperation": "COUNT",
+                  "groupBySubFieldName": "name",
+                  "dateGranularity": null,
+                  "orderBy": "FIELD_ASC",
+                  "manualSortOrder": null,
+                  "displayDataLabel": false,
+                  "showCenterMetric": true,
+                  "displayLegend": true,
+                  "numberFormat": null,
+                  "hideEmptyCategory": null,
+                  "splitMultiValueFields": null,
+                  "color": "orange",
+                  "description": null,
+                  "filter": null,
+                  "timezone": "UTC",
+                  "firstDayOfTheWeek": 0
+                },
+                "pageLayoutTabId": "b1000000-0000-4000-8000-000000000005"
+              },
+              {
+                "id": "c1000000-0000-4000-8000-000000000005",
+                "applicationId": "49b628b1-2acf-487e-b40a-4c9f5e53a125",
+                "universalIdentifier": "c1000000-0000-4000-8000-000000000005",
+                "isSystemSideEffect": false,
+                "title": "Welcome",
+                "type": "STANDALONE_RICH_TEXT",
+                "objectMetadataId": null,
+                "createdAt": "2026-01-01T00:00:05.000Z",
+                "updatedAt": "2026-01-01T00:00:00.000Z",
+                "isActive": true,
+                "deletedAt": null,
+                "conditionalDisplay": null,
+                "conditionalAvailabilityExpression": null,
+                "gridPosition": {
+                  "row": 0,
+                  "column": 0,
+                  "rowSpan": 2,
+                  "columnSpan": 6
+                },
+                "position": {
+                  "layoutMode": "GRID",
+                  "row": 0,
+                  "column": 6,
+                  "rowSpan": 2,
+                  "columnSpan": 6
+                },
+                "configuration": {
+                  "configurationType": "STANDALONE_RICH_TEXT",
+                  "body": {
+                    "blocknote": "[{\"type\":\"paragraph\"}]",
+                    "markdown": null
+                  }
+                },
+                "pageLayoutTabId": "b1000000-0000-4000-8000-000000000005"
+              },
+              {
+                "id": "c1000000-0000-4000-8000-000000000009",
+                "applicationId": "49b628b1-2acf-487e-b40a-4c9f5e53a125",
+                "universalIdentifier": "c1000000-0000-4000-8000-000000000009",
+                "isSystemSideEffect": false,
+                "title": "Win rate",
+                "type": "GRAPH",
+                "objectMetadataId": null,
+                "createdAt": "2026-01-01T00:00:09.000Z",
+                "updatedAt": "2026-01-01T00:00:00.000Z",
+                "isActive": true,
+                "deletedAt": null,
+                "conditionalDisplay": null,
+                "conditionalAvailabilityExpression": null,
+                "gridPosition": {
+                  "row": 0,
+                  "column": 0,
+                  "rowSpan": 2,
+                  "columnSpan": 6
+                },
+                "position": {
+                  "layoutMode": "GRID",
+                  "row": 2,
+                  "column": 0,
+                  "rowSpan": 2,
+                  "columnSpan": 6
+                },
+                "configuration": {
+                  "configurationType": "AGGREGATE_CHART",
+                  "aggregateFieldMetadataId": "44000000-0000-4000-8000-000000000002",
+                  "aggregateOperation": "PERCENTAGE_NOT_EMPTY",
+                  "label": null,
+                  "displayDataLabel": null,
+                  "numberFormat": null,
+                  "description": null,
+                  "filter": {
+                    "recordFilters": []
+                  },
+                  "prefix": null,
+                  "suffix": null,
+                  "timezone": null,
+                  "firstDayOfTheWeek": null,
+                  "ratioAggregateConfig": {
+                    "fieldMetadataId": "44000000-0000-4000-8000-000000000003",
+                    "optionValue": "WON"
+                  }
+                },
+                "pageLayoutTabId": "b1000000-0000-4000-8000-000000000005"
+              },
+              {
+                "id": "c1000000-0000-4000-8000-00000000000a",
+                "applicationId": "49b628b1-2acf-487e-b40a-4c9f5e53a125",
+                "universalIdentifier": "c1000000-0000-4000-8000-00000000000a",
+                "isSystemSideEffect": false,
+                "title": "Revenue",
+                "type": "GRAPH",
+                "objectMetadataId": null,
+                "createdAt": "2026-01-01T00:00:10.000Z",
+                "updatedAt": "2026-01-01T00:00:00.000Z",
+                "isActive": true,
+                "deletedAt": null,
+                "conditionalDisplay": null,
+                "conditionalAvailabilityExpression": null,
+                "gridPosition": {
+                  "row": 0,
+                  "column": 0,
+                  "rowSpan": 2,
+                  "columnSpan": 6
+                },
+                "position": {
+                  "layoutMode": "GRID",
+                  "row": 2,
+                  "column": 6,
+                  "rowSpan": 2,
+                  "columnSpan": 6
+                },
+                "configuration": {
+                  "aggregateFieldMetadataId": "44000000-0000-4000-8000-000000000002",
+                  "aggregateOperation": "SUM",
+                  "primaryAxisGroupByFieldMetadataId": "44000000-0000-4000-8000-000000000001",
+                  "primaryAxisGroupBySubFieldName": null,
+                  "primaryAxisDateGranularity": null,
+                  "primaryAxisOrderBy": null,
+                  "primaryAxisManualSortOrder": [
+                    "a",
+                    "b"
+                  ],
+                  "secondaryAxisGroupByFieldMetadataId": null,
+                  "secondaryAxisGroupBySubFieldName": null,
+                  "secondaryAxisGroupByDateGranularity": null,
+                  "secondaryAxisOrderBy": null,
+                  "secondaryAxisManualSortOrder": null,
+                  "omitNullValues": null,
+                  "axisNameDisplay": null,
+                  "displayDataLabel": null,
+                  "displayLegend": null,
+                  "numberFormat": null,
+                  "rangeMin": 0.5,
+                  "rangeMax": null,
+                  "color": null,
+                  "description": null,
+                  "filter": null,
+                  "groupMode": null,
+                  "layout": "VERTICAL",
+                  "isCumulative": null,
+                  "splitMultiValueFields": null,
+                  "timezone": null,
+                  "firstDayOfTheWeek": null,
+                  "configurationType": "BAR_CHART"
+                },
+                "pageLayoutTabId": "b1000000-0000-4000-8000-000000000005"
+              },
+              {
+                "id": "c1000000-0000-4000-8000-00000000000b",
+                "applicationId": "49b628b1-2acf-487e-b40a-4c9f5e53a125",
+                "universalIdentifier": "c1000000-0000-4000-8000-00000000000b",
+                "isSystemSideEffect": false,
+                "title": "Open deals",
+                "type": "RECORD_TABLE",
+                "objectMetadataId": null,
+                "createdAt": "2026-01-01T00:00:11.000Z",
+                "updatedAt": "2026-01-01T00:00:00.000Z",
+                "isActive": true,
+                "deletedAt": null,
+                "conditionalDisplay": null,
+                "conditionalAvailabilityExpression": null,
+                "gridPosition": {
+                  "row": 0,
+                  "column": 0,
+                  "rowSpan": 2,
+                  "columnSpan": 6
+                },
+                "position": {
+                  "layoutMode": "GRID",
+                  "row": 4,
+                  "column": 0,
+                  "rowSpan": 2,
+                  "columnSpan": 12
+                },
+                "configuration": {
+                  "configurationType": "RECORD_TABLE",
+                  "viewId": "11000000-0000-4000-8000-000000000001",
+                  "recordLimit": 10,
+                  "isUIEditable": null
+                },
+                "pageLayoutTabId": "b1000000-0000-4000-8000-000000000005"
+              }
+            ],
+            "pageLayoutId": "a1000000-0000-4000-8000-000000000005",
+            "isActive": true,
+            "createdAt": "2026-01-01T00:00:00.000Z",
+            "updatedAt": "2026-01-02T00:00:00.000Z"
+          }
+        ]
+      }
+    }
+  }
+}
