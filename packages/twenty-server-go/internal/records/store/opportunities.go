@@ -15,7 +15,7 @@ import (
 
 const opportunityColumns = `"id", "createdAt", "updatedAt", "deletedAt", "name", "amountAmountMicros", "amountCurrencyCode", "closeDate", "stage", "position", "createdBySource", "createdByWorkspaceMemberId", "createdByName", "createdByContext", "updatedBySource", "updatedByWorkspaceMemberId", "updatedByName", "updatedByContext", "searchVector", "companyId", "pointOfContactId", "ownerId"`
 
-const defaultOpportunityStage = db.Workspace2abogkkt2zd45pa9aun09djpfOpportunityStageEnumNEW
+const defaultOpportunityStage = "NEW"
 
 type opportunityRow = db.Workspace2abogkkt2zd45pa9aun09djpfOpportunity
 
@@ -49,8 +49,8 @@ func (o *Opportunities) Create(ctx context.Context, actor records.Actor, input r
 	row, err := o.queries.CreateOpportunity(ctx, db.CreateOpportunityParams{
 		Name: merged.Name, AmountAmountMicros: merged.AmountAmountMicros, AmountCurrencyCode: merged.AmountCurrencyCode,
 		CloseDate: merged.CloseDate, Stage: merged.Stage, Position: position,
-		CreatedBySource: db.Workspace2abogkkt2zd45pa9aun09djpfOpportunityCreatedBySourceEnum(actor.Source), CreatedByWorkspaceMemberId: memberID, CreatedByName: actor.Name,
-		UpdatedBySource: db.Workspace2abogkkt2zd45pa9aun09djpfOpportunityUpdatedBySourceEnum(actor.Source), UpdatedByWorkspaceMemberId: memberID, UpdatedByName: actor.Name,
+		CreatedBySource: actor.Source, CreatedByWorkspaceMemberId: memberID, CreatedByName: actor.Name,
+		UpdatedBySource: actor.Source, UpdatedByWorkspaceMemberId: memberID, UpdatedByName: actor.Name,
 		CompanyId: merged.CompanyId, PointOfContactId: merged.PointOfContactId, OwnerId: merged.OwnerId,
 	})
 	if err != nil {
@@ -88,7 +88,7 @@ func (o *Opportunities) Update(ctx context.Context, actor records.Actor, id stri
 	row, err := o.queries.WithTx(tx).UpdateOpportunity(ctx, db.UpdateOpportunityParams{
 		Name: merged.Name, AmountAmountMicros: merged.AmountAmountMicros, AmountCurrencyCode: merged.AmountCurrencyCode,
 		CloseDate: merged.CloseDate, Stage: merged.Stage, Position: current.Position,
-		UpdatedBySource: db.Workspace2abogkkt2zd45pa9aun09djpfOpportunityUpdatedBySourceEnum(actor.Source), UpdatedByWorkspaceMemberId: memberID, UpdatedByName: actor.Name, UpdatedByContext: current.UpdatedByContext,
+		UpdatedBySource: actor.Source, UpdatedByWorkspaceMemberId: memberID, UpdatedByName: actor.Name, UpdatedByContext: current.UpdatedByContext,
 		CompanyId: merged.CompanyId, PointOfContactId: merged.PointOfContactId, OwnerId: merged.OwnerId, ID: uuid,
 	})
 	if err != nil {
@@ -136,7 +136,7 @@ func mergeOpportunity(base opportunityRow, input records.OpportunityInput) (oppo
 		row.CloseDate = pgtype.Timestamptz{Time: *input.CloseDate, Valid: true}
 	}
 	if input.Stage != nil {
-		row.Stage = db.Workspace2abogkkt2zd45pa9aun09djpfOpportunityStageEnum(*input.Stage)
+		row.Stage = *input.Stage
 	}
 	for _, relation := range []struct {
 		target *pgtype.UUID

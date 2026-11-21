@@ -153,9 +153,9 @@ func (p *People) Create(ctx context.Context, actor records.Actor, input records.
 	if err != nil {
 		return records.Person{}, err
 	}
-	params.CreatedBySource = db.Workspace2abogkkt2zd45pa9aun09djpfPersonCreatedBySourceEnum(actor.Source)
+	params.CreatedBySource = actor.Source
 	params.CreatedByWorkspaceMemberId, params.CreatedByName = memberID, actor.Name
-	params.UpdatedBySource = db.Workspace2abogkkt2zd45pa9aun09djpfPersonUpdatedBySourceEnum(actor.Source)
+	params.UpdatedBySource = actor.Source
 	params.UpdatedByWorkspaceMemberId, params.UpdatedByName = memberID, actor.Name
 
 	tx, err := p.pool.Begin(ctx)
@@ -215,7 +215,7 @@ func (p *People) Update(ctx context.Context, actor records.Actor, id string, inp
 		PhonesPrimaryPhoneNumber: merged.PhonesPrimaryPhoneNumber, PhonesPrimaryPhoneCountryCode: merged.PhonesPrimaryPhoneCountryCode,
 		PhonesPrimaryPhoneCallingCode: merged.PhonesPrimaryPhoneCallingCode, PhonesAdditionalPhones: merged.PhonesAdditionalPhones,
 		AvatarUrl: current.AvatarUrl, AvatarFile: current.AvatarFile, Position: current.Position,
-		UpdatedBySource:            db.Workspace2abogkkt2zd45pa9aun09djpfPersonUpdatedBySourceEnum(actor.Source),
+		UpdatedBySource:            actor.Source,
 		UpdatedByWorkspaceMemberId: memberID, UpdatedByName: actor.Name, UpdatedByContext: current.UpdatedByContext,
 		CompanyId: merged.CompanyId, ID: uuid,
 	})

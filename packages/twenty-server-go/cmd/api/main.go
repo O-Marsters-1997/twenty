@@ -135,6 +135,7 @@ func run() error {
 			Queue:     queue.Enqueue,
 		}, logger),
 		authHandler,
+		workspaceSettingsHandler(pool, cfg, passwordLogins, logger),
 		invitationgql.NewHandler(&invitationgql.Resolver{Store: invitationstore.New(pool)}, logger),
 		agentgql.Operations,
 	))

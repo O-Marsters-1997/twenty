@@ -18,11 +18,11 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 `
 
 type CreateShortLinkParams struct {
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfShortLinkCreatedBySourceEnum
+	CreatedBySource            string
 	CreatedByWorkspaceMemberId pgtype.UUID
 	CreatedByName              string
 	CreatedByContext           []byte
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfShortLinkUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte
@@ -152,7 +152,7 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 `
 
 type UpdateShortLinkParams struct {
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfShortLinkUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte

@@ -60,17 +60,9 @@ describe('AiChatEditorSection', () => {
     editor.destroy();
   });
 
-  it('shows the composer on a new chat, which has no thread to load permissions for', () => {
+  it('shows the composer on a new chat', () => {
     renderEditorSection(NEW_CHAT_THREAD_ID);
 
     expect(screen.getByRole('button', { name: /send/i })).toBeInTheDocument();
-  });
-
-  it('waits for the permissions of an existing chat', () => {
-    renderEditorSection('20202020-7c1e-4a0f-9d2b-3f4e5a6b7c8e');
-
-    expect(screen.getByRole('status')).toHaveTextContent(
-      'Loading conversation…',
-    );
   });
 });

@@ -16,7 +16,6 @@ import { SidePanelRecordCreationFormPage } from '@/side-panel/pages/record-creat
 import { SidePanelRecordCreationFormSettingsPage } from '@/side-panel/pages/record-creation-form-settings/components/SidePanelRecordCreationFormSettingsPage';
 import { SidePanelSendCampaignTestPage } from '@/side-panel/pages/send-campaign-test/components/SidePanelSendCampaignTestPage';
 import { SidePanelAddToMessageListPage } from '@/side-panel/pages/add-to-message-list/components/SidePanelAddToMessageListPage';
-import { SidePanelShareRecordPage } from '@/side-panel/pages/share-record/components/SidePanelShareRecordPage';
 import { SidePanelSnoozeAiChatPage } from '@/side-panel/pages/snooze-ai-chat/components/SidePanelSnoozeAiChatPage';
 import { SidePanelAssignAiChatPage } from '@/side-panel/pages/assign-ai-chat/components/SidePanelAssignAiChatPage';
 import { SidePanelDashboardChartSettings } from '@/side-panel/pages/page-layout/components/dashboard/SidePanelDashboardChartSettings';
@@ -111,7 +110,6 @@ export const SIDE_PANEL_PAGES_CONFIG = new Map<
   [SidePanelPages.WorkflowCoreFilters, <SidePanelCoreWorkflowFiltersPage />],
   [SidePanelPages.WorkflowVersions, <SidePanelCoreWorkflowVersionsPage />],
   [SidePanelPages.WorkflowVersion, <SidePanelCoreWorkflowVersionPage />],
-  [SidePanelPages.ShareRecord, <SidePanelShareRecordPage />],
   [SidePanelPages.SnoozeAiChat, <SidePanelSnoozeAiChatPage />],
   [SidePanelPages.AssignAiChat, <SidePanelAssignAiChatPage />],
 ]);

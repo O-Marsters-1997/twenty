@@ -69,7 +69,7 @@ func (a *Attachments) Create(ctx context.Context, actor records.Actor, input rec
 	if err != nil {
 		return records.Attachment{}, err
 	}
-	merged, err := mergeAttachment(attachmentRow{FileCategory: db.Workspace2abogkkt2zd45pa9aun09djpfAttachmentFileCategoryEnumOTHER}, input)
+	merged, err := mergeAttachment(attachmentRow{FileCategory: "OTHER"}, input)
 	if err != nil {
 		return records.Attachment{}, err
 	}
@@ -79,9 +79,9 @@ func (a *Attachments) Create(ctx context.Context, actor records.Actor, input rec
 	}
 	row, err := a.queries.CreateAttachment(ctx, db.CreateAttachmentParams{
 		Name: merged.Name, File: merged.File, FullPath: merged.FullPath, FileCategory: merged.FileCategory,
-		CreatedBySource:            db.Workspace2abogkkt2zd45pa9aun09djpfAttachmentCreatedBySourceEnum(actor.Source),
+		CreatedBySource:            actor.Source,
 		CreatedByWorkspaceMemberId: memberID, CreatedByName: actor.Name,
-		UpdatedBySource:            db.Workspace2abogkkt2zd45pa9aun09djpfAttachmentUpdatedBySourceEnum(actor.Source),
+		UpdatedBySource:            actor.Source,
 		UpdatedByWorkspaceMemberId: memberID, UpdatedByName: actor.Name, Position: position,
 		TargetAgentChatThreadId: merged.TargetAgentChatThreadId, TargetTaskId: merged.TargetTaskId, TargetNoteId: merged.TargetNoteId,
 		TargetPersonId: merged.TargetPersonId, TargetCompanyId: merged.TargetCompanyId, TargetOpportunityId: merged.TargetOpportunityId,
@@ -121,7 +121,7 @@ func (a *Attachments) Update(ctx context.Context, actor records.Actor, id string
 	}
 	row, err := a.queries.WithTx(tx).UpdateAttachment(ctx, db.UpdateAttachmentParams{
 		Name: merged.Name, File: merged.File, FullPath: merged.FullPath, FileCategory: merged.FileCategory,
-		UpdatedBySource:            db.Workspace2abogkkt2zd45pa9aun09djpfAttachmentUpdatedBySourceEnum(actor.Source),
+		UpdatedBySource:            actor.Source,
 		UpdatedByWorkspaceMemberId: memberID, UpdatedByName: actor.Name, UpdatedByContext: current.UpdatedByContext, Position: current.Position,
 		TargetAgentChatThreadId: merged.TargetAgentChatThreadId, TargetTaskId: merged.TargetTaskId, TargetNoteId: merged.TargetNoteId,
 		TargetPersonId: merged.TargetPersonId, TargetCompanyId: merged.TargetCompanyId, TargetOpportunityId: merged.TargetOpportunityId,
@@ -165,7 +165,7 @@ func mergeAttachment(base attachmentRow, input records.AttachmentInput) (attachm
 		row.File = input.File
 	}
 	if input.FileCategory != nil {
-		row.FileCategory = db.Workspace2abogkkt2zd45pa9aun09djpfAttachmentFileCategoryEnum(*input.FileCategory)
+		row.FileCategory = *input.FileCategory
 	}
 	links := []struct {
 		target *pgtype.UUID

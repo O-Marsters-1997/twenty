@@ -22,13 +22,13 @@ type CreateOpportunityParams struct {
 	AmountAmountMicros         pgtype.Numeric
 	AmountCurrencyCode         pgtype.Text
 	CloseDate                  pgtype.Timestamptz
-	Stage                      Workspace2abogkkt2zd45pa9aun09djpfOpportunityStageEnum
+	Stage                      string
 	Position                   float64
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfOpportunityCreatedBySourceEnum
+	CreatedBySource            string
 	CreatedByWorkspaceMemberId pgtype.UUID
 	CreatedByName              string
 	CreatedByContext           []byte
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfOpportunityUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte
@@ -176,9 +176,9 @@ type UpdateOpportunityParams struct {
 	AmountAmountMicros         pgtype.Numeric
 	AmountCurrencyCode         pgtype.Text
 	CloseDate                  pgtype.Timestamptz
-	Stage                      Workspace2abogkkt2zd45pa9aun09djpfOpportunityStageEnum
+	Stage                      string
 	Position                   float64
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfOpportunityUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte

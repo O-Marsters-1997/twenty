@@ -1,0 +1,9 @@
+{
+  "name": "ActivateWorkspace",
+  "operation": "ActivateWorkspace",
+  "fixture": "workspace acme pending creation",
+  "endpoint": "/metadata",
+  "query": "mutation ActivateWorkspace($input: ActivateWorkspaceInput!) { activateWorkspace(data: $input) { id } }",
+  "variables": {"input": {"displayName": "Acme"}},
+  "response": {"data": {"activateWorkspace": {"id": "20202020-1c25-4d02-bf25-6aeccf7ea419"}}}
+}

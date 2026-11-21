@@ -18,11 +18,11 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 `
 
 type CreateNoteTargetParams struct {
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfNoteTargetCreatedBySourceEnum
+	CreatedBySource            string
 	CreatedByWorkspaceMemberId pgtype.UUID
 	CreatedByName              string
 	CreatedByContext           []byte
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfNoteTargetUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte
@@ -156,7 +156,7 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 `
 
 type UpdateNoteTargetParams struct {
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfNoteTargetUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte

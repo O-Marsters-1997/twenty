@@ -18,11 +18,11 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 `
 
 type CreateMessageListParams struct {
-	CreatedBySource            Workspace2abogkkt2zd45pa9aun09djpfMessageListCreatedBySourceEnum
+	CreatedBySource            string
 	CreatedByWorkspaceMemberId pgtype.UUID
 	CreatedByName              string
 	CreatedByContext           []byte
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfMessageListUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte
@@ -148,7 +148,7 @@ RETURNING "id", "createdAt", "updatedAt", "deletedAt", "createdBySource", "creat
 `
 
 type UpdateMessageListParams struct {
-	UpdatedBySource            Workspace2abogkkt2zd45pa9aun09djpfMessageListUpdatedBySourceEnum
+	UpdatedBySource            string
 	UpdatedByWorkspaceMemberId pgtype.UUID
 	UpdatedByName              string
 	UpdatedByContext           []byte

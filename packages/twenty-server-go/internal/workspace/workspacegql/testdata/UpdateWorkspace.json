@@ -1,0 +1,9 @@
+{
+  "name": "UpdateWorkspace",
+  "operation": "UpdateWorkspace",
+  "fixture": "active workspace acme with a Member default role, Google auth not enabled system-wide",
+  "endpoint": "/metadata",
+  "query": "fragment RoleFragment on Role { id label description icon canUpdateAllSettings canAccessAllTools isEditable canReadAllObjectRecords canUpdateAllObjectRecords canSoftDeleteAllObjectRecords canDestroyAllObjectRecords canBeAssignedToUsers canBeAssignedToAgents canBeAssignedToApiKeys } mutation UpdateWorkspace($input: UpdateWorkspaceInput!) { updateWorkspace(data: $input) { id subdomain displayName logo allowImpersonation isPublicInviteLinkEnabled isCampaignClickTrackingEnabled isCampaignOpenTrackingEnabled workspaceDiscoverability isGoogleAuthEnabled isPasswordAuthEnabled isTwoFactorAuthenticationEnforced isInternalMessagesImportEnabled defaultRole { ...RoleFragment } } }",
+  "variables": {"input": {"displayName": "Acme Inc", "isPublicInviteLinkEnabled": false}},
+  "response": {"data": {"updateWorkspace": {"id": "20202020-1c25-4d02-bf25-6aeccf7ea419", "subdomain": "acme", "displayName": "Acme Inc", "logo": "", "allowImpersonation": true, "isPublicInviteLinkEnabled": false, "isCampaignClickTrackingEnabled": false, "isCampaignOpenTrackingEnabled": false, "workspaceDiscoverability": "PUBLIC", "isGoogleAuthEnabled": false, "isPasswordAuthEnabled": true, "isTwoFactorAuthenticationEnforced": false, "isInternalMessagesImportEnabled": false, "defaultRole": {"id": "30303030-1c25-4d02-bf25-6aeccf7ea419", "label": "Member", "description": null, "icon": "IconUser", "canUpdateAllSettings": false, "canAccessAllTools": false, "isEditable": true, "canReadAllObjectRecords": false, "canUpdateAllObjectRecords": false, "canSoftDeleteAllObjectRecords": false, "canDestroyAllObjectRecords": false, "canBeAssignedToUsers": true, "canBeAssignedToAgents": true, "canBeAssignedToApiKeys": true}}}}
+}

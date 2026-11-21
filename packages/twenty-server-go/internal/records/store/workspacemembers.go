@@ -68,9 +68,9 @@ func (m *WorkspaceMembers) Create(ctx context.Context, actor records.Actor, inpu
 		ColorScheme: merged.ColorScheme, UiScale: merged.UiScale, OpenRecordIn: merged.OpenRecordIn, Locale: merged.Locale,
 		AvatarUrl: merged.AvatarUrl, UserEmail: merged.UserEmail, JobTitle: merged.JobTitle, CalendarStartDay: merged.CalendarStartDay,
 		UserId: merged.UserId, TimeZone: merged.TimeZone, DateFormat: merged.DateFormat, TimeFormat: merged.TimeFormat, NumberFormat: merged.NumberFormat,
-		CreatedBySource:            db.Workspace2abogkkt2zd45pa9aun09djpfWorkspaceMemberCreatedBySourceEnum(actor.Source),
+		CreatedBySource:            actor.Source,
 		CreatedByWorkspaceMemberId: memberID, CreatedByName: actor.Name,
-		UpdatedBySource:            db.Workspace2abogkkt2zd45pa9aun09djpfWorkspaceMemberUpdatedBySourceEnum(actor.Source),
+		UpdatedBySource:            actor.Source,
 		UpdatedByWorkspaceMemberId: memberID, UpdatedByName: actor.Name,
 	})
 	if err != nil {
@@ -110,7 +110,7 @@ func (m *WorkspaceMembers) Update(ctx context.Context, actor records.Actor, id s
 		ColorScheme: merged.ColorScheme, UiScale: merged.UiScale, OpenRecordIn: merged.OpenRecordIn, Locale: merged.Locale,
 		AvatarUrl: merged.AvatarUrl, UserEmail: merged.UserEmail, JobTitle: merged.JobTitle, CalendarStartDay: merged.CalendarStartDay,
 		UserId: merged.UserId, TimeZone: merged.TimeZone, DateFormat: merged.DateFormat, TimeFormat: merged.TimeFormat, NumberFormat: merged.NumberFormat,
-		UpdatedBySource:            db.Workspace2abogkkt2zd45pa9aun09djpfWorkspaceMemberUpdatedBySourceEnum(actor.Source),
+		UpdatedBySource:            actor.Source,
 		UpdatedByWorkspaceMemberId: memberID, UpdatedByName: actor.Name, UpdatedByContext: current.UpdatedByContext, ID: uuid,
 	})
 	if err != nil {
@@ -146,9 +146,9 @@ func scanWorkspaceMember(row pgx.Row) (workspaceMemberRow, error) {
 func workspaceMemberDefaults() workspaceMemberRow {
 	return workspaceMemberRow{
 		ColorScheme: "System", UiScale: "Default", OpenRecordIn: "SIDE_PANEL", Locale: "en", CalendarStartDay: 7, TimeZone: "system",
-		DateFormat:   db.Workspace2abogkkt2zd45pa9aun09djpfWorkspaceMemberDateFormatEnumSYSTEM,
-		TimeFormat:   db.Workspace2abogkkt2zd45pa9aun09djpfWorkspaceMemberTimeFormatEnumSYSTEM,
-		NumberFormat: db.Workspace2abogkkt2zd45pa9aun09djpfWorkspaceMemberNumberFormatEnumSYSTEM,
+		DateFormat:   "SYSTEM",
+		TimeFormat:   "SYSTEM",
+		NumberFormat: "SYSTEM",
 	}
 }
 
@@ -185,13 +185,13 @@ func mergeWorkspaceMember(base workspaceMemberRow, input records.WorkspaceMember
 		}
 	}
 	if input.DateFormat != nil {
-		row.DateFormat = db.Workspace2abogkkt2zd45pa9aun09djpfWorkspaceMemberDateFormatEnum(*input.DateFormat)
+		row.DateFormat = *input.DateFormat
 	}
 	if input.TimeFormat != nil {
-		row.TimeFormat = db.Workspace2abogkkt2zd45pa9aun09djpfWorkspaceMemberTimeFormatEnum(*input.TimeFormat)
+		row.TimeFormat = *input.TimeFormat
 	}
 	if input.NumberFormat != nil {
-		row.NumberFormat = db.Workspace2abogkkt2zd45pa9aun09djpfWorkspaceMemberNumberFormatEnum(*input.NumberFormat)
+		row.NumberFormat = *input.NumberFormat
 	}
 	return row, nil
 }

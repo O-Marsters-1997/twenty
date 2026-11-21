@@ -6,7 +6,6 @@ import { type ReactNode } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 
 import { AiChatThreadDetailsDropdown } from '@/ai/components/AiChatThreadDetailsDropdown';
-import { setAgentChatThreadPermissions } from '@/ai/testing/setAgentChatThreadPermissions';
 import { currentWorkspaceMembersState } from '@/auth/states/currentWorkspaceMembersState';
 import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
 import { dispatchObjectRecordOperationBrowserEvent } from '@/browser-event/utils/dispatchObjectRecordOperationBrowserEvent';
@@ -127,13 +126,6 @@ jest.mock(
   }),
 );
 
-const EDITABLE_PERMISSIONS = {
-  canRead: true,
-  canUpdate: true,
-  canDelete: true,
-  canSoftDelete: true,
-};
-
 const CHAT_THREAD_OBJECT_METADATA_ITEM = {
   ...getMockObjectMetadataItemOrThrow('note'),
   id: 'chat-object',
@@ -172,11 +164,9 @@ const buildWorkspaceMember = (id: string, firstName: string) => ({
 });
 
 const renderDetails = async ({
-  permissions = EDITABLE_PERMISSIONS,
   isAiChatInboxEnabled = true,
   shouldOpenDetails = true,
 }: {
-  permissions?: typeof EDITABLE_PERMISSIONS;
   isAiChatInboxEnabled?: boolean;
   shouldOpenDetails?: boolean;
 } = {}) => {
@@ -195,7 +185,6 @@ const renderDetails = async ({
           },
         ],
       });
-      setAgentChatThreadPermissions(store, THREAD_ID, permissions);
       store.set(recordStoreFamilyState.atomFamily(THREAD_ID), {
         __typename: 'AgentChatThread',
         id: THREAD_ID,
@@ -350,17 +339,6 @@ describe('AiChatThreadDetailsDropdown', () => {
     expect(
       await screen.findByRole('button', { name: 'Link to a record' }),
     ).toBeVisible();
-  });
-
-  it('shows the links read-only to a shared viewer', async () => {
-    await renderDetails({
-      permissions: { ...EDITABLE_PERMISSIONS, canUpdate: false },
-    });
-
-    expect(await screen.findByText('Acme')).toBeVisible();
-    expect(
-      screen.queryByRole('button', { name: 'Edit linked records' }),
-    ).not.toBeInTheDocument();
   });
 
   it('reads the links again when one is written elsewhere', async () => {
