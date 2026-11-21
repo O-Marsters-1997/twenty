@@ -111,12 +111,11 @@ func (s *Store) Applications(ctx context.Context, workspaceID string) ([]*Applic
 	return applications, nil
 }
 
-// logoURL mirrors the Node resolver: absolute logos pass through, bundled ones are served from public assets.
 func (s *Store) logoURL(workspaceID, applicationID string, logo *string) *string {
 	if logo == nil || *logo == "" {
 		return nil
 	}
-	if strings.HasPrefix(*logo, "http://") || strings.HasPrefix(*logo, "https://") {
+	if lower := strings.ToLower(*logo); strings.HasPrefix(lower, "http://") || strings.HasPrefix(lower, "https://") {
 		return logo
 	}
 	url := fmt.Sprintf("%s/public-assets/%s/%s/%s", s.serverURL, workspaceID, applicationID, *logo)
@@ -201,7 +200,7 @@ func applyOverrides(t *TimelineActivityType, raw []byte, owner string) {
 	}
 	if value, ok := read("label"); ok {
 		var label string
-		if json.Unmarshal(value, &label) == nil && label != "" {
+		if json.Unmarshal(value, &label) == nil {
 			t.Label = label
 		}
 	}

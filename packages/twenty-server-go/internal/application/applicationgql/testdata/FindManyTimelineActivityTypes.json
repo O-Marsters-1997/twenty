@@ -7,7 +7,7 @@
   "response": {
     "data": {
       "timelineActivityTypes": [
-        {"id": "b1000000-0000-4000-8000-000000000002", "applicationId": "c2000000-0000-4000-8000-000000000002", "universalIdentifier": "<ignored>", "name": "noteLinked", "label": "linked a note", "icon": "IconX", "emit": {"on": "linked", "objectUniversalIdentifier": "20202020-0b00-45cd-b6f6-6cd806fc6804"}, "frontComponentUniversalIdentifier": null, "isActive": false},
+        {"id": "b1000000-0000-4000-8000-000000000002", "applicationId": "c2000000-0000-4000-8000-000000000002", "universalIdentifier": "<ignored>", "name": "noteLinked", "label": "", "icon": "IconX", "emit": {"on": "linked", "objectUniversalIdentifier": "20202020-0b00-45cd-b6f6-6cd806fc6804"}, "frontComponentUniversalIdentifier": null, "isActive": false},
         {"id": "b1000000-0000-4000-8000-000000000004", "applicationId": "c2000000-0000-4000-8000-000000000001", "universalIdentifier": "<ignored>", "name": "RecordArchived", "label": "archived", "icon": null, "emit": null, "frontComponentUniversalIdentifier": null, "isActive": true},
         {"id": "b1000000-0000-4000-8000-000000000003", "applicationId": "c2000000-0000-4000-8000-000000000002", "universalIdentifier": "<ignored>", "name": "recordCreated", "label": "was created by", "icon": "IconCirclePlus", "emit": {"on": "created", "objectUniversalIdentifier": null}, "frontComponentUniversalIdentifier": null, "isActive": false},
         {"id": "b1000000-0000-4000-8000-000000000001", "applicationId": "c2000000-0000-4000-8000-000000000002", "universalIdentifier": "<ignored>", "name": "recordUpdated", "label": "changed", "icon": null, "emit": {"on": "updated", "objectUniversalIdentifier": null}, "frontComponentUniversalIdentifier": null, "isActive": false}
