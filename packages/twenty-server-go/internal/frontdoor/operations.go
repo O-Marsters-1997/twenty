@@ -84,6 +84,11 @@ var InvitationOperations = []string{
 	"GetWorkspaceInvitations", "DeleteWorkspaceInvitation", "GetApprovedAccessDomains", "DeleteApprovedAccessDomain",
 }
 
+var PageLayoutOperations = []string{
+	"FindAllRecordFormPageLayouts", "FindAllRecordPageLayouts", "FindAllStandalonePageLayouts", "FindOnePageLayout", "FindOnePageLayoutType",
+	"UpdatePageLayoutWidgetIsActive",
+}
+
 var blockedMetadataFields = []string{
 	"createOneObject", "updateOneObject", "deleteOneObject",
 	"createOneField", "updateOneField", "deleteOneField",
