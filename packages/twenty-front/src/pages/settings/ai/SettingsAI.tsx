@@ -20,7 +20,6 @@ import {
 } from 'twenty-ui/icon';
 import { SettingsAgentSkillsTab } from '~/pages/settings/ai/components/SettingsAgentSkillsTab';
 import { SettingsAgentToolsTab } from '~/pages/settings/ai/components/SettingsAgentToolsTab';
-import { SettingsAiSystemPromptsSection } from '~/pages/settings/ai/components/SettingsAiSystemPromptsSection';
 import { SettingsAiModelsTab } from '~/pages/settings/ai/components/SettingsAiModelsTab';
 import { SettingsAiOverviewTab } from '~/pages/settings/ai/components/SettingsAiOverviewTab';
 import { SETTINGS_AI_TABS } from '@/settings/ai/constants/SettingsAiTabs';
@@ -113,12 +112,7 @@ export const SettingsAI = () => {
             />
           </Section.Root>
         )}
-        {isOverviewTab && (
-          <>
-            <SettingsAiOverviewTab />
-            <SettingsAiSystemPromptsSection />
-          </>
-        )}
+        {isOverviewTab && <SettingsAiOverviewTab />}
         {isModelsTab && <SettingsAiModelsTab />}
         {isSkillsTab && <SettingsAgentSkillsTab />}
         {isToolsTab && <SettingsAgentToolsTab />}

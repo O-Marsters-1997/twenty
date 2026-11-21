@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log/slog"
 	"net/http"
@@ -48,7 +49,7 @@ func newHarness(t *testing.T) harness {
 	}
 	t.Cleanup(pool.Close)
 	logger := slog.New(slog.NewTextHandler(io.Discard, nil))
-	handler := agentgql.NewHandler(store.NewAgents(pool), logger)
+	handler := agentgql.NewHandler(store.NewAgents(pool), store.NewRuns(pool), logger)
 	server := httptest.NewServer(frontdoor.NewHandler(verifier{}, handler, logger))
 	t.Cleanup(server.Close)
 	return harness{handler: handler, server: server, pool: pool}
@@ -203,5 +204,57 @@ func TestAgentOperations_missingAgent(t *testing.T) {
 	}
 	if got := errorCode(t, h.send(t, "DeleteOneAgent", `mutation DeleteOneAgent($input: AgentIdInput!) { deleteOneAgent(input: $input) { id } }`, input)); got != "NOT_FOUND" {
 		t.Errorf("deleteOneAgent error code = %q, want NOT_FOUND", got)
+	}
+}
+
+const (
+	runTurnID   = "11111111-1111-4111-8111-111111111111"
+	runThreadID = "22222222-2222-4222-8222-222222222222"
+)
+
+func (h harness) seedRun(t *testing.T) {
+	t.Helper()
+	statements := []string{
+		`INSERT INTO %[1]s."agentChatThread" (id, title) VALUES ('` + runThreadID + `', 'Lead review')`,
+		`INSERT INTO %[1]s."agentTurn" (id, "agentId", "threadId", status, "createdAt", "startedAt", "endedAt", "modelId", "inputTokens", "outputTokens", "createdBySource", "createdByName")
+			VALUES ('` + runTurnID + `', '` + helperAgentID + `', '` + runThreadID + `', 'completed', '2026-10-05T10:00:00Z', '2026-10-05T10:00:01Z', '2026-10-05T10:00:05Z', 'gpt-4.1', 120, 45, 'APPLICATION', 'App')`,
+		`INSERT INTO %[1]s."agentMessage" (id, role, "turnId", "threadId", "createdAt") VALUES
+			('aaaaaaaa-0000-4000-8000-000000000001', 'user', '` + runTurnID + `', '` + runThreadID + `', '2026-10-05T10:00:00Z'),
+			('aaaaaaaa-0000-4000-8000-000000000002', 'user', '` + runTurnID + `', '` + runThreadID + `', '2026-10-05T10:00:01Z')`,
+		`INSERT INTO %[1]s."agentMessage" (id, role, "agentId", "turnId", "threadId", "createdAt") VALUES
+			('aaaaaaaa-0000-4000-8000-000000000003', 'assistant', '` + helperAgentID + `', '` + runTurnID + `', '` + runThreadID + `', '2026-10-05T10:00:02Z')`,
+		`INSERT INTO %[1]s."agentMessagePart" ("messageId", "orderIndex", type, "textContent", "toolName") VALUES
+			('aaaaaaaa-0000-4000-8000-000000000001', 0, 'text', 'Score this lead', NULL),
+			('aaaaaaaa-0000-4000-8000-000000000002', 0, 'text', 'It is Ada', NULL),
+			('aaaaaaaa-0000-4000-8000-000000000003', 0, 'tool-find_people', NULL, 'find_people'),
+			('aaaaaaaa-0000-4000-8000-000000000003', 1, 'text', 'Score: 8', NULL),
+			('aaaaaaaa-0000-4000-8000-000000000003', 2, 'tool-find_people', NULL, 'find_people')`,
+	}
+	for _, statement := range statements {
+		if _, err := h.pool.Exec(t.Context(), fmt.Sprintf(statement, workspace.SchemaName())); err != nil {
+			t.Fatalf("seed agent run: %v", err)
+		}
+	}
+}
+
+func TestGetAgentRuns_matchesNodeGolden(t *testing.T) {
+	t.Parallel()
+	h := newHarness(t)
+	h.seedRun(t)
+	golden.Assert(t, h.handler, "testdata", "GetAgentRuns")
+}
+
+func TestAgentRuns_edges(t *testing.T) {
+	t.Parallel()
+	h := newHarness(t)
+	h.seedRun(t)
+	const query = `query GetAgentRuns($agentId: UUID!, $limit: Int) { agentRuns(agentId: $agentId, limit: $limit) { id } }`
+
+	empty := h.data(t, "GetAgentRuns", query, map[string]any{"agentId": helperAgentID, "limit": 0})["agentRuns"].([]any)
+	if len(empty) != 1 {
+		t.Errorf("agentRuns(limit: 0) = %v, want the limit clamped to 1 run", empty)
+	}
+	if got := errorCode(t, h.send(t, "GetAgentRuns", query, map[string]any{"agentId": missingID})); got != "NOT_FOUND" {
+		t.Errorf("agentRuns of a missing agent error code = %q, want NOT_FOUND", got)
 	}
 }

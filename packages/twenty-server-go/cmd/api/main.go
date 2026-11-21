@@ -131,7 +131,7 @@ func run() error {
 		chatHandler,
 		skillgql.NewHandler(ai.NewSkills(pool), logger),
 		metagql.NewHandler(metadatastore.NewViews(pool), logger),
-		agentgql.NewHandler(aistore.NewAgents(pool), logger),
+		agentgql.NewHandler(aistore.NewAgents(pool), aistore.NewRuns(pool), logger),
 		messaginggql.NewHandler(&messaginggql.Resolver{
 			Channels:  messagingstore.NewChannels(pool, os.Getenv("INBOUND_EMAIL_DOMAIN")),
 			Campaigns: messagingstore.NewCampaigns(pool),

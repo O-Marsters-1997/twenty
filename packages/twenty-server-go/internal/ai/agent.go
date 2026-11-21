@@ -28,3 +28,22 @@ type AgentRecord struct {
 	ModelConfiguration any                `json:"modelConfiguration"`
 	Triggers           []any              `json:"triggers"`
 }
+
+type AgentRun struct {
+	ID            string              `json:"id"`
+	ThreadID      string              `json:"threadId"`
+	ThreadTitle   *string             `json:"threadTitle"`
+	Status        string              `json:"status"`
+	ErrorMessage  *string             `json:"errorMessage"`
+	CreatedAt     metadata.Timestamp  `json:"createdAt"`
+	StartedAt     *metadata.Timestamp `json:"startedAt"`
+	EndedAt       *metadata.Timestamp `json:"endedAt"`
+	ModelID       *string             `json:"modelId"`
+	InputTokens   *int                `json:"inputTokens"`
+	OutputTokens  *int                `json:"outputTokens"`
+	CreatorSource string              `json:"creatorSource"`
+	CreatorName   string              `json:"creatorName"`
+	Input         *string             `json:"input"`
+	Reply         *string             `json:"reply"`
+	ToolNames     []string            `json:"toolNames"`
+}

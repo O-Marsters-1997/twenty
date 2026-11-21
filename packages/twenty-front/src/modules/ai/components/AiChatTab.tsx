@@ -1,5 +1,3 @@
-import { useIsWorkspaceSetupChat } from '@/ai/hooks/useIsWorkspaceSetupChat';
-import { WorkspaceSetupChatKickoffEffect } from '@/onboarding/effect-components/WorkspaceSetupChatKickoffEffect';
 import { type DragEvent, useState } from 'react';
 
 import { DropZone } from '@/activities/files/components/DropZone';
@@ -31,7 +29,6 @@ const styles = stylex.create({
 });
 
 export const AiChatTab = () => {
-  const isWorkspaceSetupChat = useIsWorkspaceSetupChat();
   const [isDraggingFile, setIsDraggingFile] = useState(false);
   const currentAiChatThread = useAtomStateValue(currentAiChatThreadState);
 
@@ -64,7 +61,6 @@ export const AiChatTab = () => {
       onDragOver={(event) => event.preventDefault()}
       onDrop={handleDrop}
     >
-      {isWorkspaceSetupChat && <WorkspaceSetupChatKickoffEffect />}
       <AgentChatHasBeenOpenedEffect />
       <AgentChatThreadMarkAsReadEffect />
       <AgentChatStreamingPartsDiffSyncEffect />
