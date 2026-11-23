@@ -34,7 +34,6 @@ export enum SettingsPath {
   NewApprovedAccessDomain = 'security/approved-access-domain/new',
   Community = 'community',
   AI = 'ai',
-  AiPrompts = 'ai/prompts',
   AiNewSkill = 'ai/new-skill',
   AiSkillDetail = 'ai/skills/:skillId',
   AiToolDetail = 'ai/tools/:toolIdentifier',

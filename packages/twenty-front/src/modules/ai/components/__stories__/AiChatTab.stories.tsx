@@ -7,7 +7,6 @@ import { ComponentDecorator } from 'twenty-ui/testing';
 import { AiChatTab } from '@/ai/components/AiChatTab';
 import { AI_CHAT_SURFACE } from '@/ai/constants/AiChatSurface';
 import { AiChatSurfaceContext } from '@/ai/contexts/AiChatSurfaceContext';
-import { hasRequestedWorkspaceSetupChatState } from '@/onboarding/states/hasRequestedWorkspaceSetupChatState';
 import { shouldOpenAiChatAfterOnboardingState } from '@/onboarding/states/shouldOpenAiChatAfterOnboardingState';
 import { jotaiStore } from '@/ui/utilities/state/jotai/jotaiStore';
 import { MemoryRouterDecorator } from '~/testing/decorators/MemoryRouterDecorator';
@@ -20,12 +19,10 @@ const WorkspaceSetupChatStory = () => {
 
   useEffect(() => {
     store.set(shouldOpenAiChatAfterOnboardingState.atom, true);
-    store.set(hasRequestedWorkspaceSetupChatState.atom, true);
     setIsReady(true);
 
     return () => {
       store.set(shouldOpenAiChatAfterOnboardingState.atom, false);
-      store.set(hasRequestedWorkspaceSetupChatState.atom, false);
     };
   }, [store]);
 

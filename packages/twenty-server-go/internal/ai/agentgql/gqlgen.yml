@@ -15,6 +15,10 @@ models:
     model: github.com/99designs/gqlgen/graphql.Any
   Agent:
     model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai.AgentRecord
+  AgentTurnStatus:
+    model: github.com/99designs/gqlgen/graphql.String
+  AgentRun:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai.AgentRun
   AgentIdInput:
     model: map[string]interface{}
   CreateAgentInput:

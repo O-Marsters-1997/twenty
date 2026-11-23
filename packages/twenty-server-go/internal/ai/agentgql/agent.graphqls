@@ -55,6 +55,7 @@ input UpdateAgentInput {
 type Query {
   findManyAgents: [Agent!]!
   findOneAgent(input: AgentIdInput!): Agent!
+  agentRuns(agentId: UUID!, limit: Int = 100): [AgentRun!]!
 }
 
 type Mutation {
@@ -62,4 +63,31 @@ type Mutation {
   updateOneAgent(input: UpdateAgentInput!): Agent!
   deleteOneAgent(input: AgentIdInput!): Agent!
   assignRoleToAgent(agentId: UUID!, roleId: UUID!): Boolean!
+}
+
+enum AgentTurnStatus {
+  RUNNING
+  WAITING_FOR_INPUT
+  COMPLETED
+  CANCELLED
+  FAILED
+}
+
+type AgentRun {
+  id: UUID!
+  threadId: UUID!
+  threadTitle: String
+  status: AgentTurnStatus!
+  errorMessage: String
+  createdAt: DateTime!
+  startedAt: DateTime
+  endedAt: DateTime
+  modelId: String
+  inputTokens: Int
+  outputTokens: Int
+  creatorSource: String!
+  creatorName: String!
+  input: String
+  reply: String
+  toolNames: [String!]!
 }
