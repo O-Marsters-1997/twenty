@@ -23,6 +23,8 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai/aigql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai/skillgql"
 	aistore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/ai/store"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/application/applicationgql"
+	applicationstore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/application/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth/authgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/config"
@@ -149,6 +151,7 @@ func run() error {
 		workspaceSettingsHandler(pool, cfg, passwordLogins, logger),
 		invitationgql.NewHandler(&invitationgql.Resolver{Store: invitationstore.New(pool)}, logger),
 		pagelayoutgql.NewHandler(&pagelayoutgql.Resolver{Store: pagelayoutstore.New(pool)}, logger),
+		applicationgql.NewHandler(&applicationgql.Resolver{Store: applicationstore.New(pool, cfg.ServerURL)}, logger),
 		agentgql.Operations,
 	))
 

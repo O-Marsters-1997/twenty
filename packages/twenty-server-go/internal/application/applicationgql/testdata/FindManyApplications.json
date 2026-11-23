@@ -1,0 +1,16 @@
+{
+  "name": "FindManyApplications",
+  "operation": "FindManyApplications",
+  "fixture": "workspace with a custom app, an app with a bundled logo, an app with an absolute logo url, a soft-deleted app and another workspace's app. Hand-written from ApplicationInstallResolver, ApplicationResolver.logoUrl and ApplicationDTO; no Node server was run",
+  "endpoint": "/metadata",
+  "query": "query FindManyApplications { findManyApplications { id name description logoUrl version universalIdentifier defaultRoleId } }",
+  "response": {
+    "data": {
+      "findManyApplications": [
+        {"id": "c2000000-0000-4000-8000-000000000001", "name": "Custom", "description": "about Custom", "logoUrl": null, "version": "1.0.0", "universalIdentifier": "c3000000-0000-4000-8000-000000000001", "defaultRoleId": "d0000000-0000-4000-8000-000000000001"},
+        {"id": "c2000000-0000-4000-8000-000000000002", "name": "Standard", "description": "about Standard", "logoUrl": "http://localhost:3000/public-assets/20202020-1c25-4d02-bf25-6aeccf7ea419/c2000000-0000-4000-8000-000000000002/logo.png", "version": "1.0.0", "universalIdentifier": "c3000000-0000-4000-8000-000000000002", "defaultRoleId": "d0000000-0000-4000-8000-000000000001"},
+        {"id": "c2000000-0000-4000-8000-000000000003", "name": "Hosted", "description": "about Hosted", "logoUrl": "https://cdn.example.com/hosted.png", "version": "1.0.0", "universalIdentifier": "c3000000-0000-4000-8000-000000000003", "defaultRoleId": "d0000000-0000-4000-8000-000000000001"}
+      ]
+    }
+  }
+}
