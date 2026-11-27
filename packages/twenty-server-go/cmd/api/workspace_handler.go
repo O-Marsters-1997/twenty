@@ -10,7 +10,7 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
 )
 
-func workspaceHandler(records, chat, workflows, timeline, login http.Handler) http.Handler {
+func workspaceHandler(records, dynamic http.Handler, isDynamic func(string) bool, chat, workflows, timeline, login http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		body, err := io.ReadAll(r.Body)
 		if err != nil {
@@ -23,6 +23,9 @@ func workspaceHandler(records, chat, workflows, timeline, login http.Handler) ht
 		}
 		if json.Unmarshal(body, &request) == nil {
 			switch {
+			case isDynamic(request.OperationName):
+				dynamic.ServeHTTP(w, r)
+				return
 			case request.OperationName == frontdoor.AnswerToolCallOperation:
 				chat.ServeHTTP(w, r)
 				return

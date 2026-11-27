@@ -28,6 +28,12 @@ type Mutation struct {
 type Query struct {
 }
 
+type SendInvitations struct {
+	Success bool                   `json:"success"`
+	Errors  []string               `json:"errors"`
+	Result  []*WorkspaceInvitation `json:"result"`
+}
+
 type ValidateApprovedAccessDomainInput struct {
 	ValidationToken        string `json:"validationToken"`
 	ApprovedAccessDomainID string `json:"approvedAccessDomainId"`

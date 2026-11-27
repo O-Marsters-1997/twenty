@@ -44,14 +44,22 @@ func New(pool *pgxpool.Pool) *Store { return &Store{pool: pool} }
 
 // AuthorizeMembers allows a user whose role can update all settings or holds the WORKSPACE_MEMBERS flag.
 func (s *Store) AuthorizeMembers(ctx context.Context, workspaceID, userWorkspaceID string) error {
+	return s.authorizeFlag(ctx, workspaceID, userWorkspaceID, "WORKSPACE_MEMBERS")
+}
+
+func (s *Store) AuthorizeRoles(ctx context.Context, workspaceID, userWorkspaceID string) error {
+	return s.authorizeFlag(ctx, workspaceID, userWorkspaceID, "ROLES")
+}
+
+func (s *Store) authorizeFlag(ctx context.Context, workspaceID, userWorkspaceID, flag string) error {
 	var granted bool
 	if err := s.pool.QueryRow(ctx,
 		`SELECT COALESCE(bool_and(r."canUpdateAllSettings" OR EXISTS (
 		     SELECT 1 FROM core."rolePermissionFlag" rpf JOIN core."permissionFlag" pf ON pf.id = rpf."permissionFlagId"
-		     WHERE rpf."roleId" = r.id AND pf.key = 'WORKSPACE_MEMBERS')), false)
+		     WHERE rpf."roleId" = r.id AND pf.key = $3)), false)
 		 FROM core."roleTarget" rt JOIN core.role r ON r.id = rt."roleId"
 		 WHERE rt."userWorkspaceId" = NULLIF($1, '')::uuid AND rt."workspaceId" = $2::uuid`,
-		userWorkspaceID, workspaceID,
+		userWorkspaceID, workspaceID, flag,
 	).Scan(&granted); err != nil {
 		return fmt.Errorf("look up members permission: %w", err)
 	}
