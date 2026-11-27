@@ -1,0 +1,25 @@
+enum OnboardingStatus {
+  WORKSPACE_ACTIVATION
+  PROFILE_CREATION
+  SYNC_EMAIL
+  INVITE_TEAM
+  COMPLETED
+}
+
+type OnboardingStepSuccess {
+  success: Boolean!
+}
+
+type OnboardingStepNavigation {
+  onboardingStatus: OnboardingStatus
+  previousOnboardingStatus: OnboardingStatus
+}
+
+type Query {
+  _empty: Boolean
+}
+
+type Mutation {
+  skipSyncEmailOnboardingStep(isAutoSkipped: Boolean! = false): OnboardingStepSuccess!
+  goBackToPreviousOnboardingStep: OnboardingStepNavigation!
+}

@@ -1,0 +1,13 @@
+{
+  "name": "SkipSyncEmailOnboardingStep",
+  "operation": "SkipSyncEmailOnboardingStep",
+  "fixture": "active workspace, user with the connect-account step pending",
+  "endpoint": "/metadata",
+  "query": "mutation SkipSyncEmailOnboardingStep($isAutoSkipped: Boolean!) { skipSyncEmailOnboardingStep(isAutoSkipped: $isAutoSkipped) { success } }",
+  "variables": {"isAutoSkipped": false},
+  "response": {
+    "data": {
+      "skipSyncEmailOnboardingStep": {"success": true}
+    }
+  }
+}
