@@ -92,8 +92,16 @@ type ComplexityRoot struct {
 		Success func(childComplexity int) int
 	}
 
+	EmailPasswordResetLink struct {
+		Success func(childComplexity int) int
+	}
+
 	InitiateTwoFactorAuthenticationProvisioning struct {
 		URI func(childComplexity int) int
+	}
+
+	InvalidatePassword struct {
+		Success func(childComplexity int) int
 	}
 
 	LoginToken struct {
@@ -102,6 +110,7 @@ type ComplexityRoot struct {
 
 	Mutation struct {
 		DeleteTwoFactorAuthenticationMethod                     func(childComplexity int, twoFactorAuthenticationMethodID string) int
+		EmailPasswordResetLink                                  func(childComplexity int, email string, workspaceID *string, captchaToken *string) int
 		GenerateTransientToken                                  func(childComplexity int) int
 		GenerateTwoFactorAuthenticationRecoveryCode             func(childComplexity int, userID string, otp *string) int
 		GetAuthTokensFromLoginToken                             func(childComplexity int, loginToken string, origin string) int
@@ -116,6 +125,7 @@ type ComplexityRoot struct {
 		RevokeUserSession                                       func(childComplexity int, userSessionID string) int
 		SignIn                                                  func(childComplexity int, email string, password string, captchaToken *string, locale *string, verifyEmailRedirectPath *string) int
 		SignOut                                                 func(childComplexity int, refreshToken *string) int
+		UpdatePasswordViaResetToken                             func(childComplexity int, passwordResetToken string, newPassword string) int
 		VerifyTwoFactorAuthenticationMethodForAuthenticatedUser func(childComplexity int, otp string) int
 	}
 
@@ -144,6 +154,7 @@ type ComplexityRoot struct {
 		GetPublicWorkspaceDataByID            func(childComplexity int, id string) int
 		GetWorkspaceCreationDefaults          func(childComplexity int) int
 		TwoFactorAuthenticationRecoveryStatus func(childComplexity int, userID string) int
+		ValidatePasswordResetToken            func(childComplexity int, passwordResetToken string) int
 	}
 
 	SubdomainAvailability struct {
@@ -185,6 +196,12 @@ type ComplexityRoot struct {
 		WorkspaceID  func(childComplexity int) int
 	}
 
+	ValidatePasswordResetToken struct {
+		Email       func(childComplexity int) int
+		HasPassword func(childComplexity int) int
+		ID          func(childComplexity int) int
+	}
+
 	VerifyTwoFactorAuthenticationMethod struct {
 		Success func(childComplexity int) int
 	}
@@ -222,6 +239,8 @@ type MutationResolver interface {
 	GetAuthTokensFromOtp(ctx context.Context, loginToken string, otp string, captchaToken *string, origin string) (*AuthTokens, error)
 	GetAuthTokensFromTwoFactorAuthenticationRecoveryCode(ctx context.Context, loginToken string, recoveryCode string, captchaToken *string, origin string) (*TwoFactorAuthenticationRecoveryCodeRedemption, error)
 	InitiateOTPProvisioning(ctx context.Context, loginToken string, origin string) (*InitiateTwoFactorAuthenticationProvisioning, error)
+	EmailPasswordResetLink(ctx context.Context, email string, workspaceID *string, captchaToken *string) (*EmailPasswordResetLink, error)
+	UpdatePasswordViaResetToken(ctx context.Context, passwordResetToken string, newPassword string) (*InvalidatePassword, error)
 	GetAuthTokensFromLoginToken(ctx context.Context, loginToken string, origin string) (*AuthTokens, error)
 	RenewToken(ctx context.Context, appToken string) (*AuthTokens, error)
 	SignOut(ctx context.Context, refreshToken *string) (bool, error)
@@ -238,6 +257,7 @@ type QueryResolver interface {
 	CheckWorkspaceSubdomainAvailability(ctx context.Context, subdomain string) (*SubdomainAvailability, error)
 	GetWorkspaceCreationDefaults(ctx context.Context) (*WorkspaceCreationDefaults, error)
 	CurrentWorkspace(ctx context.Context) (*Workspace, error)
+	ValidatePasswordResetToken(ctx context.Context, passwordResetToken string) (*ValidatePasswordResetToken, error)
 	CurrentUserSessions(ctx context.Context) ([]*UserSession, error)
 }
 
@@ -419,12 +439,26 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.DeleteTwoFactorAuthenticationMethod.Success(childComplexity), true
 
+	case "EmailPasswordResetLink.success":
+		if e.ComplexityRoot.EmailPasswordResetLink.Success == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailPasswordResetLink.Success(childComplexity), true
+
 	case "InitiateTwoFactorAuthenticationProvisioning.uri":
 		if e.ComplexityRoot.InitiateTwoFactorAuthenticationProvisioning.URI == nil {
 			break
 		}
 
 		return e.ComplexityRoot.InitiateTwoFactorAuthenticationProvisioning.URI(childComplexity), true
+
+	case "InvalidatePassword.success":
+		if e.ComplexityRoot.InvalidatePassword.Success == nil {
+			break
+		}
+
+		return e.ComplexityRoot.InvalidatePassword.Success(childComplexity), true
 
 	case "LoginToken.loginToken":
 		if e.ComplexityRoot.LoginToken.LoginToken == nil {
@@ -444,6 +478,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteTwoFactorAuthenticationMethod(childComplexity, args["twoFactorAuthenticationMethodId"].(string)), true
+	case "Mutation.emailPasswordResetLink":
+		if e.ComplexityRoot.Mutation.EmailPasswordResetLink == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_emailPasswordResetLink_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.EmailPasswordResetLink(childComplexity, args["email"].(string), args["workspaceId"].(*string), args["captchaToken"].(*string)), true
 	case "Mutation.generateTransientToken":
 		if e.ComplexityRoot.Mutation.GenerateTransientToken == nil {
 			break
@@ -583,6 +628,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.SignOut(childComplexity, args["refreshToken"].(*string)), true
+	case "Mutation.updatePasswordViaResetToken":
+		if e.ComplexityRoot.Mutation.UpdatePasswordViaResetToken == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updatePasswordViaResetToken_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdatePasswordViaResetToken(childComplexity, args["passwordResetToken"].(string), args["newPassword"].(string)), true
 	case "Mutation.verifyTwoFactorAuthenticationMethodForAuthenticatedUser":
 		if e.ComplexityRoot.Mutation.VerifyTwoFactorAuthenticationMethodForAuthenticatedUser == nil {
 			break
@@ -736,6 +792,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.TwoFactorAuthenticationRecoveryStatus(childComplexity, args["userId"].(string)), true
+	case "Query.validatePasswordResetToken":
+		if e.ComplexityRoot.Query.ValidatePasswordResetToken == nil {
+			break
+		}
+
+		args, err := ec.field_Query_validatePasswordResetToken_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.ValidatePasswordResetToken(childComplexity, args["passwordResetToken"].(string)), true
 
 	case "SubdomainAvailability.available":
 		if e.ComplexityRoot.SubdomainAvailability.Available == nil {
@@ -868,6 +935,25 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.UserSession.WorkspaceID(childComplexity), true
+
+	case "ValidatePasswordResetToken.email":
+		if e.ComplexityRoot.ValidatePasswordResetToken.Email == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ValidatePasswordResetToken.Email(childComplexity), true
+	case "ValidatePasswordResetToken.hasPassword":
+		if e.ComplexityRoot.ValidatePasswordResetToken.HasPassword == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ValidatePasswordResetToken.HasPassword(childComplexity), true
+	case "ValidatePasswordResetToken.id":
+		if e.ComplexityRoot.ValidatePasswordResetToken.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ValidatePasswordResetToken.ID(childComplexity), true
 
 	case "VerifyTwoFactorAuthenticationMethod.success":
 		if e.ComplexityRoot.VerifyTwoFactorAuthenticationMethod.Success == nil {
@@ -1010,7 +1096,7 @@ func newExecutionContext(
 	}
 }
 
-//go:embed "login.graphqls" "publicdata.graphqls" "session.graphqls" "twofactor.graphqls"
+//go:embed "login.graphqls" "publicdata.graphqls" "reset.graphqls" "session.graphqls" "twofactor.graphqls"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -1024,6 +1110,7 @@ func sourceData(filename string) string {
 var sources = []*ast.Source{
 	{Name: "login.graphqls", Input: sourceData("login.graphqls"), BuiltIn: false},
 	{Name: "publicdata.graphqls", Input: sourceData("publicdata.graphqls"), BuiltIn: false},
+	{Name: "reset.graphqls", Input: sourceData("reset.graphqls"), BuiltIn: false},
 	{Name: "session.graphqls", Input: sourceData("session.graphqls"), BuiltIn: false},
 	{Name: "twofactor.graphqls", Input: sourceData("twofactor.graphqls"), BuiltIn: false},
 }
@@ -1143,12 +1230,28 @@ func (ec *executionContext) childFields_DeleteTwoFactorAuthenticationMethod(ctx 
 	return nil, fmt.Errorf("no field named %q was found under type DeleteTwoFactorAuthenticationMethod", field.Name)
 }
 
+func (ec *executionContext) childFields_EmailPasswordResetLink(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "success":
+		return ec.fieldContext_EmailPasswordResetLink_success(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type EmailPasswordResetLink", field.Name)
+}
+
 func (ec *executionContext) childFields_InitiateTwoFactorAuthenticationProvisioning(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "uri":
 		return ec.fieldContext_InitiateTwoFactorAuthenticationProvisioning_uri(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type InitiateTwoFactorAuthenticationProvisioning", field.Name)
+}
+
+func (ec *executionContext) childFields_InvalidatePassword(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "success":
+		return ec.fieldContext_InvalidatePassword_success(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type InvalidatePassword", field.Name)
 }
 
 func (ec *executionContext) childFields_LoginToken(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -1265,6 +1368,18 @@ func (ec *executionContext) childFields_UserSession(ctx context.Context, field g
 		return ec.fieldContext_UserSession_isCurrent(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type UserSession", field.Name)
+}
+
+func (ec *executionContext) childFields_ValidatePasswordResetToken(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_ValidatePasswordResetToken_id(ctx, field)
+	case "email":
+		return ec.fieldContext_ValidatePasswordResetToken_email(ctx, field)
+	case "hasPassword":
+		return ec.fieldContext_ValidatePasswordResetToken_hasPassword(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ValidatePasswordResetToken", field.Name)
 }
 
 func (ec *executionContext) childFields_VerifyTwoFactorAuthenticationMethod(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -1436,6 +1551,36 @@ func (ec *executionContext) field_Mutation_deleteTwoFactorAuthenticationMethod_a
 		return nil, err
 	}
 	args["twoFactorAuthenticationMethodId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_emailPasswordResetLink_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "email",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["email"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "workspaceId",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOUUID2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["workspaceId"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "captchaToken",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["captchaToken"] = arg2
 	return args, nil
 }
 
@@ -1737,6 +1882,28 @@ func (ec *executionContext) field_Mutation_signOut_args(ctx context.Context, raw
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_updatePasswordViaResetToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "passwordResetToken",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["passwordResetToken"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "newPassword",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["newPassword"] = arg1
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_verifyTwoFactorAuthenticationMethodForAuthenticatedUser_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -1854,6 +2021,20 @@ func (ec *executionContext) field_Query_twoFactorAuthenticationRecoveryStatus_ar
 		return nil, err
 	}
 	args["userId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_validatePasswordResetToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "passwordResetToken",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["passwordResetToken"] = arg0
 	return args, nil
 }
 
@@ -2578,6 +2759,29 @@ func (ec *executionContext) fieldContext_DeleteTwoFactorAuthenticationMethod_suc
 	return graphql.NewScalarFieldContext("DeleteTwoFactorAuthenticationMethod", field, false, false, "Boolean")
 }
 
+func (ec *executionContext) _EmailPasswordResetLink_success(ctx context.Context, field graphql.CollectedField, obj *EmailPasswordResetLink) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailPasswordResetLink_success(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Success, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_EmailPasswordResetLink_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EmailPasswordResetLink", field, false, false, "Boolean")
+}
+
 func (ec *executionContext) _InitiateTwoFactorAuthenticationProvisioning_uri(ctx context.Context, field graphql.CollectedField, obj *InitiateTwoFactorAuthenticationProvisioning) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -2599,6 +2803,29 @@ func (ec *executionContext) _InitiateTwoFactorAuthenticationProvisioning_uri(ctx
 }
 func (ec *executionContext) fieldContext_InitiateTwoFactorAuthenticationProvisioning_uri(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("InitiateTwoFactorAuthenticationProvisioning", field, false, false, "String")
+}
+
+func (ec *executionContext) _InvalidatePassword_success(ctx context.Context, field graphql.CollectedField, obj *InvalidatePassword) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_InvalidatePassword_success(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Success, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_InvalidatePassword_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("InvalidatePassword", field, false, false, "Boolean")
 }
 
 func (ec *executionContext) _LoginToken_loginToken(ctx context.Context, field graphql.CollectedField, obj *LoginToken) (ret graphql.Marshaler) {
@@ -3055,6 +3282,94 @@ func (ec *executionContext) fieldContext_Mutation_initiateOTPProvisioning(ctx co
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_initiateOTPProvisioning_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_emailPasswordResetLink(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_emailPasswordResetLink(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().EmailPasswordResetLink(ctx, fc.Args["email"].(string), fc.Args["workspaceId"].(*string), fc.Args["captchaToken"].(*string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *EmailPasswordResetLink) graphql.Marshaler {
+			return ec.marshalNEmailPasswordResetLink2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐEmailPasswordResetLink(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_emailPasswordResetLink(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_EmailPasswordResetLink(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_emailPasswordResetLink_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updatePasswordViaResetToken(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_updatePasswordViaResetToken(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().UpdatePasswordViaResetToken(ctx, fc.Args["passwordResetToken"].(string), fc.Args["newPassword"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *InvalidatePassword) graphql.Marshaler {
+			return ec.marshalNInvalidatePassword2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐInvalidatePassword(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_updatePasswordViaResetToken(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_InvalidatePassword(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updatePasswordViaResetToken_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -3854,6 +4169,50 @@ func (ec *executionContext) fieldContext_Query_currentWorkspace(_ context.Contex
 	return fc, nil
 }
 
+func (ec *executionContext) _Query_validatePasswordResetToken(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_validatePasswordResetToken(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().ValidatePasswordResetToken(ctx, fc.Args["passwordResetToken"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *ValidatePasswordResetToken) graphql.Marshaler {
+			return ec.marshalNValidatePasswordResetToken2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐValidatePasswordResetToken(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_validatePasswordResetToken(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ValidatePasswordResetToken(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_validatePasswordResetToken_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_currentUserSessions(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -4461,6 +4820,75 @@ func (ec *executionContext) _UserSession_isCurrent(ctx context.Context, field gr
 }
 func (ec *executionContext) fieldContext_UserSession_isCurrent(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("UserSession", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _ValidatePasswordResetToken_id(ctx context.Context, field graphql.CollectedField, obj *ValidatePasswordResetToken) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ValidatePasswordResetToken_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ValidatePasswordResetToken_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ValidatePasswordResetToken", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _ValidatePasswordResetToken_email(ctx context.Context, field graphql.CollectedField, obj *ValidatePasswordResetToken) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ValidatePasswordResetToken_email(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Email, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ValidatePasswordResetToken_email(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ValidatePasswordResetToken", field, false, false, "String")
+}
+
+func (ec *executionContext) _ValidatePasswordResetToken_hasPassword(ctx context.Context, field graphql.CollectedField, obj *ValidatePasswordResetToken) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ValidatePasswordResetToken_hasPassword(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.HasPassword, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ValidatePasswordResetToken_hasPassword(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ValidatePasswordResetToken", field, false, false, "Boolean")
 }
 
 func (ec *executionContext) _VerifyTwoFactorAuthenticationMethod_success(ctx context.Context, field graphql.CollectedField, obj *VerifyTwoFactorAuthenticationMethod) (ret graphql.Marshaler) {
@@ -6156,6 +6584,39 @@ func (ec *executionContext) _DeleteTwoFactorAuthenticationMethod(ctx context.Con
 	return out
 }
 
+var emailPasswordResetLinkImplementors = []string{"EmailPasswordResetLink"}
+
+func (ec *executionContext) _EmailPasswordResetLink(ctx context.Context, sel ast.SelectionSet, obj *EmailPasswordResetLink) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, emailPasswordResetLinkImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("EmailPasswordResetLink")
+		case "success":
+			out.Values[i] = ec._EmailPasswordResetLink_success(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
 var initiateTwoFactorAuthenticationProvisioningImplementors = []string{"InitiateTwoFactorAuthenticationProvisioning"}
 
 func (ec *executionContext) _InitiateTwoFactorAuthenticationProvisioning(ctx context.Context, sel ast.SelectionSet, obj *InitiateTwoFactorAuthenticationProvisioning) graphql.Marshaler {
@@ -6169,6 +6630,39 @@ func (ec *executionContext) _InitiateTwoFactorAuthenticationProvisioning(ctx con
 			out.Values[i] = graphql.MarshalString("InitiateTwoFactorAuthenticationProvisioning")
 		case "uri":
 			out.Values[i] = ec._InitiateTwoFactorAuthenticationProvisioning_uri(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var invalidatePasswordImplementors = []string{"InvalidatePassword"}
+
+func (ec *executionContext) _InvalidatePassword(ctx context.Context, sel ast.SelectionSet, obj *InvalidatePassword) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, invalidatePasswordImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("InvalidatePassword")
+		case "success":
+			out.Values[i] = ec._InvalidatePassword_success(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -6307,6 +6801,20 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "initiateOTPProvisioning":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_initiateOTPProvisioning(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "emailPasswordResetLink":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_emailPasswordResetLink(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatePasswordViaResetToken":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updatePasswordViaResetToken(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -6537,6 +7045,12 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				true, true,
 				func(ctx context.Context) graphql.Marshaler {
 					return ec._Query_currentWorkspace(ctx, field)
+				})
+		case "validatePasswordResetToken":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_validatePasswordResetToken(ctx, field)
 				})
 		case "currentUserSessions":
 			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
@@ -6828,6 +7342,49 @@ func (ec *executionContext) _UserSession(ctx context.Context, sel ast.SelectionS
 			}
 		case "isCurrent":
 			out.Values[i] = ec._UserSession_isCurrent(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var validatePasswordResetTokenImplementors = []string{"ValidatePasswordResetToken"}
+
+func (ec *executionContext) _ValidatePasswordResetToken(ctx context.Context, sel ast.SelectionSet, obj *ValidatePasswordResetToken) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, validatePasswordResetTokenImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ValidatePasswordResetToken")
+		case "id":
+			out.Values[i] = ec._ValidatePasswordResetToken_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "email":
+			out.Values[i] = ec._ValidatePasswordResetToken_email(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "hasPassword":
+			out.Values[i] = ec._ValidatePasswordResetToken_hasPassword(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -7479,6 +8036,14 @@ func (ec *executionContext) marshalNDeleteTwoFactorAuthenticationMethod2ᚖgithu
 	return ec._DeleteTwoFactorAuthenticationMethod(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalNEmailPasswordResetLink2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐEmailPasswordResetLink(ctx context.Context, sel ast.SelectionSet, v *EmailPasswordResetLink) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "EmailPasswordResetLink!")
+		return graphql.Null
+	}
+	return ec._EmailPasswordResetLink(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalNFloat2float64(ctx context.Context, v any) (float64, error) {
 	res, err := graphql.UnmarshalFloatContext(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -7513,6 +8078,14 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 		graphql.AddInvalidNullFromMarshaler(ctx, "Int!")
 	}
 	return res
+}
+
+func (ec *executionContext) marshalNInvalidatePassword2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐInvalidatePassword(ctx context.Context, sel ast.SelectionSet, v *InvalidatePassword) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "InvalidatePassword!")
+		return graphql.Null
+	}
+	return ec._InvalidatePassword(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNLoginToken2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐLoginToken(ctx context.Context, sel ast.SelectionSet, v *LoginToken) graphql.Marshaler {
@@ -7658,6 +8231,14 @@ func (ec *executionContext) marshalNUserSession2ᚖgithubᚗcomᚋtwentyhqᚋtwe
 		return graphql.Null
 	}
 	return ec._UserSession(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNValidatePasswordResetToken2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐValidatePasswordResetToken(ctx context.Context, sel ast.SelectionSet, v *ValidatePasswordResetToken) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "ValidatePasswordResetToken!")
+		return graphql.Null
+	}
+	return ec._ValidatePasswordResetToken(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNVerifyTwoFactorAuthenticationMethod2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐVerifyTwoFactorAuthenticationMethod(ctx context.Context, sel ast.SelectionSet, v *VerifyTwoFactorAuthenticationMethod) graphql.Marshaler {
