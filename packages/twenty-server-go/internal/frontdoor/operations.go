@@ -15,6 +15,8 @@ const (
 
 var RuntimeBuiltObjects = []string{
 	"person", "company", "note", "task", "opportunity", "dashboard", "attachment", "timelineActivity", "workspaceMember",
+	"message", "messageCampaign", "messageChannelMessageAssociation", "messageChannelMessageAssociationMessageFolder",
+	"messageList", "messageListMember", "messageParticipant", "messageSuppression", "messageThread", "messageThreadTarget",
 }
 
 func RecordOperations(object model.Object) []string {
