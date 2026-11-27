@@ -139,16 +139,14 @@ func (r *Roles) UpdateMemberSettings(ctx context.Context, workspaceMemberID stri
 		}
 	}
 	return pgx.BeginFunc(ctx, r.pool, func(tx pgx.Tx) error {
-		if len(assignments) > 0 {
-			tag, err := tx.Exec(ctx, `UPDATE `+memberTable+` SET `+strings.Join(assignments, ", ")+`, "updatedAt" = now() WHERE id = $1::uuid AND "deletedAt" IS NULL`, args...)
-			switch {
-			case err != nil:
-				return fmt.Errorf("update workspace member: %w", err)
-			case tag.RowsAffected() == 0:
-				return fmt.Errorf("%w: Workspace member not found", metadata.ErrInvalidInput)
-			}
+		tag, err := tx.Exec(ctx, `UPDATE `+memberTable+` SET `+strings.Join(append(assignments, `"updatedAt" = now()`), ", ")+` WHERE id = $1::uuid AND "deletedAt" IS NULL`, args...)
+		switch {
+		case err != nil:
+			return fmt.Errorf("update workspace member: %w", err)
+		case tag.RowsAffected() == 0:
+			return fmt.Errorf("%w: Workspace member not found", metadata.ErrInvalidInput)
 		}
-		if locale, present := update["locale"]; present {
+		if locale, present := update["locale"]; present && locale != nil {
 			if _, err := tx.Exec(ctx, `UPDATE core."userWorkspace" SET locale = $2, "updatedAt" = now()
 				WHERE "workspaceId" = $3::uuid AND "userId" = (SELECT "userId" FROM `+memberTable+` WHERE id = $1::uuid)`,
 				workspaceMemberID, locale, workspace.PinnedWorkspaceID); err != nil {
