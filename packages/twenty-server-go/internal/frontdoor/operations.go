@@ -17,7 +17,7 @@ var RuntimeBuiltObjects = []string{
 	"person", "company", "note", "task", "opportunity", "dashboard", "attachment", "timelineActivity", "workspaceMember",
 	"campaignDelivery", "blocklist", "recordShare", "shortLink", "noteTarget", "taskTarget",
 	"calendarEvent", "calendarEventParticipant", "calendarEventTarget", "calendarChannelEventAssociation",
-	"message", "messageCampaign", "messageChannelMessageAssociation", "messageList", "messageListMember",
+	"message", "messageCampaign", "messageChannelMessageAssociation", "messageChannelMessageAssociationMessageFolder","messageList", "messageListMember",
 	"messageParticipant", "messageSuppression", "messageThread", "messageThreadTarget",
 	"workflow", "workflowAutomatedTrigger", "workflowRun", "workflowVersion",
 }
