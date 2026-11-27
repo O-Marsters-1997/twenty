@@ -1,0 +1,61 @@
+schema:
+  - "*.graphqls"
+exec:
+  filename: generated.go
+  package: usergql
+model:
+  filename: models_gen.go
+  package: usergql
+models:
+  UUID:
+    model: github.com/99designs/gqlgen/graphql.String
+  DateTime:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata.Timestamp
+  JSON:
+    model: github.com/99designs/gqlgen/graphql.Map
+  JSONObject:
+    model: github.com/99designs/gqlgen/graphql.Map
+  OnboardingStatus:
+    model: github.com/99designs/gqlgen/graphql.String
+  WorkspaceActivationStatus:
+    model: github.com/99designs/gqlgen/graphql.String
+  WorkspaceDiscoverability:
+    model: github.com/99designs/gqlgen/graphql.String
+  AiModelTier:
+    model: github.com/99designs/gqlgen/graphql.String
+  User:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/user.User
+    fields:
+      supportUserHash:
+        resolver: true
+      onboardingStatus:
+        resolver: true
+      currentWorkspace:
+        resolver: true
+      availableWorkspaces:
+        resolver: true
+      userVars:
+        resolver: true
+  Workspace:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/user.Workspace
+    fields:
+      logo:
+        resolver: true
+      workspaceCustomApplication:
+        resolver: true
+      installedApplications:
+        resolver: true
+      workspaceUrls:
+        resolver: true
+      featureFlags:
+        resolver: true
+      workspaceMembersCount:
+        resolver: true
+      defaultRole:
+        resolver: true
+  FeatureFlag:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/user.FeatureFlag
+  Role:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workspace.Role
+  Application:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/application/store.Application

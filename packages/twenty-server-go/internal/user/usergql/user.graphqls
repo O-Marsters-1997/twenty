@@ -1,0 +1,137 @@
+scalar UUID
+scalar DateTime
+scalar JSON
+scalar JSONObject
+
+enum OnboardingStatus {
+  WORKSPACE_ACTIVATION
+  PROFILE_CREATION
+  SYNC_EMAIL
+  INVITE_TEAM
+  COMPLETED
+}
+
+enum WorkspaceActivationStatus {
+  ACTIVE
+  CREATED
+  INACTIVE
+  ONGOING_CREATION
+  PENDING_CREATION
+}
+
+enum WorkspaceDiscoverability {
+  PUBLIC
+  MEMBERS_AND_INVITEES
+  HIDDEN
+}
+
+enum AiModelTier {
+  extraFast
+  fast
+  balanced
+  smart
+  extraSmart
+}
+
+type WorkspaceUrls {
+  subdomainUrl: String!
+}
+
+type AvailableWorkspace {
+  id: UUID!
+  displayName: String
+  loginToken: String
+  personalInviteToken: String
+  inviteHash: String
+  workspaceUrls: WorkspaceUrls!
+  logo: String
+}
+
+type AvailableWorkspaces {
+  availableWorkspacesForSignIn: [AvailableWorkspace!]!
+  availableWorkspacesForSignUp: [AvailableWorkspace!]!
+}
+
+type FeatureFlag {
+  key: String!
+  value: Boolean!
+}
+
+type Role {
+  id: UUID!
+  label: String!
+  description: String
+  icon: String
+  canUpdateAllSettings: Boolean!
+  canAccessAllTools: Boolean!
+  isEditable: Boolean!
+  canReadAllObjectRecords: Boolean!
+  canUpdateAllObjectRecords: Boolean!
+  canSoftDeleteAllObjectRecords: Boolean!
+  canDestroyAllObjectRecords: Boolean!
+  canBeAssignedToUsers: Boolean!
+  canBeAssignedToAgents: Boolean!
+  canBeAssignedToApiKeys: Boolean!
+}
+
+type Application {
+  id: UUID!
+  name: String!
+  description: String
+  logoUrl: String
+  version: String
+  universalIdentifier: String!
+  createdAt: DateTime!
+  defaultRoleId: String
+}
+
+type Workspace {
+  id: UUID!
+  displayName: String
+  logo: String
+  inviteHash: String
+  allowImpersonation: Boolean!
+  activationStatus: WorkspaceActivationStatus!
+  isPublicInviteLinkEnabled: Boolean!
+  isCampaignClickTrackingEnabled: Boolean!
+  isCampaignOpenTrackingEnabled: Boolean!
+  workspaceDiscoverability: WorkspaceDiscoverability!
+  isGoogleAuthEnabled: Boolean!
+  isPasswordAuthEnabled: Boolean!
+  isGoogleAuthBypassEnabled: Boolean!
+  isPasswordAuthBypassEnabled: Boolean!
+  subdomain: String!
+  workspaceCustomApplication: Application
+  installedApplications: [Application!]!
+  workspaceUrls: WorkspaceUrls!
+  featureFlags: [FeatureFlag!]
+  workspaceMembersCount: Float
+  defaultRole: Role
+  aiChatModelTier: AiModelTier!
+  aiAgentModelTier: AiModelTier!
+  isAutoModelSelectionEnabled: Boolean!
+  aiModelIdByTier: JSON!
+  aiAdditionalInstructions: String
+  isTwoFactorAuthenticationEnforced: Boolean!
+  trashRetentionDays: Float!
+  eventLogRetentionDays: Float!
+  editableProfileFields: [String!]
+  isInternalMessagesImportEnabled: Boolean!
+}
+
+type User {
+  id: UUID!
+  firstName: String!
+  lastName: String!
+  email: String!
+  hasPassword: Boolean!
+  supportUserHash: String
+  onboardingStatus: OnboardingStatus
+  currentWorkspace: Workspace
+  availableWorkspaces: AvailableWorkspaces!
+  userVars: JSONObject
+}
+
+type Query {
+  currentUser: User!
+}
