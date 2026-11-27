@@ -140,6 +140,18 @@ type ComplexityRoot struct {
 		UpdatedAt   func(childComplexity int) int
 	}
 
+	EmailingDomain struct {
+		CreatedAt                 func(childComplexity int) int
+		Domain                    func(childComplexity int) int
+		ID                        func(childComplexity int) int
+		Status                    func(childComplexity int) int
+		TenantStatus              func(childComplexity int) int
+		UnsubscribeHostnameStatus func(childComplexity int) int
+		UpdatedAt                 func(childComplexity int) int
+		VerificationRecords       func(childComplexity int) int
+		VerifiedAt                func(childComplexity int) int
+	}
+
 	LinkMetadata struct {
 		Label func(childComplexity int) int
 		URL   func(childComplexity int) int
@@ -227,6 +239,7 @@ type ComplexityRoot struct {
 
 	Query struct {
 		ApplicationConnectedAccounts              func(childComplexity int, applicationID string) int
+		GetEmailingDomains                        func(childComplexity int) int
 		GetTimelineCalendarEventsFromObjectRecord func(childComplexity int, objectNameSingular string, recordID string, page int, pageSize int) int
 		GetTimelineThreadsFromCompanyID           func(childComplexity int, companyID string, page int, pageSize int) int
 		GetTimelineThreadsFromObjectRecord        func(childComplexity int, objectNameSingular string, recordID string, page int, pageSize int) int
@@ -326,6 +339,14 @@ type ComplexityRoot struct {
 		UpdatedAt   func(childComplexity int) int
 		Visibility  func(childComplexity int) int
 	}
+
+	VerificationRecord struct {
+		Key      func(childComplexity int) int
+		Priority func(childComplexity int) int
+		Status   func(childComplexity int) int
+		Type     func(childComplexity int) int
+		Value    func(childComplexity int) int
+	}
 }
 
 // endregion ***************************** api!.gotpl *****************************
@@ -366,6 +387,7 @@ type QueryResolver interface {
 	GetTimelineThreadsFromCompanyID(ctx context.Context, companyID string, page int, pageSize int) (*messaging.TimelineThreadsWithTotal, error)
 	GetTimelineThreadsFromOpportunityID(ctx context.Context, opportunityID string, page int, pageSize int) (*messaging.TimelineThreadsWithTotal, error)
 	PreviewMessageCampaignAudience(ctx context.Context, input PreviewMessageCampaignAudienceInput) (*messaging.Audience, error)
+	GetEmailingDomains(ctx context.Context) ([]*store.EmailingDomain, error)
 	MyMessageFolders(ctx context.Context, messageChannelID *string) ([]*store.MessageFolder, error)
 	MessageSuppressions(ctx context.Context, input map[string]any) (*store.MessageSuppressionList, error)
 	UnsubscribeTopics(ctx context.Context) ([]*store.UnsubscribeTopic, error)
@@ -833,6 +855,61 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DuplicatedMessageList.UpdatedAt(childComplexity), true
+
+	case "EmailingDomain.createdAt":
+		if e.ComplexityRoot.EmailingDomain.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailingDomain.CreatedAt(childComplexity), true
+	case "EmailingDomain.domain":
+		if e.ComplexityRoot.EmailingDomain.Domain == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailingDomain.Domain(childComplexity), true
+	case "EmailingDomain.id":
+		if e.ComplexityRoot.EmailingDomain.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailingDomain.ID(childComplexity), true
+	case "EmailingDomain.status":
+		if e.ComplexityRoot.EmailingDomain.Status == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailingDomain.Status(childComplexity), true
+	case "EmailingDomain.tenantStatus":
+		if e.ComplexityRoot.EmailingDomain.TenantStatus == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailingDomain.TenantStatus(childComplexity), true
+	case "EmailingDomain.unsubscribeHostnameStatus":
+		if e.ComplexityRoot.EmailingDomain.UnsubscribeHostnameStatus == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailingDomain.UnsubscribeHostnameStatus(childComplexity), true
+	case "EmailingDomain.updatedAt":
+		if e.ComplexityRoot.EmailingDomain.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailingDomain.UpdatedAt(childComplexity), true
+	case "EmailingDomain.verificationRecords":
+		if e.ComplexityRoot.EmailingDomain.VerificationRecords == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailingDomain.VerificationRecords(childComplexity), true
+	case "EmailingDomain.verifiedAt":
+		if e.ComplexityRoot.EmailingDomain.VerifiedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailingDomain.VerifiedAt(childComplexity), true
 
 	case "LinkMetadata.label":
 		if e.ComplexityRoot.LinkMetadata.Label == nil {
@@ -1331,6 +1408,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.ApplicationConnectedAccounts(childComplexity, args["applicationId"].(string)), true
+	case "Query.getEmailingDomains":
+		if e.ComplexityRoot.Query.GetEmailingDomains == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Query.GetEmailingDomains(childComplexity), true
 	case "Query.getTimelineCalendarEventsFromObjectRecord":
 		if e.ComplexityRoot.Query.GetTimelineCalendarEventsFromObjectRecord == nil {
 			break
@@ -1801,6 +1884,37 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.UnsubscribeTopic.Visibility(childComplexity), true
 
+	case "VerificationRecord.key":
+		if e.ComplexityRoot.VerificationRecord.Key == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VerificationRecord.Key(childComplexity), true
+	case "VerificationRecord.priority":
+		if e.ComplexityRoot.VerificationRecord.Priority == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VerificationRecord.Priority(childComplexity), true
+	case "VerificationRecord.status":
+		if e.ComplexityRoot.VerificationRecord.Status == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VerificationRecord.Status(childComplexity), true
+	case "VerificationRecord.type":
+		if e.ComplexityRoot.VerificationRecord.Type == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VerificationRecord.Type(childComplexity), true
+	case "VerificationRecord.value":
+		if e.ComplexityRoot.VerificationRecord.Value == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VerificationRecord.Value(childComplexity), true
+
 	}
 	return 0, false
 }
@@ -1903,7 +2017,7 @@ func newExecutionContext(
 	}
 }
 
-//go:embed "timeline.graphqls" "messaging.graphqls" "send.graphqls" "campaign.graphqls" "outreach.graphqls" "calendar.graphqls"
+//go:embed "timeline.graphqls" "messaging.graphqls" "send.graphqls" "campaign.graphqls" "emailingdomain.graphqls" "outreach.graphqls" "calendar.graphqls"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -1919,6 +2033,7 @@ var sources = []*ast.Source{
 	{Name: "messaging.graphqls", Input: sourceData("messaging.graphqls"), BuiltIn: false},
 	{Name: "send.graphqls", Input: sourceData("send.graphqls"), BuiltIn: false},
 	{Name: "campaign.graphqls", Input: sourceData("campaign.graphqls"), BuiltIn: false},
+	{Name: "emailingdomain.graphqls", Input: sourceData("emailingdomain.graphqls"), BuiltIn: false},
 	{Name: "outreach.graphqls", Input: sourceData("outreach.graphqls"), BuiltIn: false},
 	{Name: "calendar.graphqls", Input: sourceData("calendar.graphqls"), BuiltIn: false},
 }
@@ -2124,6 +2239,30 @@ func (ec *executionContext) childFields_DuplicatedMessageList(ctx context.Contex
 		return ec.fieldContext_DuplicatedMessageList_updatedAt(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type DuplicatedMessageList", field.Name)
+}
+
+func (ec *executionContext) childFields_EmailingDomain(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_EmailingDomain_id(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_EmailingDomain_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_EmailingDomain_updatedAt(ctx, field)
+	case "domain":
+		return ec.fieldContext_EmailingDomain_domain(ctx, field)
+	case "status":
+		return ec.fieldContext_EmailingDomain_status(ctx, field)
+	case "tenantStatus":
+		return ec.fieldContext_EmailingDomain_tenantStatus(ctx, field)
+	case "unsubscribeHostnameStatus":
+		return ec.fieldContext_EmailingDomain_unsubscribeHostnameStatus(ctx, field)
+	case "verificationRecords":
+		return ec.fieldContext_EmailingDomain_verificationRecords(ctx, field)
+	case "verifiedAt":
+		return ec.fieldContext_EmailingDomain_verifiedAt(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type EmailingDomain", field.Name)
 }
 
 func (ec *executionContext) childFields_LinkMetadata(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -2422,6 +2561,22 @@ func (ec *executionContext) childFields_UnsubscribeTopic(ctx context.Context, fi
 		return ec.fieldContext_UnsubscribeTopic_updatedAt(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type UnsubscribeTopic", field.Name)
+}
+
+func (ec *executionContext) childFields_VerificationRecord(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "type":
+		return ec.fieldContext_VerificationRecord_type(ctx, field)
+	case "key":
+		return ec.fieldContext_VerificationRecord_key(ctx, field)
+	case "value":
+		return ec.fieldContext_VerificationRecord_value(ctx, field)
+	case "priority":
+		return ec.fieldContext_VerificationRecord_priority(ctx, field)
+	case "status":
+		return ec.fieldContext_VerificationRecord_status(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type VerificationRecord", field.Name)
 }
 
 func (ec *executionContext) childFields___Directive(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -4809,6 +4964,222 @@ func (ec *executionContext) fieldContext_DuplicatedMessageList_updatedAt(_ conte
 	return graphql.NewScalarFieldContext("DuplicatedMessageList", field, false, false, "String")
 }
 
+func (ec *executionContext) _EmailingDomain_id(ctx context.Context, field graphql.CollectedField, obj *store.EmailingDomain) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailingDomain_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_EmailingDomain_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EmailingDomain", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _EmailingDomain_createdAt(ctx context.Context, field graphql.CollectedField, obj *store.EmailingDomain) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailingDomain_createdAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalNDateTime2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_EmailingDomain_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EmailingDomain", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _EmailingDomain_updatedAt(ctx context.Context, field graphql.CollectedField, obj *store.EmailingDomain) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailingDomain_updatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalNDateTime2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_EmailingDomain_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EmailingDomain", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _EmailingDomain_domain(ctx context.Context, field graphql.CollectedField, obj *store.EmailingDomain) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailingDomain_domain(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Domain, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_EmailingDomain_domain(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EmailingDomain", field, false, false, "String")
+}
+
+func (ec *executionContext) _EmailingDomain_status(ctx context.Context, field graphql.CollectedField, obj *store.EmailingDomain) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailingDomain_status(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Status, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNEmailingDomainStatus2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_EmailingDomain_status(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EmailingDomain", field, false, false, "EmailingDomainStatus")
+}
+
+func (ec *executionContext) _EmailingDomain_tenantStatus(ctx context.Context, field graphql.CollectedField, obj *store.EmailingDomain) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailingDomain_tenantStatus(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TenantStatus, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNEmailingDomainTenantStatus2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_EmailingDomain_tenantStatus(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EmailingDomain", field, false, false, "EmailingDomainTenantStatus")
+}
+
+func (ec *executionContext) _EmailingDomain_unsubscribeHostnameStatus(ctx context.Context, field graphql.CollectedField, obj *store.EmailingDomain) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailingDomain_unsubscribeHostnameStatus(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UnsubscribeHostnameStatus, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOUnsubscribeHostnameStatus2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_EmailingDomain_unsubscribeHostnameStatus(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EmailingDomain", field, false, false, "UnsubscribeHostnameStatus")
+}
+
+func (ec *executionContext) _EmailingDomain_verificationRecords(ctx context.Context, field graphql.CollectedField, obj *store.EmailingDomain) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailingDomain_verificationRecords(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.VerificationRecords, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []store.VerificationRecord) graphql.Marshaler {
+			return ec.marshalOVerificationRecord2ᚕgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐVerificationRecordᚄ(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_EmailingDomain_verificationRecords(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "EmailingDomain",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_VerificationRecord(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _EmailingDomain_verifiedAt(ctx context.Context, field graphql.CollectedField, obj *store.EmailingDomain) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EmailingDomain_verifiedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.VerifiedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *metadata.Timestamp) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_EmailingDomain_verifiedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EmailingDomain", field, false, false, "DateTime")
+}
+
 func (ec *executionContext) _LinkMetadata_label(ctx context.Context, field graphql.CollectedField, obj *store.Link) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -7091,6 +7462,38 @@ func (ec *executionContext) fieldContext_Query_previewMessageCampaignAudience(ct
 	return fc, nil
 }
 
+func (ec *executionContext) _Query_getEmailingDomains(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_getEmailingDomains(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return ec.Resolvers.Query().GetEmailingDomains(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*store.EmailingDomain) graphql.Marshaler {
+			return ec.marshalNEmailingDomain2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐEmailingDomainᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_getEmailingDomains(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_EmailingDomain(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query_myMessageFolders(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -8680,6 +9083,121 @@ func (ec *executionContext) _UnsubscribeTopic_updatedAt(ctx context.Context, fie
 }
 func (ec *executionContext) fieldContext_UnsubscribeTopic_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("UnsubscribeTopic", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _VerificationRecord_type(ctx context.Context, field graphql.CollectedField, obj *store.VerificationRecord) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VerificationRecord_type(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Type, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_VerificationRecord_type(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("VerificationRecord", field, false, false, "String")
+}
+
+func (ec *executionContext) _VerificationRecord_key(ctx context.Context, field graphql.CollectedField, obj *store.VerificationRecord) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VerificationRecord_key(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Key, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_VerificationRecord_key(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("VerificationRecord", field, false, false, "String")
+}
+
+func (ec *executionContext) _VerificationRecord_value(ctx context.Context, field graphql.CollectedField, obj *store.VerificationRecord) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VerificationRecord_value(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Value, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_VerificationRecord_value(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("VerificationRecord", field, false, false, "String")
+}
+
+func (ec *executionContext) _VerificationRecord_priority(ctx context.Context, field graphql.CollectedField, obj *store.VerificationRecord) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VerificationRecord_priority(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Priority, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOFloat2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_VerificationRecord_priority(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("VerificationRecord", field, false, false, "Float")
+}
+
+func (ec *executionContext) _VerificationRecord_status(ctx context.Context, field graphql.CollectedField, obj *store.VerificationRecord) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VerificationRecord_status(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Status, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_VerificationRecord_status(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("VerificationRecord", field, false, false, "String")
 }
 
 func (ec *executionContext) ___Directive_name(ctx context.Context, field graphql.CollectedField, obj *introspection.Directive) (ret graphql.Marshaler) {
@@ -11493,6 +12011,79 @@ func (ec *executionContext) _DuplicatedMessageList(ctx context.Context, sel ast.
 	return out
 }
 
+var emailingDomainImplementors = []string{"EmailingDomain"}
+
+func (ec *executionContext) _EmailingDomain(ctx context.Context, sel ast.SelectionSet, obj *store.EmailingDomain) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, emailingDomainImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("EmailingDomain")
+		case "id":
+			out.Values[i] = ec._EmailingDomain_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._EmailingDomain_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._EmailingDomain_updatedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "domain":
+			out.Values[i] = ec._EmailingDomain_domain(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "status":
+			out.Values[i] = ec._EmailingDomain_status(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "tenantStatus":
+			out.Values[i] = ec._EmailingDomain_tenantStatus(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "unsubscribeHostnameStatus":
+			out.Values[i] = ec._EmailingDomain_unsubscribeHostnameStatus(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "verificationRecords":
+			out.Values[i] = ec._EmailingDomain_verificationRecords(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "verifiedAt":
+			out.Values[i] = ec._EmailingDomain_verifiedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
 var linkMetadataImplementors = []string{"LinkMetadata"}
 
 func (ec *executionContext) _LinkMetadata(ctx context.Context, sel ast.SelectionSet, obj *store.Link) graphql.Marshaler {
@@ -12129,6 +12720,12 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				func(ctx context.Context) graphql.Marshaler {
 					return ec._Query_previewMessageCampaignAudience(ctx, field)
 				})
+		case "getEmailingDomains":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_getEmailingDomains(ctx, field)
+				})
 		case "myMessageFolders":
 			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
 				true, true,
@@ -12745,6 +13342,59 @@ func (ec *executionContext) _UnsubscribeTopic(ctx context.Context, sel ast.Selec
 	return out
 }
 
+var verificationRecordImplementors = []string{"VerificationRecord"}
+
+func (ec *executionContext) _VerificationRecord(ctx context.Context, sel ast.SelectionSet, obj *store.VerificationRecord) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, verificationRecordImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("VerificationRecord")
+		case "type":
+			out.Values[i] = ec._VerificationRecord_type(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "key":
+			out.Values[i] = ec._VerificationRecord_key(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "value":
+			out.Values[i] = ec._VerificationRecord_value(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "priority":
+			out.Values[i] = ec._VerificationRecord_priority(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "status":
+			out.Values[i] = ec._VerificationRecord_status(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
 var __DirectiveImplementors = []string{"__Directive"}
 
 func (ec *executionContext) ___Directive(ctx context.Context, sel ast.SelectionSet, obj *introspection.Directive) graphql.Marshaler {
@@ -13341,6 +13991,58 @@ func (ec *executionContext) marshalNDuplicatedMessageList2ᚖgithubᚗcomᚋtwen
 	return ec._DuplicatedMessageList(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalNEmailingDomain2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐEmailingDomainᚄ(ctx context.Context, sel ast.SelectionSet, v []*store.EmailingDomain) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNEmailingDomain2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐEmailingDomain(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNEmailingDomain2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐEmailingDomain(ctx context.Context, sel ast.SelectionSet, v *store.EmailingDomain) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "EmailingDomain!")
+		return graphql.Null
+	}
+	return ec._EmailingDomain(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNEmailingDomainStatus2string(ctx context.Context, v any) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNEmailingDomainStatus2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalString(v)
+	if res == graphql.Null {
+		graphql.AddInvalidNullFromMarshaler(ctx, "EmailingDomainStatus!")
+	}
+	return res
+}
+
+func (ec *executionContext) unmarshalNEmailingDomainTenantStatus2string(ctx context.Context, v any) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNEmailingDomainTenantStatus2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalString(v)
+	if res == graphql.Null {
+		graphql.AddInvalidNullFromMarshaler(ctx, "EmailingDomainTenantStatus!")
+	}
+	return res
+}
+
 func (ec *executionContext) unmarshalNFindMessageSuppressionsInput2map(ctx context.Context, v any) (map[string]any, error) {
 	res, err := ec.unmarshalInputFindMessageSuppressionsInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -13882,6 +14584,10 @@ func (ec *executionContext) unmarshalNUpdateUnsubscribeTopicInput2map(ctx contex
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) marshalNVerificationRecord2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐVerificationRecord(ctx context.Context, sel ast.SelectionSet, v store.VerificationRecord) graphql.Marshaler {
+	return ec._VerificationRecord(ctx, sel, &v)
+}
+
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {
 	return ec.___Directive(ctx, sel, &v)
 }
@@ -14113,6 +14819,24 @@ func (ec *executionContext) marshalODateTime2ᚖgithubᚗcomᚋtwentyhqᚋtwenty
 	return v
 }
 
+func (ec *executionContext) unmarshalOFloat2ᚖint(ctx context.Context, v any) (*int, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalInt(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOFloat2ᚖint(ctx context.Context, sel ast.SelectionSet, v *int) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	_ = sel
+	_ = ctx
+	res := graphql.MarshalInt(*v)
+	return res
+}
+
 func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v any) (*int, error) {
 	if v == nil {
 		return nil, nil
@@ -14310,6 +15034,24 @@ func (ec *executionContext) marshalOUUID2ᚖstring(ctx context.Context, sel ast.
 	return res
 }
 
+func (ec *executionContext) unmarshalOUnsubscribeHostnameStatus2ᚖstring(ctx context.Context, v any) (*string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalString(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOUnsubscribeHostnameStatus2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	_ = sel
+	_ = ctx
+	res := graphql.MarshalString(*v)
+	return res
+}
+
 func (ec *executionContext) unmarshalOUnsubscribeTopicVisibility2ᚖstring(ctx context.Context, v any) (*string, error) {
 	if v == nil {
 		return nil, nil
@@ -14326,6 +15068,25 @@ func (ec *executionContext) marshalOUnsubscribeTopicVisibility2ᚖstring(ctx con
 	_ = ctx
 	res := graphql.MarshalString(*v)
 	return res
+}
+
+func (ec *executionContext) marshalOVerificationRecord2ᚕgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐVerificationRecordᚄ(ctx context.Context, sel ast.SelectionSet, v []store.VerificationRecord) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNVerificationRecord2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmessagingᚋstoreᚐVerificationRecord(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
 }
 
 func (ec *executionContext) marshalO__EnumValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐEnumValueᚄ(ctx context.Context, sel ast.SelectionSet, v []introspection.EnumValue) graphql.Marshaler {

@@ -14,10 +14,8 @@ import {
 } from 'twenty-ui/icon';
 import { useTheme } from 'twenty-ui/theme';
 
-import { isClickHouseConfiguredState } from '@/client-config/states/isClickHouseConfiguredState';
 import { LogConsoleDetailPanel } from '@/log-console/components/LogConsoleDetailPanel';
 import { LogConsoleToggleHotkeyEffect } from '@/log-console/components/LogConsoleToggleHotkeyEffect';
-import { LogConsoleResults } from '@/log-console/components/LogConsoleResults';
 import { LOG_CONSOLE_HEIGHT_CONSTRAINTS } from '@/log-console/constants/LogConsoleHeightConstraints';
 import { LOG_CONSOLE_SOURCES } from '@/log-console/constants/LogConsoleSources';
 import { LOG_CONSOLE_TAB_LIST_INSTANCE_ID } from '@/log-console/constants/LogConsoleTabListInstanceId';
@@ -100,7 +98,6 @@ export const LogConsole = () => {
 
   const isLogConsoleAllowed = useIsLogConsoleAllowed();
   const isAdvancedModeEnabled = useAtomStateValue(isAdvancedModeEnabledState);
-  const isClickHouseConfigured = useAtomStateValue(isClickHouseConfiguredState);
 
   const [logConsoleDisplayMode, setLogConsoleDisplayMode] = useAtomState(
     logConsoleDisplayModeState,
@@ -387,17 +384,11 @@ export const LogConsole = () => {
     ? t`Exit full screen`
     : t`Full screen`;
 
-  const renderActiveSource = () => {
-    if (!isClickHouseConfigured) {
-      return (
-        <SettingsEmptyPlaceholder>
-          {t`Logs require ClickHouse to be configured. Please contact your administrator.`}
-        </SettingsEmptyPlaceholder>
-      );
-    }
-
-    return <LogConsoleResults key={activeSource.id} source={activeSource} />;
-  };
+  const renderActiveSource = () => (
+    <SettingsEmptyPlaceholder>
+      {t`Logs require ClickHouse to be configured. Please contact your administrator.`}
+    </SettingsEmptyPlaceholder>
+  );
 
   return (
     <>
