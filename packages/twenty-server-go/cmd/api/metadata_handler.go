@@ -10,7 +10,7 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
 )
 
-var objectOperations = []string{"ObjectMetadataItems", "GetToolIndex", "GetToolInputSchema"}
+var objectOperations = []string{"ObjectMetadataItems", "GetToolIndex", "GetToolInputSchema", "ObjectRecordCounts", "MostlyEmptyFieldMetadataIds", "FindMinimalMetadata"}
 
 func metadataHandler(objects, chat, skills, views, agents, messaging, access, twoFactor, workspace, invitations, pageLayouts, applications http.Handler, agentOperations []string) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

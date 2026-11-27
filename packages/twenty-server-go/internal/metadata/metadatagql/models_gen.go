@@ -6,6 +6,11 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/store"
 )
 
+type CollectionHash struct {
+	CollectionName string `json:"collectionName"`
+	Hash           string `json:"hash"`
+}
+
 type CursorPaging struct {
 	Before *string `json:"before,omitempty"`
 	After  *string `json:"after,omitempty"`

@@ -58,6 +58,11 @@ func newServer(t *testing.T) *httptest.Server {
 		t.Fatalf("connect: %v", err)
 	}
 	t.Cleanup(pool.Close)
+	return newServerOn(t, pool)
+}
+
+func newServerOn(t *testing.T, pool *pgxpool.Pool) *httptest.Server {
+	t.Helper()
 	logger := slog.New(slog.NewTextHandler(io.Discard, nil))
 	goGraphQL := http.NewServeMux()
 	goGraphQL.Handle("/metadata", metadatagql.NewHandler(store.New(pool), ai.NewRegistry(), logger))
