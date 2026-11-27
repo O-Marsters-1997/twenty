@@ -4,16 +4,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
+
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 )
 
 var (
 	ErrPermissionDenied = errors.New("entity performing the request does not have permission")
 	ErrDomainNotFound   = errors.New("approved access domain not found")
 	ErrInvalidID        = errors.New("id must be a UUID")
+
+	ErrDomainMismatch   = errors.New("approved access domain does not match email")
+	ErrDomainNotCompany = errors.New("approved access domain must be a company domain")
+	ErrDomainRegistered = errors.New("approved access domain already registered")
 )
 
 type Invitation struct {
@@ -112,6 +120,58 @@ func (s *Store) ApprovedDomains(ctx context.Context, workspaceID string) ([]Appr
 		return nil, fmt.Errorf("read approved access domains: %w", err)
 	}
 	return domains, nil
+}
+
+func (s *Store) CreateApprovedDomain(ctx context.Context, workspaceID, domain, email string) (ApprovedDomain, error) {
+	domain = strings.ToLower(domain)
+	if !emailInDomain(email, domain) {
+		return ApprovedDomain{}, ErrDomainMismatch
+	}
+	if auth.IsPublicEmailDomain(domain) {
+		return ApprovedDomain{}, ErrDomainNotCompany
+	}
+	var created ApprovedDomain
+	err := s.pool.QueryRow(ctx,
+		`INSERT INTO core."approvedAccessDomain" (domain, "workspaceId") VALUES ($1, $2::uuid)
+		 ON CONFLICT (domain, "workspaceId") DO NOTHING
+		 RETURNING id::text, domain, "isValidated", "createdAt"`, domain, workspaceID,
+	).Scan(&created.ID, &created.Domain, &created.IsValidated, &created.CreatedAt)
+	if errors.Is(err, pgx.ErrNoRows) {
+		return ApprovedDomain{}, ErrDomainRegistered
+	}
+	if err != nil {
+		return ApprovedDomain{}, fmt.Errorf("create approved access domain: %w", err)
+	}
+	return created, nil
+}
+
+func (s *Store) ValidateApprovedDomain(ctx context.Context, workspaceID, id, email string) (ApprovedDomain, error) {
+	if _, err := uuid.Parse(id); err != nil {
+		return ApprovedDomain{}, ErrInvalidID
+	}
+	var domain ApprovedDomain
+	err := s.pool.QueryRow(ctx,
+		`SELECT id::text, domain, "isValidated", "createdAt" FROM core."approvedAccessDomain"
+		 WHERE id = $1::uuid AND "workspaceId" = $2::uuid`, id, workspaceID,
+	).Scan(&domain.ID, &domain.Domain, &domain.IsValidated, &domain.CreatedAt)
+	if errors.Is(err, pgx.ErrNoRows) {
+		return ApprovedDomain{}, ErrDomainNotFound
+	}
+	if err != nil {
+		return ApprovedDomain{}, fmt.Errorf("look up approved access domain: %w", err)
+	}
+	if !emailInDomain(email, domain.Domain) {
+		return ApprovedDomain{}, ErrDomainMismatch
+	}
+	if _, err := s.pool.Exec(ctx, `UPDATE core."approvedAccessDomain" SET "isValidated" = true, "updatedAt" = now() WHERE id = $1::uuid`, id); err != nil {
+		return ApprovedDomain{}, fmt.Errorf("validate approved access domain: %w", err)
+	}
+	domain.IsValidated = true
+	return domain, nil
+}
+
+func emailInDomain(email, domain string) bool {
+	return strings.HasSuffix(strings.ToLower(email), "@"+strings.ToLower(domain))
 }
 
 func (s *Store) DeleteApprovedDomain(ctx context.Context, workspaceID, id string) error {

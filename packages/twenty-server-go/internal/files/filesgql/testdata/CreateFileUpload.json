@@ -1,0 +1,9 @@
+{
+  "name": "CreateFileUpload",
+  "operation": "CreateFileUpload",
+  "fixture": "admin of an active workspace asking for a CorePicture upload target. Hand-written from FileUploadResolver, FileCorePictureResolver, AuthResolver, FileUploadService, FileCorePictureService, FileUploadTargetService, FileUrlService, FileUploadTargetDTO and FileWithSignedUrlDTO at 0963016d86; no Node server was run",
+  "endpoint": "/metadata",
+  "query": "mutation CreateFileUpload($filename: String!, $size: Float!, $fileFolder: FileFolder!, $fieldMetadataId: String) { createFileUpload(filename: $filename, size: $size, fileFolder: $fileFolder, fieldMetadataId: $fieldMetadataId) { fileId uploadUrl contentType expiresAt } }",
+  "variables": {"filename": "logo.png", "size": 32, "fileFolder": "CorePicture"},
+  "response": {"data": {"createFileUpload": {"fileId": "<ignored>", "uploadUrl": "<ignored>", "contentType": "application/octet-stream", "expiresAt": "<ignored>"}}}
+}

@@ -1,0 +1,9 @@
+{
+  "name": "StartChannelSync",
+  "operation": "StartChannelSync",
+  "fixture": "hand-written from the front-end document; an account with one unconfigured message channel",
+  "endpoint": "/metadata",
+  "query": "mutation StartChannelSync($connectedAccountId: UUID!) { startChannelSync(connectedAccountId: $connectedAccountId) { success } }",
+  "variables": {"connectedAccountId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaa1"},
+  "response": {"data":{"startChannelSync":{"success":true}}}
+}

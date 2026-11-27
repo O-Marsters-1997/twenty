@@ -1270,6 +1270,7 @@ type ComplexityRoot struct {
 		People                    func(childComplexity int, filter map[string]any, orderBy []map[string]any, first *int, last *int, after *string, before *string, offset *int) int
 		PeopleGroupBy             func(childComplexity int, groupBy []map[string]any, filter map[string]any, orderBy []map[string]any, orderByForRecords []map[string]any, viewID *string, limit *int, offsetForRecords *int) int
 		Person                    func(childComplexity int, filter map[string]any) int
+		Search                    func(childComplexity int, searchInput string, limit int, after *string, excludedObjectNameSingulars []string, includedObjectNameSingulars []string, filter map[string]any) int
 		Task                      func(childComplexity int, filter map[string]any) int
 		TaskTarget                func(childComplexity int, filter map[string]any) int
 		TaskTargets               func(childComplexity int, filter map[string]any, orderBy []map[string]any, first *int, last *int, after *string, before *string, offset *int) int
@@ -1287,6 +1288,31 @@ type ComplexityRoot struct {
 	RichText struct {
 		Blocknote func(childComplexity int) int
 		Markdown  func(childComplexity int) int
+	}
+
+	SearchRecord struct {
+		ImageURL            func(childComplexity int) int
+		Label               func(childComplexity int) int
+		ObjectLabelSingular func(childComplexity int) int
+		ObjectNameSingular  func(childComplexity int) int
+		RecordID            func(childComplexity int) int
+		TsRank              func(childComplexity int) int
+		TsRankCd            func(childComplexity int) int
+	}
+
+	SearchResultConnection struct {
+		Edges    func(childComplexity int) int
+		PageInfo func(childComplexity int) int
+	}
+
+	SearchResultEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	SearchResultPageInfo struct {
+		EndCursor   func(childComplexity int) int
+		HasNextPage func(childComplexity int) int
 	}
 
 	SecondaryLink struct {
@@ -2156,6 +2182,7 @@ type QueryResolver interface {
 	TaskTargets(ctx context.Context, filter map[string]any, orderBy []map[string]any, first *int, last *int, after *string, before *string, offset *int) (*TaskTargetConnection, error)
 	TaskTarget(ctx context.Context, filter map[string]any) (*TaskTarget, error)
 	TaskTargetsGroupBy(ctx context.Context, groupBy []map[string]any, filter map[string]any, orderBy []map[string]any, orderByForRecords []map[string]any, viewID *string, limit *int, offsetForRecords *int) ([]*TaskTargetGroupByConnection, error)
+	Search(ctx context.Context, searchInput string, limit int, after *string, excludedObjectNameSingulars []string, includedObjectNameSingulars []string, filter map[string]any) (*SearchResultConnection, error)
 }
 
 // endregion ************************** generated!.gotpl **************************
@@ -9439,6 +9466,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.Person(childComplexity, args["filter"].(map[string]any)), true
+	case "Query.search":
+		if e.ComplexityRoot.Query.Search == nil {
+			break
+		}
+
+		args, err := ec.field_Query_search_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.Search(childComplexity, args["searchInput"].(string), args["limit"].(int), args["after"].(*string), args["excludedObjectNameSingulars"].([]string), args["includedObjectNameSingulars"].([]string), args["filter"].(map[string]any)), true
 	case "Query.task":
 		if e.ComplexityRoot.Query.Task == nil {
 			break
@@ -9584,6 +9622,88 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.RichText.Markdown(childComplexity), true
+
+	case "SearchRecord.imageUrl":
+		if e.ComplexityRoot.SearchRecord.ImageURL == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SearchRecord.ImageURL(childComplexity), true
+	case "SearchRecord.label":
+		if e.ComplexityRoot.SearchRecord.Label == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SearchRecord.Label(childComplexity), true
+	case "SearchRecord.objectLabelSingular":
+		if e.ComplexityRoot.SearchRecord.ObjectLabelSingular == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SearchRecord.ObjectLabelSingular(childComplexity), true
+	case "SearchRecord.objectNameSingular":
+		if e.ComplexityRoot.SearchRecord.ObjectNameSingular == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SearchRecord.ObjectNameSingular(childComplexity), true
+	case "SearchRecord.recordId":
+		if e.ComplexityRoot.SearchRecord.RecordID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SearchRecord.RecordID(childComplexity), true
+	case "SearchRecord.tsRank":
+		if e.ComplexityRoot.SearchRecord.TsRank == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SearchRecord.TsRank(childComplexity), true
+	case "SearchRecord.tsRankCD":
+		if e.ComplexityRoot.SearchRecord.TsRankCd == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SearchRecord.TsRankCd(childComplexity), true
+
+	case "SearchResultConnection.edges":
+		if e.ComplexityRoot.SearchResultConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SearchResultConnection.Edges(childComplexity), true
+	case "SearchResultConnection.pageInfo":
+		if e.ComplexityRoot.SearchResultConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SearchResultConnection.PageInfo(childComplexity), true
+
+	case "SearchResultEdge.cursor":
+		if e.ComplexityRoot.SearchResultEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SearchResultEdge.Cursor(childComplexity), true
+	case "SearchResultEdge.node":
+		if e.ComplexityRoot.SearchResultEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SearchResultEdge.Node(childComplexity), true
+
+	case "SearchResultPageInfo.endCursor":
+		if e.ComplexityRoot.SearchResultPageInfo.EndCursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SearchResultPageInfo.EndCursor(childComplexity), true
+	case "SearchResultPageInfo.hasNextPage":
+		if e.ComplexityRoot.SearchResultPageInfo.HasNextPage == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SearchResultPageInfo.HasNextPage(childComplexity), true
 
 	case "SecondaryLink.label":
 		if e.ComplexityRoot.SecondaryLink.Label == nil {
@@ -13825,6 +13945,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			graphql.NewInputUnmarshaler("NoteTargetOrderByWithGroupByInput", ec.unmarshalInputNoteTargetOrderByWithGroupByInput),
 			graphql.NewInputUnmarshaler("NoteTargetUpdateInput", ec.unmarshalInputNoteTargetUpdateInput),
 			graphql.NewInputUnmarshaler("NoteUpdateInput", ec.unmarshalInputNoteUpdateInput),
+			graphql.NewInputUnmarshaler("ObjectRecordFilterInput", ec.unmarshalInputObjectRecordFilterInput),
 			graphql.NewInputUnmarshaler("OpportunityFilterInput", ec.unmarshalInputOpportunityFilterInput),
 			graphql.NewInputUnmarshaler("OpportunityGroupByInput", ec.unmarshalInputOpportunityGroupByInput),
 			graphql.NewInputUnmarshaler("OpportunityOrderByInput", ec.unmarshalInputOpportunityOrderByInput),
@@ -13948,7 +14069,7 @@ func newExecutionContext(
 	}
 }
 
-//go:embed "person.graphqls" "company.graphqls" "opportunity.graphqls" "aggregate.graphqls" "timelineactivity.graphqls" "attachment.graphqls" "workspaceMember.graphqls" "dashboard.graphqls" "note.graphqls" "task.graphqls" "noteTaskOperations.graphqls"
+//go:embed "person.graphqls" "company.graphqls" "opportunity.graphqls" "aggregate.graphqls" "timelineactivity.graphqls" "attachment.graphqls" "workspaceMember.graphqls" "dashboard.graphqls" "note.graphqls" "task.graphqls" "noteTaskOperations.graphqls" "search.graphqls"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -13971,6 +14092,7 @@ var sources = []*ast.Source{
 	{Name: "note.graphqls", Input: sourceData("note.graphqls"), BuiltIn: false},
 	{Name: "task.graphqls", Input: sourceData("task.graphqls"), BuiltIn: false},
 	{Name: "noteTaskOperations.graphqls", Input: sourceData("noteTaskOperations.graphqls"), BuiltIn: false},
+	{Name: "search.graphqls", Input: sourceData("search.graphqls"), BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
@@ -16242,6 +16364,56 @@ func (ec *executionContext) childFields_RichText(ctx context.Context, field grap
 		return ec.fieldContext_RichText_markdown(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type RichText", field.Name)
+}
+
+func (ec *executionContext) childFields_SearchRecord(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "recordId":
+		return ec.fieldContext_SearchRecord_recordId(ctx, field)
+	case "objectNameSingular":
+		return ec.fieldContext_SearchRecord_objectNameSingular(ctx, field)
+	case "objectLabelSingular":
+		return ec.fieldContext_SearchRecord_objectLabelSingular(ctx, field)
+	case "label":
+		return ec.fieldContext_SearchRecord_label(ctx, field)
+	case "imageUrl":
+		return ec.fieldContext_SearchRecord_imageUrl(ctx, field)
+	case "tsRankCD":
+		return ec.fieldContext_SearchRecord_tsRankCD(ctx, field)
+	case "tsRank":
+		return ec.fieldContext_SearchRecord_tsRank(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type SearchRecord", field.Name)
+}
+
+func (ec *executionContext) childFields_SearchResultConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_SearchResultConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_SearchResultConnection_pageInfo(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type SearchResultConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_SearchResultEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_SearchResultEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_SearchResultEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type SearchResultEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_SearchResultPageInfo(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "hasNextPage":
+		return ec.fieldContext_SearchResultPageInfo_hasNextPage(ctx, field)
+	case "endCursor":
+		return ec.fieldContext_SearchResultPageInfo_endCursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type SearchResultPageInfo", field.Name)
 }
 
 func (ec *executionContext) childFields_SecondaryLink(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -20177,6 +20349,60 @@ func (ec *executionContext) field_Query_person_args(ctx context.Context, rawArgs
 		return nil, err
 	}
 	args["filter"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_search_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "searchInput",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["searchInput"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "limit",
+		func(ctx context.Context, v any) (int, error) {
+			return ec.unmarshalNInt2int(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["limit"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "excludedObjectNameSingulars",
+		func(ctx context.Context, v any) ([]string, error) {
+			return ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["excludedObjectNameSingulars"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "includedObjectNameSingulars",
+		func(ctx context.Context, v any) ([]string, error) {
+			return ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["includedObjectNameSingulars"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "filter",
+		func(ctx context.Context, v any) (map[string]any, error) {
+			return ec.unmarshalOObjectRecordFilterInput2map(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["filter"] = arg5
 	return args, nil
 }
 
@@ -49762,6 +49988,50 @@ func (ec *executionContext) fieldContext_Query_taskTargetsGroupBy(ctx context.Co
 	return fc, nil
 }
 
+func (ec *executionContext) _Query_search(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_search(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().Search(ctx, fc.Args["searchInput"].(string), fc.Args["limit"].(int), fc.Args["after"].(*string), fc.Args["excludedObjectNameSingulars"].([]string), fc.Args["includedObjectNameSingulars"].([]string), fc.Args["filter"].(map[string]any))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *SearchResultConnection) graphql.Marshaler {
+			return ec.marshalNSearchResultConnection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐSearchResultConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_search(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_SearchResultConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_search_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -49882,6 +50152,332 @@ func (ec *executionContext) _RichText_markdown(ctx context.Context, field graphq
 }
 func (ec *executionContext) fieldContext_RichText_markdown(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("RichText", field, false, false, "String")
+}
+
+func (ec *executionContext) _SearchRecord_recordId(ctx context.Context, field graphql.CollectedField, obj *SearchRecord) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchRecord_recordId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.RecordID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SearchRecord_recordId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SearchRecord", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _SearchRecord_objectNameSingular(ctx context.Context, field graphql.CollectedField, obj *SearchRecord) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchRecord_objectNameSingular(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ObjectNameSingular, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SearchRecord_objectNameSingular(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SearchRecord", field, false, false, "String")
+}
+
+func (ec *executionContext) _SearchRecord_objectLabelSingular(ctx context.Context, field graphql.CollectedField, obj *SearchRecord) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchRecord_objectLabelSingular(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ObjectLabelSingular, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SearchRecord_objectLabelSingular(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SearchRecord", field, false, false, "String")
+}
+
+func (ec *executionContext) _SearchRecord_label(ctx context.Context, field graphql.CollectedField, obj *SearchRecord) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchRecord_label(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Label, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SearchRecord_label(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SearchRecord", field, false, false, "String")
+}
+
+func (ec *executionContext) _SearchRecord_imageUrl(ctx context.Context, field graphql.CollectedField, obj *SearchRecord) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchRecord_imageUrl(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ImageURL, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_SearchRecord_imageUrl(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SearchRecord", field, false, false, "String")
+}
+
+func (ec *executionContext) _SearchRecord_tsRankCD(ctx context.Context, field graphql.CollectedField, obj *SearchRecord) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchRecord_tsRankCD(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TsRankCd, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v float64) graphql.Marshaler {
+			return ec.marshalNFloat2float64(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SearchRecord_tsRankCD(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SearchRecord", field, false, false, "Float")
+}
+
+func (ec *executionContext) _SearchRecord_tsRank(ctx context.Context, field graphql.CollectedField, obj *SearchRecord) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchRecord_tsRank(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TsRank, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v float64) graphql.Marshaler {
+			return ec.marshalNFloat2float64(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SearchRecord_tsRank(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SearchRecord", field, false, false, "Float")
+}
+
+func (ec *executionContext) _SearchResultConnection_edges(ctx context.Context, field graphql.CollectedField, obj *SearchResultConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResultConnection_edges(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Edges, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*SearchResultEdge) graphql.Marshaler {
+			return ec.marshalNSearchResultEdge2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐSearchResultEdgeᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SearchResultConnection_edges(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResultConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_SearchResultEdge(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SearchResultConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *SearchResultConnection) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResultConnection_pageInfo(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PageInfo, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *SearchResultPageInfo) graphql.Marshaler {
+			return ec.marshalNSearchResultPageInfo2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐSearchResultPageInfo(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SearchResultConnection_pageInfo(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResultConnection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_SearchResultPageInfo(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SearchResultEdge_node(ctx context.Context, field graphql.CollectedField, obj *SearchResultEdge) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResultEdge_node(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Node, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *SearchRecord) graphql.Marshaler {
+			return ec.marshalNSearchRecord2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐSearchRecord(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SearchResultEdge_node(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SearchResultEdge",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_SearchRecord(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SearchResultEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *SearchResultEdge) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResultEdge_cursor(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Cursor, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SearchResultEdge_cursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SearchResultEdge", field, false, false, "String")
+}
+
+func (ec *executionContext) _SearchResultPageInfo_hasNextPage(ctx context.Context, field graphql.CollectedField, obj *SearchResultPageInfo) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResultPageInfo_hasNextPage(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.HasNextPage, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SearchResultPageInfo_hasNextPage(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SearchResultPageInfo", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _SearchResultPageInfo_endCursor(ctx context.Context, field graphql.CollectedField, obj *SearchResultPageInfo) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SearchResultPageInfo_endCursor(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.EndCursor, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_SearchResultPageInfo_endCursor(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SearchResultPageInfo", field, false, false, "String")
 }
 
 func (ec *executionContext) _SecondaryLink_label(ctx context.Context, field graphql.CollectedField, obj *SecondaryLink) (ret graphql.Marshaler) {
@@ -71094,6 +71690,91 @@ func UnmarshalNoteUpdateInput(ctx context.Context, raw any) (NoteUpdateInput, er
 	return out, err
 }
 
+func (ec *executionContext) unmarshalInputObjectRecordFilterInput(ctx context.Context, obj any) (map[string]any, error) {
+	var it map[string]any
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"and", "or", "not", "id", "createdAt", "updatedAt", "deletedAt"}
+	it = make(map[string]any, len(asMap))
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "and":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("and"))
+			data, err := ec.unmarshalOObjectRecordFilterInput2ᚕmapᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["and"] = data
+		case "or":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("or"))
+			data, err := ec.unmarshalOObjectRecordFilterInput2ᚕmapᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["or"] = data
+		case "not":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("not"))
+			data, err := ec.unmarshalOObjectRecordFilterInput2map(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["not"] = data
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalOUUIDFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐUUIDFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["id"] = data
+		case "createdAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAt"))
+			data, err := ec.unmarshalODateTimeFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐDateTimeFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["createdAt"] = data
+		case "updatedAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("updatedAt"))
+			data, err := ec.unmarshalODateTimeFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐDateTimeFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["updatedAt"] = data
+		case "deletedAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("deletedAt"))
+			data, err := ec.unmarshalODateTimeFilter2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐDateTimeFilter(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["deletedAt"] = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalObjectRecordFilterInput unmarshals raw into the ObjectRecordFilterInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalObjectRecordFilterInput(ctx context.Context, raw any) (map[string]any, error) {
+	var out map[string]any
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "ObjectRecordFilterInput", raw, &out)
+	return out, err
+}
+
 func (ec *executionContext) unmarshalInputOpportunityFilterInput(ctx context.Context, obj any) (map[string]any, error) {
 	var it map[string]any
 	if obj == nil {
@@ -82925,6 +83606,12 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				func(ctx context.Context) graphql.Marshaler {
 					return ec._Query_taskTargetsGroupBy(ctx, field)
 				})
+		case "search":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_search(ctx, field)
+				})
 		case "__type":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Query___type(ctx, field)
@@ -82974,6 +83661,183 @@ func (ec *executionContext) _RichText(ctx context.Context, sel ast.SelectionSet,
 			}
 		case "markdown":
 			out.Values[i] = ec._RichText_markdown(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var searchRecordImplementors = []string{"SearchRecord"}
+
+func (ec *executionContext) _SearchRecord(ctx context.Context, sel ast.SelectionSet, obj *SearchRecord) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, searchRecordImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SearchRecord")
+		case "recordId":
+			out.Values[i] = ec._SearchRecord_recordId(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "objectNameSingular":
+			out.Values[i] = ec._SearchRecord_objectNameSingular(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "objectLabelSingular":
+			out.Values[i] = ec._SearchRecord_objectLabelSingular(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "label":
+			out.Values[i] = ec._SearchRecord_label(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "imageUrl":
+			out.Values[i] = ec._SearchRecord_imageUrl(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "tsRankCD":
+			out.Values[i] = ec._SearchRecord_tsRankCD(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "tsRank":
+			out.Values[i] = ec._SearchRecord_tsRank(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var searchResultConnectionImplementors = []string{"SearchResultConnection"}
+
+func (ec *executionContext) _SearchResultConnection(ctx context.Context, sel ast.SelectionSet, obj *SearchResultConnection) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, searchResultConnectionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SearchResultConnection")
+		case "edges":
+			out.Values[i] = ec._SearchResultConnection_edges(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "pageInfo":
+			out.Values[i] = ec._SearchResultConnection_pageInfo(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var searchResultEdgeImplementors = []string{"SearchResultEdge"}
+
+func (ec *executionContext) _SearchResultEdge(ctx context.Context, sel ast.SelectionSet, obj *SearchResultEdge) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, searchResultEdgeImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SearchResultEdge")
+		case "node":
+			out.Values[i] = ec._SearchResultEdge_node(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "cursor":
+			out.Values[i] = ec._SearchResultEdge_cursor(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var searchResultPageInfoImplementors = []string{"SearchResultPageInfo"}
+
+func (ec *executionContext) _SearchResultPageInfo(ctx context.Context, sel ast.SelectionSet, obj *SearchResultPageInfo) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, searchResultPageInfoImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SearchResultPageInfo")
+		case "hasNextPage":
+			out.Values[i] = ec._SearchResultPageInfo_hasNextPage(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "endCursor":
+			out.Values[i] = ec._SearchResultPageInfo_endCursor(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
@@ -87744,6 +88608,20 @@ func (ec *executionContext) marshalNFloat2float64(ctx context.Context, sel ast.S
 	return graphql.WrapContextMarshaler(ctx, res)
 }
 
+func (ec *executionContext) unmarshalNInt2int(ctx context.Context, v any) (int, error) {
+	res, err := graphql.UnmarshalInt(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.SelectionSet, v int) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalInt(v)
+	if res == graphql.Null {
+		graphql.AddInvalidNullFromMarshaler(ctx, "Int!")
+	}
+	return res
+}
+
 func (ec *executionContext) unmarshalNJSON2interface(ctx context.Context, v any) (any, error) {
 	res, err := graphql.UnmarshalAny(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -88011,6 +88889,11 @@ func (ec *executionContext) unmarshalNNoteUpdateInput2githubᚗcomᚋtwentyhqᚋ
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) unmarshalNObjectRecordFilterInput2map(ctx context.Context, v any) (map[string]any, error) {
+	res, err := ec.unmarshalInputObjectRecordFilterInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) marshalNOpportunity2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐOpportunity(ctx context.Context, sel ast.SelectionSet, v *Opportunity) graphql.Marshaler {
 	if v == nil {
 		graphql.AddInvalidNullError(ctx, "Opportunity!")
@@ -88256,6 +89139,54 @@ func (ec *executionContext) marshalNPosition2float64(ctx context.Context, sel as
 		graphql.AddInvalidNullFromMarshaler(ctx, "Position!")
 	}
 	return res
+}
+
+func (ec *executionContext) marshalNSearchRecord2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐSearchRecord(ctx context.Context, sel ast.SelectionSet, v *SearchRecord) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "SearchRecord!")
+		return graphql.Null
+	}
+	return ec._SearchRecord(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNSearchResultConnection2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐSearchResultConnection(ctx context.Context, sel ast.SelectionSet, v *SearchResultConnection) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "SearchResultConnection!")
+		return graphql.Null
+	}
+	return ec._SearchResultConnection(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNSearchResultEdge2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐSearchResultEdgeᚄ(ctx context.Context, sel ast.SelectionSet, v []*SearchResultEdge) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNSearchResultEdge2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐSearchResultEdge(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNSearchResultEdge2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐSearchResultEdge(ctx context.Context, sel ast.SelectionSet, v *SearchResultEdge) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "SearchResultEdge!")
+		return graphql.Null
+	}
+	return ec._SearchResultEdge(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNSearchResultPageInfo2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐSearchResultPageInfo(ctx context.Context, sel ast.SelectionSet, v *SearchResultPageInfo) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "SearchResultPageInfo!")
+		return graphql.Null
+	}
+	return ec._SearchResultPageInfo(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNSecondaryLink2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋrecordsᚋrecordsgqlᚐSecondaryLink(ctx context.Context, sel ast.SelectionSet, v *SecondaryLink) graphql.Marshaler {
@@ -90043,6 +90974,31 @@ func (ec *executionContext) unmarshalONoteTargetOrderByWithGroupByInput2ᚕmap�
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
 		res[i], err = ec.unmarshalNNoteTargetOrderByWithGroupByInput2map(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalOObjectRecordFilterInput2map(ctx context.Context, v any) (map[string]any, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputObjectRecordFilterInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalOObjectRecordFilterInput2ᚕmapᚄ(ctx context.Context, v any) ([]map[string]any, error) {
+	if v == nil {
+		return nil, nil
+	}
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]map[string]any, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNObjectRecordFilterInput2map(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}

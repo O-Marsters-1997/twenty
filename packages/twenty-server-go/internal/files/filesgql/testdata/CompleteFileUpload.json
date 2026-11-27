@@ -1,0 +1,9 @@
+{
+  "name": "CompleteFileUpload",
+  "operation": "CompleteFileUpload",
+  "fixture": "admin of an active workspace; a pending workflow text file whose six declared bytes sit in quarantine. Hand-written from FileUploadResolver, FileCorePictureResolver, AuthResolver, FileUploadService, FileCorePictureService, FileUploadTargetService, FileUrlService, FileUploadTargetDTO and FileWithSignedUrlDTO at 0963016d86; no Node server was run",
+  "endpoint": "/metadata",
+  "query": "mutation CompleteFileUpload($fileId: String!) { completeFileUpload(fileId: $fileId) { id path size createdAt url } }",
+  "variables": {"fileId": "a1000000-0000-4000-8000-000000000001"},
+  "response": {"data": {"completeFileUpload": {"id": "a1000000-0000-4000-8000-000000000001", "path": "workflow/a1000000-0000-4000-8000-000000000001.txt", "size": 6, "createdAt": "2026-01-02T03:04:05.000Z", "url": "http://localhost:3000/file/workflow/a1000000-0000-4000-8000-000000000001?token=FILE.26a06a83-ad30-4547-9126-7f6339d43e03.a1000000-0000-4000-8000-000000000001"}}}
+}

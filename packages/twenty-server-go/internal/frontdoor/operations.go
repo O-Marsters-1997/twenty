@@ -27,6 +27,7 @@ var WorkflowOperations = []string{
 var TimelineOperations = []string{
 	"GetTimelineThreadsFromObjectRecord", "GetTimelineThreadsFromPersonId",
 	"GetTimelineThreadsFromCompanyId", "GetTimelineThreadsFromOpportunityId", "DismissReconnectAccountBanner",
+	"GetTimelineCalendarEventsFromObjectRecord",
 }
 
 const AnswerToolCallOperation = "AnswerToolCall"
@@ -60,6 +61,8 @@ var MessagingOperations = []string{
 	"MyCalendarChannels", "UpdateCalendarChannel",
 	"SendMessageCampaign", "CancelMessageCampaign", "SendMessageCampaignTest", "PreviewMessageCampaignAudience",
 	"GetEmailingDomains",
+	"MyMessageFolders", "UpdateMessageFolders", "MessageSuppressions", "StartChannelSync", "DuplicateMessageList",
+	"CreateUnsubscribeTopic", "UpdateUnsubscribeTopic", "DeleteUnsubscribeTopic", "UnsubscribeTopics", "CreateCalendarEvent",
 }
 
 var GeoOperations = []string{"GetAutoCompleteAddress", "GetAddressDetails"}
@@ -73,6 +76,7 @@ var AccessOperations = []string{
 	"GenerateApiKeyToken", "GeneratePlaygroundToken",
 	"GetRoles", "GetRole", "CreateOneRole", "UpdateOneRole", "DeleteOneRole",
 	"UpsertFieldPermissions", "UpsertObjectPermissions", "UpsertPermissionFlags",
+	"UpdateWorkspaceMemberRole", "UpdateWorkspaceMemberSettings", "UpdateLabPublicFeatureFlag",
 }
 
 var TwoFactorOperations = []string{
@@ -87,21 +91,33 @@ var SessionManagementOperations = []string{"CurrentUserSessions", "RevokeUserSes
 
 var InvitationOperations = []string{
 	"GetWorkspaceInvitations", "DeleteWorkspaceInvitation", "GetApprovedAccessDomains", "DeleteApprovedAccessDomain",
+	"CreateApprovedAccessDomain", "ValidateApprovedAccessDomain",
 }
+
+var OnboardingOperations = []string{"GoBackToPreviousOnboardingStep", "SkipSyncEmailOnboardingStep"}
 
 var PageLayoutOperations = []string{
 	"FindAllRecordFormPageLayouts", "FindAllRecordPageLayouts", "FindAllStandalonePageLayouts", "FindOnePageLayout", "FindOnePageLayoutType",
 	"UpdatePageLayoutWidgetIsActive", "UpdatePageLayoutWithTabsAndWidgets", "DuplicateDashboard",
 }
 
+var ChartOperations = []string{"BarChartData"}
+
 var ApplicationOperations = []string{"FindManyApplications", "FindManyApplicationsForToolTable", "FindManyTimelineActivityTypes"}
+
+var FileOperations = []string{
+	"CreateFileUpload", "CompleteFileUpload", "CreateNewWorkspaceLogoUpload", "CompleteNewWorkspaceLogoUpload",
+	"CompleteWorkspaceLogoUpload", "CompleteWorkspaceMemberProfilePictureUpload",
+}
 
 var blockedMetadataFields = []string{
 	"createOneObject", "updateOneObject", "deleteOneObject",
 	"createOneField", "updateOneField", "deleteOneField",
 }
 
-var PasswordLoginOperations = []string{"GetLoginTokenFromCredentials", "SignIn"}
+var PasswordLoginOperations = []string{
+	"GetLoginTokenFromCredentials", "SignIn", "EmailPasswordResetLink", "ValidatePasswordResetToken", "UpdatePasswordViaResetToken",
+}
 
 var PublicWorkspaceOperations = []string{
 	"GetPublicWorkspaceDataByDomain", "GetPublicWorkspaceDataById", "GetWorkspaceFromInviteHash", "CheckUserExists",
@@ -109,7 +125,7 @@ var PublicWorkspaceOperations = []string{
 
 var WorkspaceDataOperations = []string{"GetWorkspaceCreationDefaults", "CheckWorkspaceSubdomainAvailability", "GetWorkspaceIframeOrigins"}
 
-var WorkspaceSettingsOperations = []string{"UpdateWorkspace", "UpdateWorkspaceAllowedIframeOrigins", "ActivateWorkspace"}
+var WorkspaceSettingsOperations = []string{"UpdateWorkspace", "UpdateWorkspaceAllowedIframeOrigins", "ActivateWorkspace", "DeleteCurrentWorkspace", "DeleteUserWorkspace", "DeleteUserAccount"}
 
 var blockedMetadataOperations = []string{
 	"CreateOneObjectMetadataItem", "UpdateOneObjectMetadataItem", "DeleteOneObjectMetadataItem",

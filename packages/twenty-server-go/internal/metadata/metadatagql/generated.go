@@ -29,6 +29,7 @@ func NewExecutableSchema(cfg Config) graphql.ExecutableSchema {
 type Config = graphql.Config[ResolverRoot, DirectiveRoot, ComplexityRoot]
 
 type ResolverRoot interface {
+	MinimalMetadata() MinimalMetadataResolver
 	Query() QueryResolver
 }
 
@@ -36,6 +37,11 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
+	CollectionHash struct {
+		CollectionName func(childComplexity int) int
+		Hash           func(childComplexity int) int
+	}
+
 	Field struct {
 		ApplicationID         func(childComplexity int) int
 		CreatedAt             func(childComplexity int) int
@@ -85,6 +91,32 @@ type ComplexityRoot struct {
 		UpdatedAt       func(childComplexity int) int
 	}
 
+	MinimalMetadata struct {
+		CollectionHashes    func(childComplexity int) int
+		ObjectMetadataItems func(childComplexity int) int
+		Views               func(childComplexity int) int
+	}
+
+	MinimalObjectMetadata struct {
+		Color         func(childComplexity int) int
+		ID            func(childComplexity int) int
+		Icon          func(childComplexity int) int
+		IsActive      func(childComplexity int) int
+		IsRemote      func(childComplexity int) int
+		IsSystem      func(childComplexity int) int
+		LabelPlural   func(childComplexity int) int
+		LabelSingular func(childComplexity int) int
+		NamePlural    func(childComplexity int) int
+		NameSingular  func(childComplexity int) int
+	}
+
+	MinimalView struct {
+		ID               func(childComplexity int) int
+		Key              func(childComplexity int) int
+		ObjectMetadataID func(childComplexity int) int
+		Type             func(childComplexity int) int
+	}
+
 	Object struct {
 		ApplicationID                  func(childComplexity int) int
 		Color                          func(childComplexity int) int
@@ -128,6 +160,11 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
+	ObjectRecordCount struct {
+		ObjectNamePlural func(childComplexity int) int
+		TotalCount       func(childComplexity int) int
+	}
+
 	PageInfo struct {
 		EndCursor       func(childComplexity int) int
 		HasNextPage     func(childComplexity int) int
@@ -136,9 +173,12 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		GetToolIndex       func(childComplexity int) int
-		GetToolInputSchema func(childComplexity int, toolName string) int
-		Objects            func(childComplexity int, paging *CursorPaging) int
+		GetToolIndex                func(childComplexity int) int
+		GetToolInputSchema          func(childComplexity int, toolName string) int
+		MinimalMetadata             func(childComplexity int) int
+		MostlyEmptyFieldMetadataIds func(childComplexity int, objectMetadataID string) int
+		ObjectRecordCounts          func(childComplexity int) int
+		Objects                     func(childComplexity int, paging *CursorPaging) int
 	}
 
 	Relation struct {
@@ -174,10 +214,16 @@ type ComplexityRoot struct {
 
 // region    ************************** generated!.gotpl **************************
 
+type MinimalMetadataResolver interface {
+	CollectionHashes(ctx context.Context, obj *store.MinimalMetadata) ([]*CollectionHash, error)
+}
 type QueryResolver interface {
 	Objects(ctx context.Context, paging *CursorPaging) (*ObjectConnection, error)
 	GetToolIndex(ctx context.Context) ([]*ToolIndexEntry, error)
 	GetToolInputSchema(ctx context.Context, toolName string) (any, error)
+	ObjectRecordCounts(ctx context.Context) ([]*store.ObjectRecordCount, error)
+	MostlyEmptyFieldMetadataIds(ctx context.Context, objectMetadataID string) ([]string, error)
+	MinimalMetadata(ctx context.Context) (*store.MinimalMetadata, error)
 }
 
 // endregion ************************** generated!.gotpl **************************
@@ -197,6 +243,19 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 	ec := newExecutionContext(nil, e, nil)
 	_ = ec
 	switch typeName + "." + field {
+
+	case "CollectionHash.collectionName":
+		if e.ComplexityRoot.CollectionHash.CollectionName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CollectionHash.CollectionName(childComplexity), true
+	case "CollectionHash.hash":
+		if e.ComplexityRoot.CollectionHash.Hash == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CollectionHash.Hash(childComplexity), true
 
 	case "Field.applicationId":
 		if e.ComplexityRoot.Field.ApplicationID == nil {
@@ -441,6 +500,111 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.IndexField.UpdatedAt(childComplexity), true
 
+	case "MinimalMetadata.collectionHashes":
+		if e.ComplexityRoot.MinimalMetadata.CollectionHashes == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MinimalMetadata.CollectionHashes(childComplexity), true
+	case "MinimalMetadata.objectMetadataItems":
+		if e.ComplexityRoot.MinimalMetadata.ObjectMetadataItems == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MinimalMetadata.ObjectMetadataItems(childComplexity), true
+	case "MinimalMetadata.views":
+		if e.ComplexityRoot.MinimalMetadata.Views == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MinimalMetadata.Views(childComplexity), true
+
+	case "MinimalObjectMetadata.color":
+		if e.ComplexityRoot.MinimalObjectMetadata.Color == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MinimalObjectMetadata.Color(childComplexity), true
+	case "MinimalObjectMetadata.id":
+		if e.ComplexityRoot.MinimalObjectMetadata.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MinimalObjectMetadata.ID(childComplexity), true
+	case "MinimalObjectMetadata.icon":
+		if e.ComplexityRoot.MinimalObjectMetadata.Icon == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MinimalObjectMetadata.Icon(childComplexity), true
+	case "MinimalObjectMetadata.isActive":
+		if e.ComplexityRoot.MinimalObjectMetadata.IsActive == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MinimalObjectMetadata.IsActive(childComplexity), true
+	case "MinimalObjectMetadata.isRemote":
+		if e.ComplexityRoot.MinimalObjectMetadata.IsRemote == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MinimalObjectMetadata.IsRemote(childComplexity), true
+	case "MinimalObjectMetadata.isSystem":
+		if e.ComplexityRoot.MinimalObjectMetadata.IsSystem == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MinimalObjectMetadata.IsSystem(childComplexity), true
+	case "MinimalObjectMetadata.labelPlural":
+		if e.ComplexityRoot.MinimalObjectMetadata.LabelPlural == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MinimalObjectMetadata.LabelPlural(childComplexity), true
+	case "MinimalObjectMetadata.labelSingular":
+		if e.ComplexityRoot.MinimalObjectMetadata.LabelSingular == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MinimalObjectMetadata.LabelSingular(childComplexity), true
+	case "MinimalObjectMetadata.namePlural":
+		if e.ComplexityRoot.MinimalObjectMetadata.NamePlural == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MinimalObjectMetadata.NamePlural(childComplexity), true
+	case "MinimalObjectMetadata.nameSingular":
+		if e.ComplexityRoot.MinimalObjectMetadata.NameSingular == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MinimalObjectMetadata.NameSingular(childComplexity), true
+
+	case "MinimalView.id":
+		if e.ComplexityRoot.MinimalView.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MinimalView.ID(childComplexity), true
+	case "MinimalView.key":
+		if e.ComplexityRoot.MinimalView.Key == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MinimalView.Key(childComplexity), true
+	case "MinimalView.objectMetadataId":
+		if e.ComplexityRoot.MinimalView.ObjectMetadataID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MinimalView.ObjectMetadataID(childComplexity), true
+	case "MinimalView.type":
+		if e.ComplexityRoot.MinimalView.Type == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MinimalView.Type(childComplexity), true
+
 	case "Object.applicationId":
 		if e.ComplexityRoot.Object.ApplicationID == nil {
 			break
@@ -648,6 +812,19 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.ObjectEdge.Node(childComplexity), true
 
+	case "ObjectRecordCount.objectNamePlural":
+		if e.ComplexityRoot.ObjectRecordCount.ObjectNamePlural == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ObjectRecordCount.ObjectNamePlural(childComplexity), true
+	case "ObjectRecordCount.totalCount":
+		if e.ComplexityRoot.ObjectRecordCount.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ObjectRecordCount.TotalCount(childComplexity), true
+
 	case "PageInfo.endCursor":
 		if e.ComplexityRoot.PageInfo.EndCursor == nil {
 			break
@@ -691,6 +868,29 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Query.GetToolInputSchema(childComplexity, args["toolName"].(string)), true
 
+	case "Query.minimalMetadata":
+		if e.ComplexityRoot.Query.MinimalMetadata == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Query.MinimalMetadata(childComplexity), true
+	case "Query.mostlyEmptyFieldMetadataIds":
+		if e.ComplexityRoot.Query.MostlyEmptyFieldMetadataIds == nil {
+			break
+		}
+
+		args, err := ec.field_Query_mostlyEmptyFieldMetadataIds_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.MostlyEmptyFieldMetadataIds(childComplexity, args["objectMetadataId"].(string)), true
+	case "Query.objectRecordCounts":
+		if e.ComplexityRoot.Query.ObjectRecordCounts == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Query.ObjectRecordCounts(childComplexity), true
 	case "Query.objects":
 		if e.ComplexityRoot.Query.Objects == nil {
 			break
@@ -910,6 +1110,16 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 // Each function is generated once per unique object type, deduplicating the
 // switch statements that were previously inlined in every fieldContext_* function.
 
+func (ec *executionContext) childFields_CollectionHash(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "collectionName":
+		return ec.fieldContext_CollectionHash_collectionName(ctx, field)
+	case "hash":
+		return ec.fieldContext_CollectionHash_hash(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type CollectionHash", field.Name)
+}
+
 func (ec *executionContext) childFields_Field(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "id":
@@ -1008,6 +1218,58 @@ func (ec *executionContext) childFields_IndexField(ctx context.Context, field gr
 	return nil, fmt.Errorf("no field named %q was found under type IndexField", field.Name)
 }
 
+func (ec *executionContext) childFields_MinimalMetadata(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "objectMetadataItems":
+		return ec.fieldContext_MinimalMetadata_objectMetadataItems(ctx, field)
+	case "views":
+		return ec.fieldContext_MinimalMetadata_views(ctx, field)
+	case "collectionHashes":
+		return ec.fieldContext_MinimalMetadata_collectionHashes(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type MinimalMetadata", field.Name)
+}
+
+func (ec *executionContext) childFields_MinimalObjectMetadata(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_MinimalObjectMetadata_id(ctx, field)
+	case "nameSingular":
+		return ec.fieldContext_MinimalObjectMetadata_nameSingular(ctx, field)
+	case "namePlural":
+		return ec.fieldContext_MinimalObjectMetadata_namePlural(ctx, field)
+	case "labelSingular":
+		return ec.fieldContext_MinimalObjectMetadata_labelSingular(ctx, field)
+	case "labelPlural":
+		return ec.fieldContext_MinimalObjectMetadata_labelPlural(ctx, field)
+	case "icon":
+		return ec.fieldContext_MinimalObjectMetadata_icon(ctx, field)
+	case "color":
+		return ec.fieldContext_MinimalObjectMetadata_color(ctx, field)
+	case "isActive":
+		return ec.fieldContext_MinimalObjectMetadata_isActive(ctx, field)
+	case "isSystem":
+		return ec.fieldContext_MinimalObjectMetadata_isSystem(ctx, field)
+	case "isRemote":
+		return ec.fieldContext_MinimalObjectMetadata_isRemote(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type MinimalObjectMetadata", field.Name)
+}
+
+func (ec *executionContext) childFields_MinimalView(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_MinimalView_id(ctx, field)
+	case "type":
+		return ec.fieldContext_MinimalView_type(ctx, field)
+	case "key":
+		return ec.fieldContext_MinimalView_key(ctx, field)
+	case "objectMetadataId":
+		return ec.fieldContext_MinimalView_objectMetadataId(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type MinimalView", field.Name)
+}
+
 func (ec *executionContext) childFields_Object(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "id":
@@ -1092,6 +1354,16 @@ func (ec *executionContext) childFields_ObjectEdge(ctx context.Context, field gr
 		return ec.fieldContext_ObjectEdge_cursor(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type ObjectEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_ObjectRecordCount(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "objectNamePlural":
+		return ec.fieldContext_ObjectRecordCount_objectNamePlural(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_ObjectRecordCount_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ObjectRecordCount", field.Name)
 }
 
 func (ec *executionContext) childFields_PageInfo(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -1308,6 +1580,20 @@ func (ec *executionContext) field_Query_getToolInputSchema_args(ctx context.Cont
 	return args, nil
 }
 
+func (ec *executionContext) field_Query_mostlyEmptyFieldMetadataIds_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "objectMetadataId",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNUUID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["objectMetadataId"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Query_objects_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -1395,6 +1681,52 @@ func (ec *executionContext) field___Type_inputFields_args(ctx context.Context, r
 // endregion ***************************** args.gotpl *****************************
 
 // region    **************************** field.gotpl *****************************
+
+func (ec *executionContext) _CollectionHash_collectionName(ctx context.Context, field graphql.CollectedField, obj *CollectionHash) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CollectionHash_collectionName(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CollectionName, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CollectionHash_collectionName(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CollectionHash", field, false, false, "String")
+}
+
+func (ec *executionContext) _CollectionHash_hash(ctx context.Context, field graphql.CollectedField, obj *CollectionHash) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CollectionHash_hash(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Hash, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CollectionHash_hash(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CollectionHash", field, false, false, "String")
+}
 
 func (ec *executionContext) _Field_id(ctx context.Context, field graphql.CollectedField, obj *store.FieldDetail) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
@@ -2343,6 +2675,424 @@ func (ec *executionContext) fieldContext_IndexField_order(_ context.Context, fie
 	return graphql.NewScalarFieldContext("IndexField", field, false, false, "Int")
 }
 
+func (ec *executionContext) _MinimalMetadata_objectMetadataItems(ctx context.Context, field graphql.CollectedField, obj *store.MinimalMetadata) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MinimalMetadata_objectMetadataItems(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ObjectMetadataItems, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []store.MinimalObject) graphql.Marshaler {
+			return ec.marshalNMinimalObjectMetadata2ᚕgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚋstoreᚐMinimalObjectᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MinimalMetadata_objectMetadataItems(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MinimalMetadata",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_MinimalObjectMetadata(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MinimalMetadata_views(ctx context.Context, field graphql.CollectedField, obj *store.MinimalMetadata) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MinimalMetadata_views(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Views, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []store.MinimalView) graphql.Marshaler {
+			return ec.marshalNMinimalView2ᚕgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚋstoreᚐMinimalViewᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MinimalMetadata_views(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MinimalMetadata",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_MinimalView(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MinimalMetadata_collectionHashes(ctx context.Context, field graphql.CollectedField, obj *store.MinimalMetadata) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MinimalMetadata_collectionHashes(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return ec.Resolvers.MinimalMetadata().CollectionHashes(ctx, obj)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*CollectionHash) graphql.Marshaler {
+			return ec.marshalNCollectionHash2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚋmetadatagqlᚐCollectionHashᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MinimalMetadata_collectionHashes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "MinimalMetadata",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_CollectionHash(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _MinimalObjectMetadata_id(ctx context.Context, field graphql.CollectedField, obj *store.MinimalObject) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MinimalObjectMetadata_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MinimalObjectMetadata_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MinimalObjectMetadata", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _MinimalObjectMetadata_nameSingular(ctx context.Context, field graphql.CollectedField, obj *store.MinimalObject) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MinimalObjectMetadata_nameSingular(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.NameSingular, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MinimalObjectMetadata_nameSingular(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MinimalObjectMetadata", field, false, false, "String")
+}
+
+func (ec *executionContext) _MinimalObjectMetadata_namePlural(ctx context.Context, field graphql.CollectedField, obj *store.MinimalObject) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MinimalObjectMetadata_namePlural(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.NamePlural, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MinimalObjectMetadata_namePlural(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MinimalObjectMetadata", field, false, false, "String")
+}
+
+func (ec *executionContext) _MinimalObjectMetadata_labelSingular(ctx context.Context, field graphql.CollectedField, obj *store.MinimalObject) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MinimalObjectMetadata_labelSingular(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.LabelSingular, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MinimalObjectMetadata_labelSingular(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MinimalObjectMetadata", field, false, false, "String")
+}
+
+func (ec *executionContext) _MinimalObjectMetadata_labelPlural(ctx context.Context, field graphql.CollectedField, obj *store.MinimalObject) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MinimalObjectMetadata_labelPlural(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.LabelPlural, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MinimalObjectMetadata_labelPlural(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MinimalObjectMetadata", field, false, false, "String")
+}
+
+func (ec *executionContext) _MinimalObjectMetadata_icon(ctx context.Context, field graphql.CollectedField, obj *store.MinimalObject) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MinimalObjectMetadata_icon(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Icon, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_MinimalObjectMetadata_icon(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MinimalObjectMetadata", field, false, false, "String")
+}
+
+func (ec *executionContext) _MinimalObjectMetadata_color(ctx context.Context, field graphql.CollectedField, obj *store.MinimalObject) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MinimalObjectMetadata_color(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Color, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_MinimalObjectMetadata_color(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MinimalObjectMetadata", field, false, false, "String")
+}
+
+func (ec *executionContext) _MinimalObjectMetadata_isActive(ctx context.Context, field graphql.CollectedField, obj *store.MinimalObject) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MinimalObjectMetadata_isActive(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.IsActive, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MinimalObjectMetadata_isActive(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MinimalObjectMetadata", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _MinimalObjectMetadata_isSystem(ctx context.Context, field graphql.CollectedField, obj *store.MinimalObject) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MinimalObjectMetadata_isSystem(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.IsSystem, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MinimalObjectMetadata_isSystem(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MinimalObjectMetadata", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _MinimalObjectMetadata_isRemote(ctx context.Context, field graphql.CollectedField, obj *store.MinimalObject) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MinimalObjectMetadata_isRemote(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.IsRemote, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MinimalObjectMetadata_isRemote(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MinimalObjectMetadata", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _MinimalView_id(ctx context.Context, field graphql.CollectedField, obj *store.MinimalView) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MinimalView_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MinimalView_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MinimalView", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _MinimalView_type(ctx context.Context, field graphql.CollectedField, obj *store.MinimalView) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MinimalView_type(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Type, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MinimalView_type(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MinimalView", field, false, false, "String")
+}
+
+func (ec *executionContext) _MinimalView_key(ctx context.Context, field graphql.CollectedField, obj *store.MinimalView) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MinimalView_key(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Key, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_MinimalView_key(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MinimalView", field, false, false, "String")
+}
+
+func (ec *executionContext) _MinimalView_objectMetadataId(ctx context.Context, field graphql.CollectedField, obj *store.MinimalView) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_MinimalView_objectMetadataId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ObjectMetadataID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_MinimalView_objectMetadataId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("MinimalView", field, false, false, "UUID")
+}
+
 func (ec *executionContext) _Object_id(ctx context.Context, field graphql.CollectedField, obj *store.ObjectDetail) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -3179,6 +3929,52 @@ func (ec *executionContext) fieldContext_ObjectEdge_cursor(_ context.Context, fi
 	return graphql.NewScalarFieldContext("ObjectEdge", field, false, false, "String")
 }
 
+func (ec *executionContext) _ObjectRecordCount_objectNamePlural(ctx context.Context, field graphql.CollectedField, obj *store.ObjectRecordCount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ObjectRecordCount_objectNamePlural(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ObjectNamePlural, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ObjectRecordCount_objectNamePlural(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ObjectRecordCount", field, false, false, "String")
+}
+
+func (ec *executionContext) _ObjectRecordCount_totalCount(ctx context.Context, field graphql.CollectedField, obj *store.ObjectRecordCount) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ObjectRecordCount_totalCount(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TotalCount, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ObjectRecordCount_totalCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ObjectRecordCount", field, false, false, "Int")
+}
+
 func (ec *executionContext) _PageInfo_hasNextPage(ctx context.Context, field graphql.CollectedField, obj *PageInfo) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -3387,6 +4183,114 @@ func (ec *executionContext) fieldContext_Query_getToolInputSchema(ctx context.Co
 	if fc.Args, err = ec.field_Query_getToolInputSchema_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_objectRecordCounts(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_objectRecordCounts(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return ec.Resolvers.Query().ObjectRecordCounts(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*store.ObjectRecordCount) graphql.Marshaler {
+			return ec.marshalNObjectRecordCount2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚋstoreᚐObjectRecordCountᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_objectRecordCounts(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ObjectRecordCount(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_mostlyEmptyFieldMetadataIds(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_mostlyEmptyFieldMetadataIds(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().MostlyEmptyFieldMetadataIds(ctx, fc.Args["objectMetadataId"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNUUID2ᚕstringᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_mostlyEmptyFieldMetadataIds(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type UUID does not have child fields")
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_mostlyEmptyFieldMetadataIds_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_minimalMetadata(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_minimalMetadata(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return ec.Resolvers.Query().MinimalMetadata(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *store.MinimalMetadata) graphql.Marshaler {
+			return ec.marshalNMinimalMetadata2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚋstoreᚐMinimalMetadata(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_minimalMetadata(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_MinimalMetadata(ctx, field)
+		},
 	}
 	return fc, nil
 }
@@ -5084,6 +5988,44 @@ func UnmarshalCursorPaging(ctx context.Context, raw any) (CursorPaging, error) {
 
 // region    **************************** object.gotpl ****************************
 
+var collectionHashImplementors = []string{"CollectionHash"}
+
+func (ec *executionContext) _CollectionHash(ctx context.Context, sel ast.SelectionSet, obj *CollectionHash) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, collectionHashImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("CollectionHash")
+		case "collectionName":
+			out.Values[i] = ec._CollectionHash_collectionName(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "hash":
+			out.Values[i] = ec._CollectionHash_hash(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
 var fieldImplementors = []string{"Field"}
 
 func (ec *executionContext) _Field(ctx context.Context, sel ast.SelectionSet, obj *store.FieldDetail) graphql.Marshaler {
@@ -5368,6 +6310,176 @@ func (ec *executionContext) _IndexField(ctx context.Context, sel ast.SelectionSe
 	return out
 }
 
+var minimalMetadataImplementors = []string{"MinimalMetadata"}
+
+func (ec *executionContext) _MinimalMetadata(ctx context.Context, sel ast.SelectionSet, obj *store.MinimalMetadata) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, minimalMetadataImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("MinimalMetadata")
+		case "objectMetadataItems":
+			out.Values[i] = ec._MinimalMetadata_objectMetadataItems(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "views":
+			out.Values[i] = ec._MinimalMetadata_views(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "collectionHashes":
+			out.ResolveConcurrently(ec.OperationContext, &deferred, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._MinimalMetadata_collectionHashes(ctx, field, obj)
+				})
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var minimalObjectMetadataImplementors = []string{"MinimalObjectMetadata"}
+
+func (ec *executionContext) _MinimalObjectMetadata(ctx context.Context, sel ast.SelectionSet, obj *store.MinimalObject) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, minimalObjectMetadataImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("MinimalObjectMetadata")
+		case "id":
+			out.Values[i] = ec._MinimalObjectMetadata_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "nameSingular":
+			out.Values[i] = ec._MinimalObjectMetadata_nameSingular(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "namePlural":
+			out.Values[i] = ec._MinimalObjectMetadata_namePlural(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "labelSingular":
+			out.Values[i] = ec._MinimalObjectMetadata_labelSingular(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "labelPlural":
+			out.Values[i] = ec._MinimalObjectMetadata_labelPlural(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "icon":
+			out.Values[i] = ec._MinimalObjectMetadata_icon(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "color":
+			out.Values[i] = ec._MinimalObjectMetadata_color(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "isActive":
+			out.Values[i] = ec._MinimalObjectMetadata_isActive(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "isSystem":
+			out.Values[i] = ec._MinimalObjectMetadata_isSystem(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "isRemote":
+			out.Values[i] = ec._MinimalObjectMetadata_isRemote(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var minimalViewImplementors = []string{"MinimalView"}
+
+func (ec *executionContext) _MinimalView(ctx context.Context, sel ast.SelectionSet, obj *store.MinimalView) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, minimalViewImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("MinimalView")
+		case "id":
+			out.Values[i] = ec._MinimalView_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "type":
+			out.Values[i] = ec._MinimalView_type(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "key":
+			out.Values[i] = ec._MinimalView_key(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "objectMetadataId":
+			out.Values[i] = ec._MinimalView_objectMetadataId(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
 var objectImplementors = []string{"Object"}
 
 func (ec *executionContext) _Object(ctx context.Context, sel ast.SelectionSet, obj *store.ObjectDetail) graphql.Marshaler {
@@ -5622,6 +6734,44 @@ func (ec *executionContext) _ObjectEdge(ctx context.Context, sel ast.SelectionSe
 	return out
 }
 
+var objectRecordCountImplementors = []string{"ObjectRecordCount"}
+
+func (ec *executionContext) _ObjectRecordCount(ctx context.Context, sel ast.SelectionSet, obj *store.ObjectRecordCount) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, objectRecordCountImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ObjectRecordCount")
+		case "objectNamePlural":
+			out.Values[i] = ec._ObjectRecordCount_objectNamePlural(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "totalCount":
+			out.Values[i] = ec._ObjectRecordCount_totalCount(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
 var pageInfoImplementors = []string{"PageInfo"}
 
 func (ec *executionContext) _PageInfo(ctx context.Context, sel ast.SelectionSet, obj *PageInfo) graphql.Marshaler {
@@ -5706,6 +6856,24 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				true, false,
 				func(ctx context.Context) graphql.Marshaler {
 					return ec._Query_getToolInputSchema(ctx, field)
+				})
+		case "objectRecordCounts":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_objectRecordCounts(ctx, field)
+				})
+		case "mostlyEmptyFieldMetadataIds":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_mostlyEmptyFieldMetadataIds(ctx, field)
+				})
+		case "minimalMetadata":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_minimalMetadata(ctx, field)
 				})
 		case "__type":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
@@ -6293,6 +7461,30 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
+func (ec *executionContext) marshalNCollectionHash2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚋmetadatagqlᚐCollectionHashᚄ(ctx context.Context, sel ast.SelectionSet, v []*CollectionHash) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNCollectionHash2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚋmetadatagqlᚐCollectionHash(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNCollectionHash2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚋmetadatagqlᚐCollectionHash(ctx context.Context, sel ast.SelectionSet, v *CollectionHash) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "CollectionHash!")
+		return graphql.Null
+	}
+	return ec._CollectionHash(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNField2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚋstoreᚐFieldDetail(ctx context.Context, sel ast.SelectionSet, v store.FieldDetail) graphql.Marshaler {
 	return ec._Field(ctx, sel, &v)
 }
@@ -6389,6 +7581,54 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	return res
 }
 
+func (ec *executionContext) marshalNMinimalMetadata2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚋstoreᚐMinimalMetadata(ctx context.Context, sel ast.SelectionSet, v *store.MinimalMetadata) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "MinimalMetadata!")
+		return graphql.Null
+	}
+	return ec._MinimalMetadata(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNMinimalObjectMetadata2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚋstoreᚐMinimalObject(ctx context.Context, sel ast.SelectionSet, v store.MinimalObject) graphql.Marshaler {
+	return ec._MinimalObjectMetadata(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNMinimalObjectMetadata2ᚕgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚋstoreᚐMinimalObjectᚄ(ctx context.Context, sel ast.SelectionSet, v []store.MinimalObject) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNMinimalObjectMetadata2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚋstoreᚐMinimalObject(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNMinimalView2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚋstoreᚐMinimalView(ctx context.Context, sel ast.SelectionSet, v store.MinimalView) graphql.Marshaler {
+	return ec._MinimalView(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNMinimalView2ᚕgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚋstoreᚐMinimalViewᚄ(ctx context.Context, sel ast.SelectionSet, v []store.MinimalView) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNMinimalView2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚋstoreᚐMinimalView(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
 func (ec *executionContext) marshalNObject2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚋstoreᚐObjectDetail(ctx context.Context, sel ast.SelectionSet, v *store.ObjectDetail) graphql.Marshaler {
 	if v == nil {
 		graphql.AddInvalidNullError(ctx, "Object!")
@@ -6427,6 +7667,30 @@ func (ec *executionContext) marshalNObjectEdge2ᚖgithubᚗcomᚋtwentyhqᚋtwen
 		return graphql.Null
 	}
 	return ec._ObjectEdge(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNObjectRecordCount2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚋstoreᚐObjectRecordCountᚄ(ctx context.Context, sel ast.SelectionSet, v []*store.ObjectRecordCount) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNObjectRecordCount2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚋstoreᚐObjectRecordCount(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNObjectRecordCount2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚋstoreᚐObjectRecordCount(ctx context.Context, sel ast.SelectionSet, v *store.ObjectRecordCount) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "ObjectRecordCount!")
+		return graphql.Null
+	}
+	return ec._ObjectRecordCount(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNPageInfo2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚋmetadatagqlᚐPageInfo(ctx context.Context, sel ast.SelectionSet, v *PageInfo) graphql.Marshaler {
@@ -6544,6 +7808,35 @@ func (ec *executionContext) marshalNUUID2string(ctx context.Context, sel ast.Sel
 		graphql.AddInvalidNullFromMarshaler(ctx, "UUID!")
 	}
 	return res
+}
+
+func (ec *executionContext) unmarshalNUUID2ᚕstringᚄ(ctx context.Context, v any) ([]string, error) {
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]string, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNUUID2string(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalNUUID2ᚕstringᚄ(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNUUID2string(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
 }
 
 func (ec *executionContext) marshalN__Directive2githubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐDirective(ctx context.Context, sel ast.SelectionSet, v introspection.Directive) graphql.Marshaler {

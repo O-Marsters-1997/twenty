@@ -1,0 +1,19 @@
+schema:
+  - "*.graphqls"
+exec:
+  filename: generated.go
+  package: filesgql
+model:
+  filename: models_gen.go
+  package: filesgql
+models:
+  UUID:
+    model: github.com/99designs/gqlgen/graphql.String
+  DateTime:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata.Timestamp
+  FileFolder:
+    model: github.com/99designs/gqlgen/graphql.String
+  FileUploadTarget:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/files.UploadTarget
+  FileWithSignedUrl:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/files.SignedFile

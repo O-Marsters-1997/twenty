@@ -26,7 +26,7 @@ func (stubTool) Call(context.Context, auth.Principal, json.RawMessage) (json.Raw
 	return nil, nil
 }
 
-type noPager struct{}
+type noPager struct{ metadatagql.Pager }
 
 func (noPager) Page(context.Context, store.PageRequest) (store.Page, error) {
 	return store.Page{}, nil

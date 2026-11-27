@@ -31,6 +31,14 @@ type Resolver struct {
 	Renderer        messaging.Renderer
 	Queue           func(ctx context.Context, args river.JobArgs) error
 	Logger          *slog.Logger
+
+	Outreach         *store.Outreach
+	CalendarChannels *store.CalendarChannels
+	Calendar         CalendarEvents
+}
+
+type CalendarEvents interface {
+	CreateEvent(ctx context.Context, accountID string, event messaging.NewCalendarEvent) (messaging.CreatedCalendarEvent, error)
 }
 
 func caller(ctx context.Context) (string, error) {
@@ -180,6 +188,12 @@ func withoutPointers(input map[string]any) map[string]any {
 				plain[key] = nil
 			}
 		case *bool:
+			if typed != nil {
+				plain[key] = *typed
+			} else {
+				plain[key] = nil
+			}
+		case *int:
 			if typed != nil {
 				plain[key] = *typed
 			} else {

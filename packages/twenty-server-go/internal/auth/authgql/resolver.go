@@ -15,6 +15,33 @@ type Resolver struct {
 	Login         *auth.TwoFactorLogin
 	Tokens        *auth.PGIssuer
 	Public        *auth.PublicData
+	PasswordReset *auth.PasswordReset
+}
+
+func (r *mutationResolver) EmailPasswordResetLink(ctx context.Context, email string, workspaceID *string, _ *string) (*EmailPasswordResetLink, error) {
+	var workspace string
+	if workspaceID != nil {
+		workspace = *workspaceID
+	}
+	if err := r.PasswordReset.RequestLink(ctx, email, workspace); err != nil {
+		return nil, err
+	}
+	return &EmailPasswordResetLink{Success: true}, nil
+}
+
+func (r *mutationResolver) UpdatePasswordViaResetToken(ctx context.Context, passwordResetToken string, newPassword string) (*InvalidatePassword, error) {
+	if err := r.PasswordReset.UpdatePassword(ctx, passwordResetToken, newPassword); err != nil {
+		return nil, err
+	}
+	return &InvalidatePassword{Success: true}, nil
+}
+
+func (r *queryResolver) ValidatePasswordResetToken(ctx context.Context, passwordResetToken string) (*ValidatePasswordResetToken, error) {
+	user, err := r.PasswordReset.Validate(ctx, passwordResetToken)
+	if err != nil {
+		return nil, err
+	}
+	return &ValidatePasswordResetToken{ID: user.ID, Email: user.Email, HasPassword: user.HasPassword}, nil
 }
 
 func (r *mutationResolver) InitiateOTPProvisioning(ctx context.Context, loginToken string, origin string) (*InitiateTwoFactorAuthenticationProvisioning, error) {
