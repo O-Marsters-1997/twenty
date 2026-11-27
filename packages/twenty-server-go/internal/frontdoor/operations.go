@@ -94,6 +94,11 @@ var PageLayoutOperations = []string{
 
 var ApplicationOperations = []string{"FindManyApplications", "FindManyApplicationsForToolTable", "FindManyTimelineActivityTypes"}
 
+var FileOperations = []string{
+	"CreateFileUpload", "CompleteFileUpload", "CreateNewWorkspaceLogoUpload", "CompleteNewWorkspaceLogoUpload",
+	"CompleteWorkspaceLogoUpload", "CompleteWorkspaceMemberProfilePictureUpload",
+}
+
 var blockedMetadataFields = []string{
 	"createOneObject", "updateOneObject", "deleteOneObject",
 	"createOneField", "updateOneField", "deleteOneField",
