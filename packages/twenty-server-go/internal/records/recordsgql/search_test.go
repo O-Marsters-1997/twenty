@@ -91,6 +91,15 @@ func TestSearch(t *testing.T) {
 		})
 	}
 
+	t.Run("rejects a non-positive limit and punctuation-only input", func(t *testing.T) {
+		if response := send(t, server, "Search", searchQuery, map[string]any{"searchInput": "acm", "limit": -1}); response["errors"] == nil {
+			t.Errorf("limit -1 response = %v, want an error", response)
+		}
+		if got := searchLabels(t, send(t, server, "Search", searchQuery, map[string]any{"searchInput": "@@", "limit": 10})); len(got) != 0 {
+			t.Errorf("punctuation-only search = %v, want no hits", got)
+		}
+	})
+
 	t.Run("returns the object label and ranks", func(t *testing.T) {
 		response := send(t, server, "Search", searchQuery, map[string]any{"searchInput": "bolt", "limit": 10})
 		node := response["data"].(map[string]any)["search"].(map[string]any)["edges"].([]any)[0].(map[string]any)["node"].(map[string]any)

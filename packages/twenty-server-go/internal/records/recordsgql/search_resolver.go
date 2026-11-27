@@ -35,6 +35,9 @@ func (r *queryResolver) Search(ctx context.Context, searchInput string, limit in
 }
 
 func shortest(value float32) float64 {
-	parsed, _ := strconv.ParseFloat(strconv.FormatFloat(float64(value), 'g', -1, 32), 64)
+	parsed, err := strconv.ParseFloat(strconv.FormatFloat(float64(value), 'g', -1, 32), 64)
+	if err != nil {
+		return float64(value)
+	}
 	return parsed
 }

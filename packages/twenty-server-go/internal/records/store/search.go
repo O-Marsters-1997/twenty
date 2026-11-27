@@ -23,7 +23,10 @@ type searchSpec struct {
 	image        string
 }
 
-const noImage = "NULL::text"
+const (
+	noImage        = "NULL::text"
+	maxSearchLimit = 1000
+)
 
 var searchSpecs = []searchSpec{
 	{"company", `"name"`, noImage},
@@ -53,6 +56,9 @@ type searchCursor struct {
 }
 
 func (s *Search) Search(ctx context.Context, query records.SearchQuery) (records.SearchPage, error) {
+	if query.Limit < 1 || query.Limit > maxSearchLimit {
+		return records.SearchPage{}, fmt.Errorf("%w: search limit must be between 1 and %d", records.ErrUnknownField, maxSearchLimit)
+	}
 	after, err := decodeSearchCursor(query.After)
 	if err != nil {
 		return records.SearchPage{}, err
@@ -120,7 +126,11 @@ func (s *Search) objectLabels(ctx context.Context) (map[string]string, error) {
 }
 
 func (s *Search) searchObject(ctx context.Context, spec searchSpec, objectLabel string, query records.SearchQuery, after *searchCursor) ([]records.SearchHit, error) {
-	object := model.Objects[slices.IndexFunc(model.Objects, func(candidate model.Object) bool { return candidate.NameSingular == spec.nameSingular })]
+	index := slices.IndexFunc(model.Objects, func(candidate model.Object) bool { return candidate.NameSingular == spec.nameSingular })
+	if index < 0 {
+		return nil, fmt.Errorf("search %s: object missing from the model", spec.nameSingular)
+	}
+	object := model.Objects[index]
 	where := &compiler{object: object}
 	var conditions []string
 	if query.FilterFor != nil {
@@ -141,7 +151,11 @@ func (s *Search) searchObject(ctx context.Context, spec searchSpec, objectLabel 
 	}
 
 	rankCD, rank := "0::float4", "0::float4"
-	if terms := searchTerms(query.Input); terms != "" {
+	terms := searchTerms(query.Input)
+	if terms == "" && strings.TrimSpace(query.Input) != "" {
+		return nil, nil
+	}
+	if terms != "" {
 		tsQuery := where.arg(terms) + "::text"
 		pattern := where.arg("%" + escapeLike(strings.TrimSpace(query.Input)) + "%")
 		rankCD = `ts_rank_cd("searchVector", to_tsquery('simple', ` + tsQuery + `))::float4`
@@ -153,7 +167,7 @@ func (s *Search) searchObject(ctx context.Context, spec searchSpec, objectLabel 
 		cd, r, id := where.arg(after.RankCD), where.arg(after.Rank), where.arg(after.ID)
 		outer = ` WHERE (hit.rank_cd < ` + cd + `::float4 OR (hit.rank_cd = ` + cd + `::float4 AND (hit.rank < ` + r + `::float4 OR (hit.rank = ` + r + `::float4 AND hit.id > ` + id + `::text))))`
 	}
-	statement := `SELECT * FROM (SELECT "id"::text AS id, ` + spec.label + ` AS label, ` + spec.image + ` AS image, ` + rankCD + ` AS rank_cd, ` + rank + ` AS rank
+	statement := `SELECT * FROM (SELECT "id"::text AS id, COALESCE(` + spec.label + `, '') AS label, ` + spec.image + ` AS image, ` + rankCD + ` AS rank_cd, ` + rank + ` AS rank
 		FROM ` + workspace.SchemaName() + `."` + object.Table + `" WHERE ` + orElse(strings.Join(conditions, " AND "), "TRUE") + `) hit` + outer +
 		` ORDER BY hit.rank_cd DESC, hit.rank DESC, hit.id LIMIT ` + fmt.Sprint(query.Limit+1)
 	rows, err := s.pool.Query(ctx, statement, where.args...)
