@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math"
 	"regexp"
+	"slices"
 	"strconv"
 	"strings"
 )
@@ -98,11 +99,7 @@ func parseActorSources(value string) ([]string, error) {
 		return nil, fmt.Errorf("%w: %q is not an array of actor sources", ErrInvalidFilter, value)
 	}
 	for _, source := range sources {
-		known := false
-		for _, candidate := range actorSources {
-			known = known || candidate == source
-		}
-		if !known {
+		if !slices.Contains(actorSources, source) {
 			return nil, fmt.Errorf("%w: unknown actor source %q", ErrInvalidFilter, source)
 		}
 	}

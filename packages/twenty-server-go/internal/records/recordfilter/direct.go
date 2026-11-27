@@ -191,7 +191,7 @@ func (b builder) dateTime(recordFilter RecordFilter, name string) (records.Filte
 }
 
 func ratingValues(keep func(rating int) bool) []string {
-	var values []string
+	values := []string{}
 	for rating := 1; rating <= 5; rating++ {
 		if keep(rating) {
 			values = append(values, "RATING_"+strconv.Itoa(rating))
@@ -395,7 +395,7 @@ func (b builder) selectOptions(recordFilter RecordFilter, name string) (records.
 }
 
 func splitEmptyOption(options []string) ([]string, bool) {
-	var nonEmpty []string
+	nonEmpty := []string{}
 	hasEmpty := false
 	for _, option := range options {
 		if option == "" {
