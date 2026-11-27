@@ -14,6 +14,7 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth/authgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/config"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/systemmail"
 )
 
 const seedWorkspaceID = "20202020-1c25-4d02-bf25-6aeccf7ea419"
@@ -87,7 +88,15 @@ func newPublicData(pool *pgxpool.Pool, cfg config.Config, passwordLogin *auth.Pa
 
 func newAuthResolver(pool *pgxpool.Pool, cfg config.Config, twoFactor *auth.TwoFactor, passwordLogin *auth.PasswordLogin, stack authStack) *authgql.Resolver {
 	return &authgql.Resolver{
-		Public:        newPublicData(pool, cfg, passwordLogin),
+		Public: newPublicData(pool, cfg, passwordLogin),
+		PasswordReset: auth.NewPasswordReset(pool, auth.NewPasswordHasher(), systemmail.NewSMTPSender(systemmail.SMTPConfig{
+			Host:        os.Getenv("EMAIL_SMTP_HOST"),
+			Port:        os.Getenv("EMAIL_SMTP_PORT"),
+			User:        os.Getenv("EMAIL_SMTP_USER"),
+			Password:    os.Getenv("EMAIL_SMTP_PASSWORD"),
+			FromName:    os.Getenv("EMAIL_FROM_NAME"),
+			FromAddress: os.Getenv("EMAIL_FROM_ADDRESS"),
+		}), stack.frontURL),
 		TwoFactor:     twoFactor,
 		PasswordLogin: passwordLogin,
 		Sessions:      stack.sessions,
