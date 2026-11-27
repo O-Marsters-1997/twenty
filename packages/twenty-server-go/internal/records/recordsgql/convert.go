@@ -3,7 +3,6 @@ package recordsgql
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"slices"
 	"sort"
@@ -15,11 +14,6 @@ import (
 func personObject() model.Object {
 	index := slices.IndexFunc(model.Objects, func(object model.Object) bool { return object.NameSingular == "person" })
 	return model.Objects[index]
-}
-
-func isComposite(object model.Object, name string) bool {
-	index := slices.IndexFunc(object.Fields, func(field model.Field) bool { return field.Name == name })
-	return index >= 0 && len(object.Fields[index].Columns) > 1
 }
 
 func sortedKeys(values map[string]any) []string {
@@ -50,100 +44,7 @@ func parseFilter(object model.Object, input map[string]any) (records.Filter, err
 	if err != nil {
 		return records.Filter{}, err
 	}
-	var conjuncts []records.Filter
-	for _, key := range sortedKeys(input) {
-		switch key {
-		case "and", "or":
-			group, err := parseGroup(object, input[key])
-			if err != nil {
-				return records.Filter{}, err
-			}
-			if key == "and" {
-				conjuncts = append(conjuncts, records.Filter{And: group})
-			} else {
-				conjuncts = append(conjuncts, records.Filter{Or: group})
-			}
-		case "not":
-			nested, ok := input[key].(map[string]any)
-			if !ok {
-				return records.Filter{}, errors.New("not filter must be an object")
-			}
-			inner, err := parseFilter(object, nested)
-			if err != nil {
-				return records.Filter{}, err
-			}
-			conjuncts = append(conjuncts, records.Filter{Not: &inner})
-		default:
-			operators, ok := input[key].(map[string]any)
-			if !ok {
-				return records.Filter{}, fmt.Errorf("filter on %s must be an object", key)
-			}
-			if isComposite(object, key) {
-				for _, subField := range sortedKeys(operators) {
-					subOperators, ok := operators[subField].(map[string]any)
-					if !ok {
-						return records.Filter{}, fmt.Errorf("filter on %s.%s must be an object", key, subField)
-					}
-					conjuncts = append(conjuncts, operatorFilters(key, subField, subOperators)...)
-				}
-				continue
-			}
-			conjuncts = append(conjuncts, operatorFilters(key, "", operators)...)
-		}
-	}
-	return records.Filter{And: conjuncts}, nil
-}
-
-func parseGroup(object model.Object, raw any) ([]records.Filter, error) {
-	items, _ := raw.([]any)
-	var group []records.Filter
-	for _, item := range items {
-		if item == nil {
-			continue
-		}
-		nested, ok := item.(map[string]any)
-		if !ok {
-			return nil, errors.New("and/or entries must be objects")
-		}
-		filter, err := parseFilter(object, nested)
-		if err != nil {
-			return nil, err
-		}
-		group = append(group, filter)
-	}
-	return group, nil
-}
-
-func operatorFilters(field, subField string, operators map[string]any) []records.Filter {
-	var filters []records.Filter
-	for _, operand := range sortedKeys(operators) {
-		filters = append(filters, records.Filter{Field: &records.FieldFilter{
-			Field: field, SubField: subField, Operand: records.Operand(operand), Value: normalise(operators[operand]),
-		}})
-	}
-	return filters
-}
-
-func normalise(value any) any {
-	switch typed := value.(type) {
-	case json.Number:
-		number, err := typed.Float64()
-		if err != nil {
-			return typed.String()
-		}
-		return number
-	case []any:
-		strings := make([]string, 0, len(typed))
-		for _, item := range typed {
-			text, ok := item.(string)
-			if !ok {
-				return typed
-			}
-			strings = append(strings, text)
-		}
-		return strings
-	}
-	return value
+	return records.ParseFilter(object, input)
 }
 
 func parseOrderBy(input []map[string]any) ([]records.OrderBy, error) {
