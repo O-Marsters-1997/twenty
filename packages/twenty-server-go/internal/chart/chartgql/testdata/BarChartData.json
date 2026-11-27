@@ -1,0 +1,37 @@
+{
+  "name": "BarChartData",
+  "operation": "BarChartData",
+  "fixture": "opportunities grouped by stage, count of id, vertical layout",
+  "endpoint": "/metadata",
+  "query": "query BarChartData($input: BarChartDataInput!) { barChartData(input: $input) { data indexBy keys series { key label } xAxisLabel yAxisLabel showLegend showDataLabels layout groupMode hasTooManyGroups formattedToRawLookup } }",
+  "variables": {
+    "input": {
+      "objectMetadataId": "o-opportunity",
+      "configuration": {
+        "configurationType": "BAR_CHART",
+        "aggregateFieldMetadataId": "f-id",
+        "aggregateOperation": "COUNT",
+        "primaryAxisGroupByFieldMetadataId": "f-stage",
+        "layout": "VERTICAL"
+      }
+    }
+  },
+  "response": {
+    "data": {
+      "barChartData": {
+        "data": [{"stage": "New", "Count": 3}, {"stage": "Won", "Count": 2}],
+        "indexBy": "stage",
+        "keys": ["Count"],
+        "series": [{"key": "Count", "label": "Count"}],
+        "xAxisLabel": "Stage",
+        "yAxisLabel": "Count",
+        "showLegend": true,
+        "showDataLabels": false,
+        "layout": "VERTICAL",
+        "groupMode": "STACKED",
+        "hasTooManyGroups": false,
+        "formattedToRawLookup": {"New": "NEW", "Won": "WON"}
+      }
+    }
+  }
+}
