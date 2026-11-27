@@ -11,7 +11,6 @@ import { SettingsPageContainer } from '@/settings/components/SettingsPageContain
 import { SettingsSkeletonLoader } from '@/settings/components/SettingsSkeletonLoader';
 import { SettingsPageLayout } from '@/settings/components/layout/SettingsPageLayout';
 import { SettingsEmailingDomainDnsRecords } from '@/settings/emailing-domains/components/SettingsEmailingDomainDnsRecords';
-import { SettingsEmailingDomainVerifyButton } from '@/settings/emailing-domains/components/SettingsEmailingDomainVerifyButton';
 import { getDocumentationUrl } from '@/support/utils/getDocumentationUrl';
 import { SettingsTextInput } from '@/ui/input/components/SettingsTextInput';
 import { ConfirmationDialog } from '@/ui/layout/dialog/components/ConfirmationDialog';
@@ -273,9 +272,6 @@ export const SettingsWorkspaceCommunicationGroupChannelDetail = () => {
                     fullWidth
                   />
                 </div>
-                <SettingsEmailingDomainVerifyButton
-                  emailingDomainId={emailingDomain.id}
-                />
               </div>
               <SettingsEmailingDomainDnsRecords
                 emailingDomain={emailingDomain}

@@ -1,0 +1,17 @@
+scalar JSON
+
+input AddQuerySubscriptionInput {
+  eventStreamId: String!
+  queryId: String!
+  operationSignature: JSON!
+}
+
+input RemoveQueryFromEventStreamInput {
+  eventStreamId: String!
+  queryId: String!
+}
+
+type Mutation {
+  addQueryToEventStream(input: AddQuerySubscriptionInput!): Boolean!
+  removeQueryFromEventStream(input: RemoveQueryFromEventStreamInput!): Boolean!
+}
