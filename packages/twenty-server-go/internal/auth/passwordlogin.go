@@ -247,6 +247,21 @@ func (l *PasswordLogin) availableWorkspaces(ctx context.Context, user loginUser)
 	return forSignIn, forSignUp, nil
 }
 
+func (l *PasswordLogin) AvailableWorkspacesForUser(ctx context.Context, userID string) (forSignIn, forSignUp []AvailableWorkspace, err error) {
+	var user loginUser
+	err = l.pool.QueryRow(ctx, `SELECT id::text, email::text, "passwordHash", "isEmailVerified" FROM core."user" WHERE id = $1::uuid AND "deletedAt" IS NULL`, userID).
+		Scan(&user.id, &user.email, &user.passwordHash, &user.verified)
+	if errors.Is(err, pgx.ErrNoRows) {
+		return nil, nil, ErrUnauthenticated
+	}
+	if err != nil {
+		return nil, nil, fmt.Errorf("look up user: %w", err)
+	}
+	return l.availableWorkspaces(ctx, user)
+}
+
+func (l *PasswordLogin) WorkspaceURL(subdomain string) string { return l.workspaceURL(subdomain) }
+
 func (l *PasswordLogin) availableWorkspaceRows(ctx context.Context, user loginUser) (members, signUp []workspaceRow, err error) {
 	members, err = l.queryWorkspaces(ctx,
 		`SELECT `+workspaceColumns+`, NULL::text FROM core."userWorkspace" uw JOIN core.workspace w ON w.id = uw."workspaceId"

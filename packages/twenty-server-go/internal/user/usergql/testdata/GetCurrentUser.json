@@ -1,0 +1,79 @@
+{
+  "name": "GetCurrentUser",
+  "operation": "GetCurrentUser",
+  "fixture": "active workspace with a custom and a standard application, one feature flag, two memberships, pending connect-account and invite-team onboarding steps",
+  "endpoint": "/metadata",
+  "query": "query GetCurrentUser { currentUser { id firstName lastName email hasPassword supportUserHash onboardingStatus userVars currentWorkspace { id displayName logo inviteHash allowImpersonation activationStatus isPublicInviteLinkEnabled isCampaignClickTrackingEnabled isCampaignOpenTrackingEnabled workspaceDiscoverability isGoogleAuthEnabled isPasswordAuthEnabled isGoogleAuthBypassEnabled isPasswordAuthBypassEnabled subdomain workspaceCustomApplication { id } installedApplications { id name universalIdentifier logoUrl createdAt } workspaceUrls { subdomainUrl } featureFlags { key value } workspaceMembersCount defaultRole { id label description icon canUpdateAllSettings canAccessAllTools isEditable canReadAllObjectRecords canUpdateAllObjectRecords canSoftDeleteAllObjectRecords canDestroyAllObjectRecords canBeAssignedToUsers canBeAssignedToAgents canBeAssignedToApiKeys } aiChatModelTier aiAgentModelTier isAutoModelSelectionEnabled aiModelIdByTier aiAdditionalInstructions isTwoFactorAuthenticationEnforced trashRetentionDays eventLogRetentionDays editableProfileFields isInternalMessagesImportEnabled } availableWorkspaces { availableWorkspacesForSignIn { id displayName loginToken personalInviteToken inviteHash workspaceUrls { subdomainUrl } logo } availableWorkspacesForSignUp { id displayName loginToken personalInviteToken inviteHash workspaceUrls { subdomainUrl } logo } } } }",
+  "response": {
+    "data": {
+      "currentUser": {
+        "id": "a1000000-0000-4000-8000-000000000001",
+        "firstName": "Tim",
+        "lastName": "Apple",
+        "email": "tim@apple.dev",
+        "hasPassword": true,
+        "supportUserHash": "0dda30b53af11435e3990d6ebd1a56c2f98123ab07f339d79a7836cc0e6a72d4",
+        "onboardingStatus": "SYNC_EMAIL",
+        "userVars": {"ACCOUNTS_TO_RECONNECT_EMAIL_ALIASES": ["acc-1"]},
+        "currentWorkspace": {
+          "id": "20202020-1c25-4d02-bf25-6aeccf7ea419",
+          "displayName": "Acme",
+          "logo": null,
+          "inviteHash": "invite-acme",
+          "allowImpersonation": true,
+          "activationStatus": "ACTIVE",
+          "isPublicInviteLinkEnabled": true,
+          "isCampaignClickTrackingEnabled": false,
+          "isCampaignOpenTrackingEnabled": false,
+          "workspaceDiscoverability": "PUBLIC",
+          "isGoogleAuthEnabled": true,
+          "isPasswordAuthEnabled": false,
+          "isGoogleAuthBypassEnabled": false,
+          "isPasswordAuthBypassEnabled": false,
+          "subdomain": "acme",
+          "workspaceCustomApplication": {"id": "<ignored>"},
+          "installedApplications": [
+            {"id": "<ignored>", "name": "Custom", "universalIdentifier": "<ignored>", "logoUrl": "http://localhost:3000/public-assets/20202020-1c25-4d02-bf25-6aeccf7ea419/c2000000-0000-4000-8000-000000000001/logo.png", "createdAt": "2026-01-01T00:00:00.000Z"},
+            {"id": "<ignored>", "name": "Standard", "universalIdentifier": "<ignored>", "logoUrl": "http://localhost:3000/public-assets/20202020-1c25-4d02-bf25-6aeccf7ea419/c2000000-0000-4000-8000-000000000002/logo.png", "createdAt": "2026-01-02T00:00:00.000Z"}
+          ],
+          "workspaceUrls": {"subdomainUrl": "http://acme.localhost:3001/"},
+          "featureFlags": [{"key": "IS_AI_ENABLED", "value": true}],
+          "workspaceMembersCount": 1,
+          "defaultRole": {
+            "id": "d0000000-0000-4000-8000-000000000001",
+            "label": "Admin",
+            "description": null,
+            "icon": null,
+            "canUpdateAllSettings": true,
+            "canAccessAllTools": false,
+            "isEditable": true,
+            "canReadAllObjectRecords": false,
+            "canUpdateAllObjectRecords": false,
+            "canSoftDeleteAllObjectRecords": false,
+            "canDestroyAllObjectRecords": false,
+            "canBeAssignedToUsers": true,
+            "canBeAssignedToAgents": true,
+            "canBeAssignedToApiKeys": true
+          },
+          "aiChatModelTier": "fast",
+          "aiAgentModelTier": "fast",
+          "isAutoModelSelectionEnabled": true,
+          "aiModelIdByTier": {},
+          "aiAdditionalInstructions": null,
+          "isTwoFactorAuthenticationEnforced": false,
+          "trashRetentionDays": 14,
+          "eventLogRetentionDays": 3,
+          "editableProfileFields": ["email", "profilePicture", "firstName", "lastName"],
+          "isInternalMessagesImportEnabled": false
+        },
+        "availableWorkspaces": {
+          "availableWorkspacesForSignIn": [
+            {"id": "20202020-1c25-4d02-bf25-6aeccf7ea419", "displayName": "Acme", "loginToken": null, "personalInviteToken": null, "inviteHash": null, "workspaceUrls": {"subdomainUrl": "http://acme.localhost:3001/"}, "logo": ""},
+            {"id": "20202020-1c25-4d02-bf25-6aeccf7ea420", "displayName": "Pitch", "loginToken": null, "personalInviteToken": null, "inviteHash": null, "workspaceUrls": {"subdomainUrl": "http://pitch.localhost:3001/"}, "logo": ""}
+          ],
+          "availableWorkspacesForSignUp": []
+        }
+      }
+    }
+  }
+}
