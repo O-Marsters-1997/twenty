@@ -1,0 +1,14 @@
+{
+  "name": "GetTimelineCalendarEventsFromObjectRecord",
+  "operation": "GetTimelineCalendarEventsFromObjectRecord",
+  "fixture": "hand-written from the front-end fragments and TimelineCalendarEvent DTO; two events of one person, one on the caller's channel and one on another member's metadata-only channel",
+  "endpoint": "/graphql",
+  "query": "query GetTimelineCalendarEventsFromObjectRecord($objectNameSingular: String!, $recordId: UUID!, $page: Int!, $pageSize: Int!) { getTimelineCalendarEventsFromObjectRecord(objectNameSingular: $objectNameSingular, recordId: $recordId, page: $page, pageSize: $pageSize) { totalNumberOfCalendarEvents relatedPersonIds timelineCalendarEvents { id title description location startsAt endsAt isFullDay visibility participants { personId workspaceMemberId firstName lastName displayName avatarUrl handle } } } }",
+  "variables": {"objectNameSingular": "person", "recordId": "0b000000-0000-4000-8000-0000000000a1", "page": 1, "pageSize": 10},
+  "response": {"data":{"getTimelineCalendarEventsFromObjectRecord":{"totalNumberOfCalendarEvents":2,"relatedPersonIds":["0b000000-0000-4000-8000-0000000000a1"],"timelineCalendarEvents":[
+ {"id":"ec000000-0000-4000-8000-000000000001","title":"Kickoff","description":"Agenda","location":"Room 1","startsAt":"2026-03-01T10:00:00.000Z","endsAt":"2026-03-01T11:00:00.000Z","isFullDay":false,"visibility":"SHARE_EVERYTHING","participants":[
+  {"personId":"0b000000-0000-4000-8000-0000000000a1","workspaceMemberId":null,"firstName":"Ada","lastName":"Lovelace","displayName":"Ada L","avatarUrl":"https://img/ada.png","handle":"ada@x.com"},
+  {"personId":null,"workspaceMemberId":"0a000000-0000-4000-8000-0000000000a1","firstName":"Olly","lastName":"Owner","displayName":"Olly","avatarUrl":"","handle":"olly@x.com"}]},
+ {"id":"ec000000-0000-4000-8000-000000000002","title":"Review","description":"","location":"","startsAt":"2026-02-01T00:00:00.000Z","endsAt":"2026-02-02T00:00:00.000Z","isFullDay":true,"visibility":"METADATA","participants":[
+  {"personId":"0b000000-0000-4000-8000-0000000000a1","workspaceMemberId":null,"firstName":"Ada","lastName":"Lovelace","displayName":"Ada L","avatarUrl":"https://img/ada.png","handle":"ada@x.com"}]}]}}}
+}
