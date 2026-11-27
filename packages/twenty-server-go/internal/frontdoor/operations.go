@@ -15,6 +15,7 @@ const (
 
 var RuntimeBuiltObjects = []string{
 	"person", "company", "note", "task", "opportunity", "dashboard", "attachment", "timelineActivity", "workspaceMember",
+	"calendarEvent", "calendarEventParticipant", "calendarEventTarget", "calendarChannelEventAssociation",
 }
 
 func RecordOperations(object model.Object) []string {

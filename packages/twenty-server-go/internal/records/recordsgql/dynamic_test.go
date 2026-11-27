@@ -190,6 +190,32 @@ func TestDynamic_ServesAnyRegisteredObject(t *testing.T) {
 	}
 }
 
+func TestDynamic_ServesCalendarObjects(t *testing.T) {
+	t.Parallel()
+	server := newDynamicServer(t, "calendarEvent", "calendarEventParticipant", "calendarEventTarget", "calendarChannelEventAssociation")
+
+	event := dataOf(t, call(t, server,
+		`mutation CreateOneCalendarEvent($data: CalendarEventCreateInput!) { createCalendarEvent(data: $data) { id title isFullDay conferenceLink { primaryLinkUrl } } }`,
+		map[string]any{"data": map[string]any{"title": "Standup", "isFullDay": false, "conferenceLink": map[string]any{"primaryLinkUrl": "https://meet.example/x"}}}))["createCalendarEvent"].(map[string]any)
+	eventID := event["id"].(string)
+	call(t, server,
+		`mutation CreateOneCalendarEventParticipant($data: CalendarEventParticipantCreateInput!) { createCalendarEventParticipant(data: $data) { id } }`,
+		map[string]any{"data": map[string]any{"calendarEventId": eventID, "handle": "ada@x.org", "responseStatus": "ACCEPTED"}})
+
+	found := dataOf(t, call(t, server,
+		`query FindManyCalendarEvents { calendarEvents { edges { node { title conferenceLink { primaryLinkUrl } calendarEventParticipants { edges { node { handle responseStatus } } } __typename } } totalCount } }`, nil))["calendarEvents"]
+	want := map[string]any{
+		"edges": []any{map[string]any{"node": map[string]any{
+			"title": "Standup", "conferenceLink": map[string]any{"primaryLinkUrl": "https://meet.example/x"}, "__typename": "CalendarEvent",
+			"calendarEventParticipants": map[string]any{"edges": []any{map[string]any{"node": map[string]any{"handle": "ada@x.org", "responseStatus": "ACCEPTED"}}}},
+		}}},
+		"totalCount": float64(1),
+	}
+	if diff := cmp.Diff(want, found); diff != "" {
+		t.Errorf("calendarEvents mismatch (-want +got):\n%s", diff)
+	}
+}
+
 func TestDynamic_RejectsUnknownFields(t *testing.T) {
 	t.Parallel()
 	server := newDynamicServer(t, "person")
