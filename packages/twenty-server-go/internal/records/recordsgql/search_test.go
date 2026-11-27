@@ -109,12 +109,13 @@ func TestSearch(t *testing.T) {
 	})
 
 	t.Run("pages with the cursor", func(t *testing.T) {
-		first := send(t, server, "Search", searchQuery, map[string]any{"searchInput": "", "limit": 2})
+		objects := []string{"company", "person"}
+		first := send(t, server, "Search", searchQuery, map[string]any{"searchInput": "", "limit": 2, "includedObjectNameSingulars": objects})
 		pageInfo := first["data"].(map[string]any)["search"].(map[string]any)["pageInfo"].(map[string]any)
 		if pageInfo["hasNextPage"] != true {
 			t.Fatalf("first page pageInfo = %v, want a next page", pageInfo)
 		}
-		second := send(t, server, "Search", searchQuery, map[string]any{"searchInput": "", "limit": 2, "after": pageInfo["endCursor"]})
+		second := send(t, server, "Search", searchQuery, map[string]any{"searchInput": "", "limit": 2, "after": pageInfo["endCursor"], "includedObjectNameSingulars": objects})
 		got := slices.Concat(searchLabels(t, first), searchLabels(t, second))
 		slices.Sort(got)
 		want := []string{"company:Acme", "company:Bolt", "person:Acme Person", "person:Zed Person"}

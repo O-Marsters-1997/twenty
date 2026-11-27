@@ -135,6 +135,16 @@ func ResetEmail(to, link, duration string, hasPassword bool) (Message, error) {
 	return render(resetTemplate, to, "Action Needed to "+verb+" Password", text, data)
 }
 
+func InvitationEmail(to, link, senderName, workspaceName string) (Message, error) {
+	data := struct{ Title, Body, Link, Action string }{
+		Title:  "Join your team on Twenty",
+		Body:   senderName + " has invited you to join a workspace called " + workspaceName + ".",
+		Link:   link,
+		Action: "Accept invite",
+	}
+	return render(verificationTemplate, to, data.Title, data.Title+"\n\n"+data.Body+"\n\n"+data.Action+": "+link, data)
+}
+
 func ApprovedAccessDomainEmail(to, link, domain string) (Message, error) {
 	data := struct{ Title, Body, Link, Action string }{
 		Title:  "Validate domain " + domain,

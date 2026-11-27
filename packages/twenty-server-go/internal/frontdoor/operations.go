@@ -112,7 +112,7 @@ var SessionManagementOperations = []string{"CurrentUserSessions", "RevokeUserSes
 
 var InvitationOperations = []string{
 	"GetWorkspaceInvitations", "DeleteWorkspaceInvitation", "GetApprovedAccessDomains", "DeleteApprovedAccessDomain",
-	"CreateApprovedAccessDomain", "ValidateApprovedAccessDomain",
+	"SendInvitations", "ResendWorkspaceInvitation", "CreateApprovedAccessDomain", "ValidateApprovedAccessDomain",
 }
 
 var OnboardingOperations = []string{"GoBackToPreviousOnboardingStep", "SkipSyncEmailOnboardingStep"}
