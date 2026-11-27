@@ -38,6 +38,7 @@ const (
 	errAlreadyMember   recipientError = "This user is already a member of the workspace"
 	errAlreadyInvited  recipientError = "Invitation already sent"
 	errInvitationLimit recipientError = "Too many invitations sent, please try again later"
+	errMailFailed      recipientError = "Invitation created but the email could not be sent"
 )
 
 type Throttle interface {
@@ -175,7 +176,7 @@ func (i *Inviter) invite(ctx context.Context, invite inviteContext, email string
 	created := Invitation{Email: email, RoleID: roleID, ExpiresAt: i.now().Add(invitationTTL)}
 	err := pgx.BeginFunc(ctx, i.pool, func(tx pgx.Tx) error {
 		if replacing != "" {
-			if _, err := tx.Exec(ctx, `DELETE FROM core."appToken" WHERE id = $1::uuid`, replacing); err != nil {
+			if _, err := tx.Exec(ctx, `DELETE FROM core."appToken" WHERE id = $1::uuid AND "workspaceId" = $2::uuid`, replacing, invite.workspaceID); err != nil {
 				return fmt.Errorf("delete replaced invitation: %w", err)
 			}
 		}
@@ -197,7 +198,7 @@ func (i *Inviter) invite(ctx context.Context, invite inviteContext, email string
 		return Invitation{}, err
 	}
 	if err := i.mailer.Send(ctx, message); err != nil {
-		return Invitation{}, fmt.Errorf("send invitation email: %w", err)
+		return Invitation{}, errMailFailed
 	}
 	return created, nil
 }
