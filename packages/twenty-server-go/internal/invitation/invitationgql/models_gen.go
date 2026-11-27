@@ -23,6 +23,12 @@ type Mutation struct {
 type Query struct {
 }
 
+type SendInvitations struct {
+	Success bool                   `json:"success"`
+	Errors  []string               `json:"errors"`
+	Result  []*WorkspaceInvitation `json:"result"`
+}
+
 type WorkspaceInvitation struct {
 	ID        string             `json:"id"`
 	Email     string             `json:"email"`

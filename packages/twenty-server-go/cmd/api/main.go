@@ -159,7 +159,10 @@ func run() error {
 		}, logger),
 		authHandler,
 		workspaceSettingsHandler(pool, cfg, passwordLogins, logger),
-		invitationgql.NewHandler(&invitationgql.Resolver{Store: invitationstore.New(pool)}, logger),
+		invitationgql.NewHandler(&invitationgql.Resolver{
+			Store:   invitationstore.New(pool),
+			Inviter: invitationstore.NewInviter(pool, newSystemMailer(), auth.NewMemoryThrottle(), stack.frontURL, cfg.MultiWorkspace),
+		}, logger),
 		pagelayoutgql.NewHandler(&pagelayoutgql.Resolver{Store: pagelayoutstore.New(pool)}, logger),
 		applicationgql.NewHandler(&applicationgql.Resolver{Store: applicationstore.New(pool, cfg.ServerURL)}, logger),
 		filesgql.NewHandler(&filesgql.Resolver{Files: fileSvc}, logger),
