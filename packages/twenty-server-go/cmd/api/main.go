@@ -156,6 +156,7 @@ func run() error {
 			RoleStore:    accessstore.NewRoles(pool),
 			Permissions:  accessstore.NewPermissions(pool),
 			Tokens:       stack.issuer,
+			FeatureFlags: accessstore.NewFeatureFlags(pool, nil),
 		}, logger),
 		authHandler,
 		workspaceSettingsHandler(pool, cfg, passwordLogins, logger),
