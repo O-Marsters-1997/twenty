@@ -27,6 +27,29 @@ func (r *queryResolver) BarChartData(ctx context.Context, input BarChartDataInpu
 	return &data, nil
 }
 
+func (r *queryResolver) PieChartData(ctx context.Context, input PieChartDataInput) (*chart.PieChartData, error) {
+	if principal, ok := auth.PrincipalFrom(ctx); !ok || principal.WorkspaceID == "" {
+		return nil, auth.ErrUnauthenticated
+	}
+	configuration, ok := input.Configuration.(map[string]any)
+	if !ok {
+		return nil, fmt.Errorf("%w: configuration must be an object", chart.ErrInvalidConfiguration)
+	}
+	data, err := r.Charts.PieChartData(ctx, input.ObjectMetadataID, configuration)
+	if err != nil {
+		return nil, err
+	}
+	return &data, nil
+}
+
+func (r *pieChartDataResolver) FormattedToRawLookup(_ context.Context, obj *chart.PieChartData) (any, error) {
+	return obj.FormattedToRawLookup, nil
+}
+
+func (r *Resolver) PieChartData() PieChartDataResolver { return &pieChartDataResolver{r} }
+
+type pieChartDataResolver struct{ *Resolver }
+
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
 type queryResolver struct{ *Resolver }

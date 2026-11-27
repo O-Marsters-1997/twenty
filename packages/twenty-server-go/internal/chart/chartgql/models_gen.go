@@ -7,5 +7,10 @@ type BarChartDataInput struct {
 	Configuration    any    `json:"configuration"`
 }
 
+type PieChartDataInput struct {
+	ObjectMetadataID string `json:"objectMetadataId"`
+	Configuration    any    `json:"configuration"`
+}
+
 type Query struct {
 }
