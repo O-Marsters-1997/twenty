@@ -5,6 +5,45 @@ type Query {
   objects(paging: CursorPaging = { first: 10 }): ObjectConnection!
   getToolIndex: [ToolIndexEntry!]!
   getToolInputSchema(toolName: String!): JSON
+  objectRecordCounts: [ObjectRecordCount!]!
+  mostlyEmptyFieldMetadataIds(objectMetadataId: UUID!): [UUID!]!
+  minimalMetadata: MinimalMetadata!
+}
+
+type ObjectRecordCount {
+  objectNamePlural: String!
+  totalCount: Int!
+}
+
+type MinimalMetadata {
+  objectMetadataItems: [MinimalObjectMetadata!]!
+  views: [MinimalView!]!
+  collectionHashes: [CollectionHash!]!
+}
+
+type MinimalObjectMetadata {
+  id: UUID!
+  nameSingular: String!
+  namePlural: String!
+  labelSingular: String!
+  labelPlural: String!
+  icon: String
+  color: String
+  isActive: Boolean!
+  isSystem: Boolean!
+  isRemote: Boolean!
+}
+
+type MinimalView {
+  id: UUID!
+  type: String!
+  key: String
+  objectMetadataId: UUID!
+}
+
+type CollectionHash {
+  collectionName: String!
+  hash: String!
 }
 
 type ToolIndexEntry {

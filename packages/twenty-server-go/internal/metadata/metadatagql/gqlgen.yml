@@ -15,6 +15,12 @@ models:
     model: github.com/99designs/gqlgen/graphql.Any
   Object:
     model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/store.ObjectDetail
+  ObjectRecordCount:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/store.ObjectRecordCount
+  MinimalObjectMetadata:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/store.MinimalObject
+  MinimalView:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/store.MinimalView
   Field:
     model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/store.FieldDetail
   Relation:

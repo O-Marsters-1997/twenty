@@ -1440,6 +1440,31 @@ type RichTextOrderByInput struct {
 	Markdown  *OrderByDirection `json:"markdown,omitempty"`
 }
 
+type SearchRecord struct {
+	RecordID            string  `json:"recordId"`
+	ObjectNameSingular  string  `json:"objectNameSingular"`
+	ObjectLabelSingular string  `json:"objectLabelSingular"`
+	Label               string  `json:"label"`
+	ImageURL            *string `json:"imageUrl,omitempty"`
+	TsRankCd            float64 `json:"tsRankCD"`
+	TsRank              float64 `json:"tsRank"`
+}
+
+type SearchResultConnection struct {
+	Edges    []*SearchResultEdge   `json:"edges"`
+	PageInfo *SearchResultPageInfo `json:"pageInfo"`
+}
+
+type SearchResultEdge struct {
+	Node   *SearchRecord `json:"node"`
+	Cursor string        `json:"cursor"`
+}
+
+type SearchResultPageInfo struct {
+	HasNextPage bool    `json:"hasNextPage"`
+	EndCursor   *string `json:"endCursor,omitempty"`
+}
+
 type SecondaryLink struct {
 	Label *string `json:"label,omitempty"`
 	URL   *string `json:"url,omitempty"`

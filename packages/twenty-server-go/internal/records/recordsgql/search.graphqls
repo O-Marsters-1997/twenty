@@ -1,0 +1,45 @@
+input ObjectRecordFilterInput {
+  and: [ObjectRecordFilterInput!]
+  or: [ObjectRecordFilterInput!]
+  not: ObjectRecordFilterInput
+  id: UUIDFilter
+  createdAt: DateTimeFilter
+  updatedAt: DateTimeFilter
+  deletedAt: DateTimeFilter
+}
+
+type SearchRecord {
+  recordId: UUID!
+  objectNameSingular: String!
+  objectLabelSingular: String!
+  label: String!
+  imageUrl: String
+  tsRankCD: Float!
+  tsRank: Float!
+}
+
+type SearchResultEdge {
+  node: SearchRecord!
+  cursor: String!
+}
+
+type SearchResultPageInfo {
+  hasNextPage: Boolean!
+  endCursor: String
+}
+
+type SearchResultConnection {
+  edges: [SearchResultEdge!]!
+  pageInfo: SearchResultPageInfo!
+}
+
+extend type Query {
+  search(
+    searchInput: String!
+    limit: Int!
+    after: String
+    excludedObjectNameSingulars: [String!]
+    includedObjectNameSingulars: [String!]
+    filter: ObjectRecordFilterInput
+  ): SearchResultConnection!
+}

@@ -1,0 +1,9 @@
+{
+  "name": "CompleteNewWorkspaceLogoUpload",
+  "operation": "CompleteNewWorkspaceLogoUpload",
+  "fixture": "a user belonging to a workspace still PENDING_CREATION; a pending PNG whose 32 declared bytes sit in quarantine. Hand-written from FileUploadResolver, FileCorePictureResolver, AuthResolver, FileUploadService, FileCorePictureService, FileUploadTargetService, FileUrlService, FileUploadTargetDTO and FileWithSignedUrlDTO at 0963016d86; no Node server was run",
+  "endpoint": "/metadata",
+  "query": "mutation CompleteNewWorkspaceLogoUpload($workspaceId: String!, $fileId: String!) { completeNewWorkspaceLogoUpload(workspaceId: $workspaceId, fileId: $fileId) { id path size createdAt url } }",
+  "variables": {"workspaceId": "20202020-0000-4000-8000-000000000003", "fileId": "a1000000-0000-4000-8000-000000000002"},
+  "response": {"data": {"completeNewWorkspaceLogoUpload": {"id": "a1000000-0000-4000-8000-000000000002", "path": "core-picture/a1000000-0000-4000-8000-000000000002.png", "size": 32, "createdAt": "2026-01-02T03:04:05.000Z", "url": "http://localhost:3000/file/core-picture/a1000000-0000-4000-8000-000000000002?token=FILE.20202020-0000-4000-8000-000000000003.a1000000-0000-4000-8000-000000000002"}}}
+}

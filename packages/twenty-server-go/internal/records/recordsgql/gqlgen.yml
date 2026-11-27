@@ -10,6 +10,7 @@ schema:
   - note.graphqls
   - task.graphqls
   - noteTaskOperations.graphqls
+  - search.graphqls
 exec:
   filename: generated.go
   package: recordsgql
@@ -33,6 +34,8 @@ models:
     model: github.com/99designs/gqlgen/graphql.Map
   OrderByMap:
     model: github.com/99designs/gqlgen/graphql.Map
+  ObjectRecordFilterInput:
+    model: map[string]interface{}
   PersonFilterInput:
     model: map[string]interface{}
   PersonOrderByInput:
