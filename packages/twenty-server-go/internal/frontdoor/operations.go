@@ -86,9 +86,14 @@ var MessagingOperations = []string{
 	"MyMessageChannels", "UpdateMessageChannel", "CreateEmailGroupChannel", "UpdateEmailGroupChannel", "DeleteEmailGroupChannel",
 	"MyCalendarChannels", "UpdateCalendarChannel",
 	"SendMessageCampaign", "CancelMessageCampaign", "SendMessageCampaignTest", "PreviewMessageCampaignAudience",
+	"GetEmailingDomains",
 	"MyMessageFolders", "UpdateMessageFolders", "MessageSuppressions", "StartChannelSync", "DuplicateMessageList",
 	"CreateUnsubscribeTopic", "UpdateUnsubscribeTopic", "DeleteUnsubscribeTopic", "UnsubscribeTopics", "CreateCalendarEvent",
 }
+
+var GeoOperations = []string{"GetAutoCompleteAddress", "GetAddressDetails"}
+
+var EventStreamOperations = []string{"AddQueryToEventStream", "RemoveQueryFromEventStream"}
 
 var LoginOperations = []string{"getAuthTokensFromOTP", "getAuthTokensFromTwoFactorAuthenticationRecoveryCode", "initiateOTPProvisioning"}
 var AccessOperations = []string{
@@ -112,7 +117,7 @@ var SessionManagementOperations = []string{"CurrentUserSessions", "RevokeUserSes
 
 var InvitationOperations = []string{
 	"GetWorkspaceInvitations", "DeleteWorkspaceInvitation", "GetApprovedAccessDomains", "DeleteApprovedAccessDomain",
-	"CreateApprovedAccessDomain", "ValidateApprovedAccessDomain",
+	"SendInvitations", "ResendWorkspaceInvitation", "CreateApprovedAccessDomain", "ValidateApprovedAccessDomain",
 }
 
 var OnboardingOperations = []string{"GoBackToPreviousOnboardingStep", "SkipSyncEmailOnboardingStep"}
@@ -122,7 +127,7 @@ var PageLayoutOperations = []string{
 	"UpdatePageLayoutWidgetIsActive", "UpdatePageLayoutWithTabsAndWidgets", "DuplicateDashboard",
 }
 
-var ChartOperations = []string{"BarChartData"}
+var ChartOperations = []string{"BarChartData", "PieChartData"}
 
 var ApplicationOperations = []string{"FindManyApplications", "FindManyApplicationsForToolTable", "FindManyTimelineActivityTypes"}
 
@@ -138,6 +143,7 @@ var blockedMetadataFields = []string{
 
 var PasswordLoginOperations = []string{
 	"GetLoginTokenFromCredentials", "SignIn", "EmailPasswordResetLink", "ValidatePasswordResetToken", "UpdatePasswordViaResetToken",
+	"SignUp", "SignUpInWorkspace", "SignUpInNewWorkspace",
 }
 
 var PublicWorkspaceOperations = []string{

@@ -1,0 +1,9 @@
+{
+  "name": "ResendWorkspaceInvitation",
+  "operation": "ResendWorkspaceInvitation",
+  "fixture": "workspace with an invitation for ada@example.com carrying a role",
+  "endpoint": "/metadata",
+  "query": "mutation ResendWorkspaceInvitation($appTokenId: String!) { resendWorkspaceInvitation(appTokenId: $appTokenId) { success errors result { ... on WorkspaceInvitation { id email roleId expiresAt } } } }",
+  "variables": {"appTokenId": "a1000000-0000-4000-8000-000000000001"},
+  "response": {"data": {"resendWorkspaceInvitation": {"success": true, "errors": [], "result": [{"id": "ignored", "email": "ada@example.com", "roleId": "d0000000-0000-4000-8000-000000000003", "expiresAt": "ignored"}]}}}
+}

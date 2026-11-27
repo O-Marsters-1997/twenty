@@ -21,6 +21,7 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth/authgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/golden"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/membership"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/pgtest"
 )
 
@@ -97,6 +98,7 @@ func newPasswordHarness(t *testing.T, emailVerificationRequired bool) *loginHarn
 	h.mail = &recordingSender{}
 	h.handler = authgql.NewHandler(&authgql.Resolver{
 		PasswordLogin: passwordLogin,
+		SignUpFlow:    auth.NewSignUp(passwordLogin, membership.New(pool)),
 		PasswordReset: auth.NewPasswordReset(pool, auth.NewPasswordHasher(), h.mail, frontURL),
 		Sessions:      auth.NewUserSession(pool, noCache{}, issuer, auth.SessionConfig{ServerURL: "http://localhost:3000"}, logger),
 		Public: auth.NewPublicData(pool, passwordLogin, auth.PublicDataConfig{

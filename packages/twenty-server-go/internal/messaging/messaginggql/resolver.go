@@ -26,10 +26,11 @@ type Resolver struct {
 	Mailer   Mailer
 	Sent     SentMessages
 
-	Campaigns *store.Campaigns
-	Renderer  messaging.Renderer
-	Queue     func(ctx context.Context, args river.JobArgs) error
-	Logger    *slog.Logger
+	EmailingDomains *store.EmailingDomains
+	Campaigns       *store.Campaigns
+	Renderer        messaging.Renderer
+	Queue           func(ctx context.Context, args river.JobArgs) error
+	Logger          *slog.Logger
 
 	Outreach         *store.Outreach
 	CalendarChannels *store.CalendarChannels
@@ -424,6 +425,17 @@ func (r *mutationResolver) SendMessageCampaignTest(ctx context.Context, input Se
 		return nil, fmt.Errorf("send test campaign email: %w", err)
 	}
 	return &SendEmailViaDomainOutput{MessageID: messageID}, nil
+}
+
+func (r *queryResolver) GetEmailingDomains(ctx context.Context) ([]*store.EmailingDomain, error) {
+	principal, ok := auth.PrincipalFrom(ctx)
+	if !ok {
+		return nil, auth.ErrUnauthenticated
+	}
+	if err := r.EmailingDomains.AuthorizeWorkspaceSettings(ctx, principal); err != nil {
+		return nil, err
+	}
+	return r.EmailingDomains.List(ctx, principal.WorkspaceID)
 }
 
 func (r *queryResolver) PreviewMessageCampaignAudience(ctx context.Context, input PreviewMessageCampaignAudienceInput) (*messaging.Audience, error) {

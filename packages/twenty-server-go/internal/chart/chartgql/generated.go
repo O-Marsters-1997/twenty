@@ -29,6 +29,7 @@ type Config = graphql.Config[ResolverRoot, DirectiveRoot, ComplexityRoot]
 
 type ResolverRoot interface {
 	BarChartData() BarChartDataResolver
+	PieChartData() PieChartDataResolver
 	Query() QueryResolver
 }
 
@@ -56,8 +57,23 @@ type ComplexityRoot struct {
 		Label func(childComplexity int) int
 	}
 
+	PieChartData struct {
+		Data                 func(childComplexity int) int
+		FormattedToRawLookup func(childComplexity int) int
+		HasTooManyGroups     func(childComplexity int) int
+		ShowCenterMetric     func(childComplexity int) int
+		ShowDataLabels       func(childComplexity int) int
+		ShowLegend           func(childComplexity int) int
+	}
+
+	PieChartDataItem struct {
+		Key   func(childComplexity int) int
+		Value func(childComplexity int) int
+	}
+
 	Query struct {
 		BarChartData func(childComplexity int, input BarChartDataInput) int
+		PieChartData func(childComplexity int, input PieChartDataInput) int
 	}
 }
 
@@ -68,8 +84,12 @@ type ComplexityRoot struct {
 type BarChartDataResolver interface {
 	FormattedToRawLookup(ctx context.Context, obj *chart.BarChartData) (any, error)
 }
+type PieChartDataResolver interface {
+	FormattedToRawLookup(ctx context.Context, obj *chart.PieChartData) (any, error)
+}
 type QueryResolver interface {
 	BarChartData(ctx context.Context, input BarChartDataInput) (*chart.BarChartData, error)
+	PieChartData(ctx context.Context, input PieChartDataInput) (*chart.PieChartData, error)
 }
 
 // endregion ************************** generated!.gotpl **************************
@@ -176,6 +196,56 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.BarChartSeries.Label(childComplexity), true
 
+	case "PieChartData.data":
+		if e.ComplexityRoot.PieChartData.Data == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PieChartData.Data(childComplexity), true
+	case "PieChartData.formattedToRawLookup":
+		if e.ComplexityRoot.PieChartData.FormattedToRawLookup == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PieChartData.FormattedToRawLookup(childComplexity), true
+	case "PieChartData.hasTooManyGroups":
+		if e.ComplexityRoot.PieChartData.HasTooManyGroups == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PieChartData.HasTooManyGroups(childComplexity), true
+	case "PieChartData.showCenterMetric":
+		if e.ComplexityRoot.PieChartData.ShowCenterMetric == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PieChartData.ShowCenterMetric(childComplexity), true
+	case "PieChartData.showDataLabels":
+		if e.ComplexityRoot.PieChartData.ShowDataLabels == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PieChartData.ShowDataLabels(childComplexity), true
+	case "PieChartData.showLegend":
+		if e.ComplexityRoot.PieChartData.ShowLegend == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PieChartData.ShowLegend(childComplexity), true
+
+	case "PieChartDataItem.key":
+		if e.ComplexityRoot.PieChartDataItem.Key == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PieChartDataItem.Key(childComplexity), true
+	case "PieChartDataItem.value":
+		if e.ComplexityRoot.PieChartDataItem.Value == nil {
+			break
+		}
+
+		return e.ComplexityRoot.PieChartDataItem.Value(childComplexity), true
+
 	case "Query.barChartData":
 		if e.ComplexityRoot.Query.BarChartData == nil {
 			break
@@ -188,6 +258,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Query.BarChartData(childComplexity, args["input"].(BarChartDataInput)), true
 
+	case "Query.pieChartData":
+		if e.ComplexityRoot.Query.PieChartData == nil {
+			break
+		}
+
+		args, err := ec.field_Query_pieChartData_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.PieChartData(childComplexity, args["input"].(PieChartDataInput)), true
+
 	}
 	return 0, false
 }
@@ -198,6 +280,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	inputUnmarshalers := func() *graphql.InputUnmarshalerIndex {
 		return graphql.NewInputUnmarshalerIndex(
 			graphql.NewInputUnmarshaler("BarChartDataInput", ec.unmarshalInputBarChartDataInput),
+			graphql.NewInputUnmarshaler("PieChartDataInput", ec.unmarshalInputPieChartDataInput),
 		)
 	}
 	first := true
@@ -316,6 +399,34 @@ func (ec *executionContext) childFields_BarChartSeries(ctx context.Context, fiel
 		return ec.fieldContext_BarChartSeries_label(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type BarChartSeries", field.Name)
+}
+
+func (ec *executionContext) childFields_PieChartData(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "data":
+		return ec.fieldContext_PieChartData_data(ctx, field)
+	case "showLegend":
+		return ec.fieldContext_PieChartData_showLegend(ctx, field)
+	case "showDataLabels":
+		return ec.fieldContext_PieChartData_showDataLabels(ctx, field)
+	case "showCenterMetric":
+		return ec.fieldContext_PieChartData_showCenterMetric(ctx, field)
+	case "hasTooManyGroups":
+		return ec.fieldContext_PieChartData_hasTooManyGroups(ctx, field)
+	case "formattedToRawLookup":
+		return ec.fieldContext_PieChartData_formattedToRawLookup(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type PieChartData", field.Name)
+}
+
+func (ec *executionContext) childFields_PieChartDataItem(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "key":
+		return ec.fieldContext_PieChartDataItem_key(ctx, field)
+	case "value":
+		return ec.fieldContext_PieChartDataItem_value(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type PieChartDataItem", field.Name)
 }
 
 func (ec *executionContext) childFields___Directive(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -454,6 +565,20 @@ func (ec *executionContext) field_Query_barChartData_args(ctx context.Context, r
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
 		func(ctx context.Context, v any) (BarChartDataInput, error) {
 			return ec.unmarshalNBarChartDataInput2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋchartᚋchartgqlᚐBarChartDataInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_pieChartData_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
+		func(ctx context.Context, v any) (PieChartDataInput, error) {
+			return ec.unmarshalNPieChartDataInput2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋchartᚋchartgqlᚐPieChartDataInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -867,6 +992,199 @@ func (ec *executionContext) fieldContext_BarChartSeries_label(_ context.Context,
 	return graphql.NewScalarFieldContext("BarChartSeries", field, false, false, "String")
 }
 
+func (ec *executionContext) _PieChartData_data(ctx context.Context, field graphql.CollectedField, obj *chart.PieChartData) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PieChartData_data(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Data, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*chart.PieChartDataItem) graphql.Marshaler {
+			return ec.marshalNPieChartDataItem2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋchartᚐPieChartDataItemᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_PieChartData_data(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "PieChartData",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_PieChartDataItem(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _PieChartData_showLegend(ctx context.Context, field graphql.CollectedField, obj *chart.PieChartData) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PieChartData_showLegend(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ShowLegend, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_PieChartData_showLegend(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PieChartData", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _PieChartData_showDataLabels(ctx context.Context, field graphql.CollectedField, obj *chart.PieChartData) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PieChartData_showDataLabels(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ShowDataLabels, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_PieChartData_showDataLabels(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PieChartData", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _PieChartData_showCenterMetric(ctx context.Context, field graphql.CollectedField, obj *chart.PieChartData) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PieChartData_showCenterMetric(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ShowCenterMetric, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_PieChartData_showCenterMetric(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PieChartData", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _PieChartData_hasTooManyGroups(ctx context.Context, field graphql.CollectedField, obj *chart.PieChartData) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PieChartData_hasTooManyGroups(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.HasTooManyGroups, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_PieChartData_hasTooManyGroups(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PieChartData", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _PieChartData_formattedToRawLookup(ctx context.Context, field graphql.CollectedField, obj *chart.PieChartData) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PieChartData_formattedToRawLookup(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return ec.Resolvers.PieChartData().FormattedToRawLookup(ctx, obj)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v any) graphql.Marshaler {
+			return ec.marshalNJSON2interface(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_PieChartData_formattedToRawLookup(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PieChartData", field, true, true, "JSON")
+}
+
+func (ec *executionContext) _PieChartDataItem_key(ctx context.Context, field graphql.CollectedField, obj *chart.PieChartDataItem) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PieChartDataItem_key(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Key, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_PieChartDataItem_key(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PieChartDataItem", field, false, false, "String")
+}
+
+func (ec *executionContext) _PieChartDataItem_value(ctx context.Context, field graphql.CollectedField, obj *chart.PieChartDataItem) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_PieChartDataItem_value(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Value, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v float64) graphql.Marshaler {
+			return ec.marshalNFloat2float64(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_PieChartDataItem_value(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("PieChartDataItem", field, false, false, "Float")
+}
+
 func (ec *executionContext) _Query_barChartData(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -905,6 +1223,50 @@ func (ec *executionContext) fieldContext_Query_barChartData(ctx context.Context,
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_barChartData_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_pieChartData(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_pieChartData(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Query().PieChartData(ctx, fc.Args["input"].(PieChartDataInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *chart.PieChartData) graphql.Marshaler {
+			return ec.marshalNPieChartData2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋchartᚐPieChartData(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_pieChartData(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_PieChartData(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_pieChartData_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -2109,6 +2471,55 @@ func UnmarshalBarChartDataInput(ctx context.Context, raw any) (BarChartDataInput
 	return out, err
 }
 
+func (ec *executionContext) unmarshalInputPieChartDataInput(ctx context.Context, obj any) (PieChartDataInput, error) {
+	var it PieChartDataInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"objectMetadataId", "configuration"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "objectMetadataId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("objectMetadataId"))
+			data, err := ec.unmarshalNUUID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObjectMetadataID = data
+		case "configuration":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("configuration"))
+			data, err := ec.unmarshalNJSON2interface(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Configuration = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalPieChartDataInput unmarshals raw into the PieChartDataInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalPieChartDataInput(ctx context.Context, raw any) (PieChartDataInput, error) {
+	var out PieChartDataInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "PieChartDataInput", raw, &out)
+	return out, err
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -2244,6 +2655,103 @@ func (ec *executionContext) _BarChartSeries(ctx context.Context, sel ast.Selecti
 	return out
 }
 
+var pieChartDataImplementors = []string{"PieChartData"}
+
+func (ec *executionContext) _PieChartData(ctx context.Context, sel ast.SelectionSet, obj *chart.PieChartData) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, pieChartDataImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PieChartData")
+		case "data":
+			out.Values[i] = ec._PieChartData_data(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "showLegend":
+			out.Values[i] = ec._PieChartData_showLegend(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "showDataLabels":
+			out.Values[i] = ec._PieChartData_showDataLabels(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "showCenterMetric":
+			out.Values[i] = ec._PieChartData_showCenterMetric(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "hasTooManyGroups":
+			out.Values[i] = ec._PieChartData_hasTooManyGroups(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "formattedToRawLookup":
+			out.ResolveConcurrently(ec.OperationContext, &deferred, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._PieChartData_formattedToRawLookup(ctx, field, obj)
+				})
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var pieChartDataItemImplementors = []string{"PieChartDataItem"}
+
+func (ec *executionContext) _PieChartDataItem(ctx context.Context, sel ast.SelectionSet, obj *chart.PieChartDataItem) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, pieChartDataItemImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("PieChartDataItem")
+		case "key":
+			out.Values[i] = ec._PieChartDataItem_key(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "value":
+			out.Values[i] = ec._PieChartDataItem_value(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
 var queryImplementors = []string{"Query"}
 
 func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) graphql.Marshaler {
@@ -2268,6 +2776,12 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				true, true,
 				func(ctx context.Context) graphql.Marshaler {
 					return ec._Query_barChartData(ctx, field)
+				})
+		case "pieChartData":
+			out.ResolveRootConcurrently(innerCtx, ec.OperationContext, i,
+				true, true,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._Query_pieChartData(ctx, field)
 				})
 		case "__type":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
@@ -2741,6 +3255,20 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
+func (ec *executionContext) unmarshalNFloat2float64(ctx context.Context, v any) (float64, error) {
+	res, err := graphql.UnmarshalFloatContext(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNFloat2float64(ctx context.Context, sel ast.SelectionSet, v float64) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalFloatContext(v)
+	if res == graphql.Null {
+		graphql.AddInvalidNullFromMarshaler(ctx, "Float!")
+	}
+	return graphql.WrapContextMarshaler(ctx, res)
+}
+
 func (ec *executionContext) unmarshalNJSON2interface(ctx context.Context, v any) (any, error) {
 	res, err := graphql.UnmarshalAny(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -2786,6 +3314,43 @@ func (ec *executionContext) marshalNJSON2ᚕinterfaceᚄ(ctx context.Context, se
 	}
 
 	return ret
+}
+
+func (ec *executionContext) marshalNPieChartData2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋchartᚐPieChartData(ctx context.Context, sel ast.SelectionSet, v *chart.PieChartData) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "PieChartData!")
+		return graphql.Null
+	}
+	return ec._PieChartData(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNPieChartDataInput2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋchartᚋchartgqlᚐPieChartDataInput(ctx context.Context, v any) (PieChartDataInput, error) {
+	res, err := ec.unmarshalInputPieChartDataInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNPieChartDataItem2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋchartᚐPieChartDataItemᚄ(ctx context.Context, sel ast.SelectionSet, v []*chart.PieChartDataItem) graphql.Marshaler {
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNPieChartDataItem2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋchartᚐPieChartDataItem(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalNPieChartDataItem2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋchartᚐPieChartDataItem(ctx context.Context, sel ast.SelectionSet, v *chart.PieChartDataItem) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "PieChartDataItem!")
+		return graphql.Null
+	}
+	return ec._PieChartDataItem(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v any) (string, error) {
