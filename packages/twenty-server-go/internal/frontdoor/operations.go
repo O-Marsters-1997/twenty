@@ -123,7 +123,7 @@ var PageLayoutOperations = []string{
 	"UpdatePageLayoutWidgetIsActive", "UpdatePageLayoutWithTabsAndWidgets", "DuplicateDashboard",
 }
 
-var ChartOperations = []string{"BarChartData"}
+var ChartOperations = []string{"BarChartData", "PieChartData"}
 
 var ApplicationOperations = []string{"FindManyApplications", "FindManyApplicationsForToolTable", "FindManyTimelineActivityTypes"}
 

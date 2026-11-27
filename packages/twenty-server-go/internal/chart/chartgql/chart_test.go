@@ -54,6 +54,11 @@ func handler() http.Handler {
 	})
 }
 
+func TestPieChartData_MatchesGolden(t *testing.T) {
+	t.Parallel()
+	golden.Assert(t, handler(), "testdata", "PieChartData")
+}
+
 func TestBarChartData_MatchesGolden(t *testing.T) {
 	t.Parallel()
 	for _, name := range []string{"BarChartData", "BarChartDataTwoDimensionsCumulative"} {

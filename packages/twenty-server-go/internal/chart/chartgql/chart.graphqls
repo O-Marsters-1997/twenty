@@ -36,6 +36,26 @@ input BarChartDataInput {
   configuration: JSON!
 }
 
+type PieChartDataItem {
+  key: String!
+  value: Float!
+}
+
+type PieChartData {
+  data: [PieChartDataItem!]!
+  showLegend: Boolean!
+  showDataLabels: Boolean!
+  showCenterMetric: Boolean!
+  hasTooManyGroups: Boolean!
+  formattedToRawLookup: JSON!
+}
+
+input PieChartDataInput {
+  objectMetadataId: UUID!
+  configuration: JSON!
+}
+
 type Query {
   barChartData(input: BarChartDataInput!): BarChartData!
+  pieChartData(input: PieChartDataInput!): PieChartData!
 }
