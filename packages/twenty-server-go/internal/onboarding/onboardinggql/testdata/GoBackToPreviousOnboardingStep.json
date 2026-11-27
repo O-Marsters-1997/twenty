@@ -1,0 +1,12 @@
+{
+  "name": "GoBackToPreviousOnboardingStep",
+  "operation": "GoBackToPreviousOnboardingStep",
+  "fixture": "active workspace, user whose reversible step history is profile creation then sync email",
+  "endpoint": "/metadata",
+  "query": "mutation GoBackToPreviousOnboardingStep { goBackToPreviousOnboardingStep { onboardingStatus previousOnboardingStatus } }",
+  "response": {
+    "data": {
+      "goBackToPreviousOnboardingStep": {"onboardingStatus": "SYNC_EMAIL", "previousOnboardingStatus": "PROFILE_CREATION"}
+    }
+  }
+}

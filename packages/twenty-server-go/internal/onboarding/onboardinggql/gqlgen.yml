@@ -1,0 +1,18 @@
+schema:
+  - "*.graphqls"
+exec:
+  filename: generated.go
+  package: onboardinggql
+model:
+  filename: models_gen.go
+  package: onboardinggql
+models:
+  OnboardingStatus:
+    model: github.com/99designs/gqlgen/graphql.String
+  OnboardingStepNavigation:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/onboarding.Navigation
+    fields:
+      onboardingStatus:
+        fieldName: Status
+      previousOnboardingStatus:
+        fieldName: PreviousStatus
