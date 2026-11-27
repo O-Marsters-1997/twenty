@@ -8,10 +8,11 @@ import (
 
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/membership"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/pgtest"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workspace"
 )
 
 const (
-	workspaceID   = "c1000000-0000-4000-8000-000000000001"
+	workspaceID   = workspace.PinnedWorkspaceID
 	applicationID = "c2000000-0000-4000-8000-000000000001"
 	roleID        = "d0000000-0000-4000-8000-000000000001"
 )
@@ -100,7 +101,7 @@ func TestAddUserToWorkspace(t *testing.T) {
 	if _, err := store.AddUserToWorkspace(t.Context(), "20202020-0000-4000-8000-0000000000ff", workspaceID); !errors.Is(err, membership.ErrUserNotFound) {
 		t.Errorf("unknown user error = %v, want ErrUserNotFound", err)
 	}
-	if _, err := store.AddUserToWorkspace(t.Context(), userID, "20202020-0000-4000-8000-0000000000ff"); !errors.Is(err, membership.ErrWorkspaceNotFound) {
+	if _, err := store.AddUserToWorkspace(t.Context(), userID, "c1000000-0000-4000-8000-0000000000ff"); !errors.Is(err, membership.ErrWorkspaceNotFound) {
 		t.Errorf("unknown workspace error = %v, want ErrWorkspaceNotFound", err)
 	}
 }

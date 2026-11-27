@@ -35,7 +35,6 @@ type NewUser struct {
 	IsEmailVerified bool
 }
 
-// CreateUser inserts a core user and returns its id; an empty Locale becomes "en".
 func (s *Store) CreateUser(ctx context.Context, user NewUser) (string, error) {
 	locale := user.Locale
 	if locale == "" {
@@ -57,14 +56,11 @@ func (s *Store) CreateUser(ctx context.Context, user NewUser) (string, error) {
 	return id, nil
 }
 
-// AddUserToWorkspace joins the user to the workspace and returns the userWorkspace id.
-// It creates the tenant workspace member, assigns the workspace's default role and
-// flags profile creation as pending. A user already in the workspace is left untouched.
 func (s *Store) AddUserToWorkspace(ctx context.Context, userID, workspaceID string) (string, error) {
 	if _, err := uuid.Parse(userID); err != nil {
 		return "", ErrUserNotFound
 	}
-	if _, err := uuid.Parse(workspaceID); err != nil {
+	if workspaceID != workspace.PinnedWorkspaceID {
 		return "", ErrWorkspaceNotFound
 	}
 	tx, err := s.pool.Begin(ctx)

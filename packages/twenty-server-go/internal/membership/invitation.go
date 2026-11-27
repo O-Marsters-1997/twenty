@@ -13,14 +13,13 @@ var (
 	ErrInvitationExpired = errors.New("personal invitation token has expired")
 )
 
-// ValidatePersonalInvitation returns the id of the invitation token issued to this email.
 func (s *Store) ValidatePersonalInvitation(ctx context.Context, workspaceID, token, email string) (string, error) {
 	var id string
 	var expired bool
 	err := s.pool.QueryRow(ctx,
 		`SELECT id::text, "expiresAt" <= now() FROM core."appToken"
 		 WHERE type = 'INVITATION_TOKEN' AND value = $1 AND "workspaceId" = NULLIF($2, '')::uuid
-		   AND lower(context->>'email') = lower($3) AND "deletedAt" IS NULL`,
+		   AND lower(context->>'email') = lower($3) AND "deletedAt" IS NULL AND "revokedAt" IS NULL`,
 		token, workspaceID, email,
 	).Scan(&id, &expired)
 	if errors.Is(err, pgx.ErrNoRows) {
