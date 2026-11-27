@@ -217,3 +217,28 @@ func TestDynamic_RejectsUnknownFields(t *testing.T) {
 		})
 	}
 }
+
+func TestDynamic_ServesMessagingObjects(t *testing.T) {
+	t.Parallel()
+	singulars := []string{
+		"message", "messageCampaign", "messageChannelMessageAssociation", "messageChannelMessageAssociationMessageFolder",
+		"messageList", "messageListMember", "messageParticipant", "messageSuppression", "messageThread", "messageThreadTarget",
+	}
+	server := newDynamicServer(t, singulars...)
+
+	for _, singular := range singulars {
+		object := model.Objects[slices.IndexFunc(model.Objects, func(candidate model.Object) bool { return candidate.NameSingular == singular })]
+		query := `query FindMany { ` + object.NamePlural + ` { edges { node { id __typename } } totalCount } }`
+		got := dataOf(t, call(t, server, query, nil))[object.NamePlural]
+		if diff := cmp.Diff(map[string]any{"edges": []any{}, "totalCount": float64(0)}, got); diff != "" {
+			t.Errorf("%s mismatch (-want +got):\n%s", object.NamePlural, diff)
+		}
+	}
+
+	created := dataOf(t, call(t, server,
+		`mutation CreateOneMessageList($data: MessageListCreateInput!) { createMessageList(data: $data) { id name __typename } }`,
+		map[string]any{"data": map[string]any{"name": "Launch"}}))["createMessageList"].(map[string]any)
+	if created["name"] != "Launch" || created["__typename"] != "MessageList" {
+		t.Errorf("createMessageList = %v, want name Launch typed MessageList", created)
+	}
+}
