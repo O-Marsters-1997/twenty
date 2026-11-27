@@ -21,6 +21,7 @@ require (
 	github.com/testcontainers/testcontainers-go/modules/postgres v0.45.0
 	github.com/vektah/gqlparser/v2 v2.5.64
 	golang.org/x/crypto v0.58.0
+	golang.org/x/net v0.61.0
 )
 
 require (

@@ -3,6 +3,7 @@ schema:
   - messaging.graphqls
   - send.graphqls
   - campaign.graphqls
+  - emailingdomain.graphqls
 exec:
   filename: generated.go
   package: messaginggql
@@ -58,6 +59,16 @@ models:
     model: map[string]interface{}
   UpdateCalendarChannelInputUpdates:
     model: map[string]interface{}
+  EmailingDomainStatus:
+    model: github.com/99designs/gqlgen/graphql.String
+  EmailingDomainTenantStatus:
+    model: github.com/99designs/gqlgen/graphql.String
+  UnsubscribeHostnameStatus:
+    model: github.com/99designs/gqlgen/graphql.String
+  EmailingDomain:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/store.EmailingDomain
+  VerificationRecord:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/store.VerificationRecord
   CampaignAudiencePreview:
     model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging.Audience
   Float:

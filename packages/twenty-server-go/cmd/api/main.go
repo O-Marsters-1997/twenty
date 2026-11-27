@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/signal"
 	"slices"
+	"strings"
 	"syscall"
 	"time"
 
@@ -28,7 +29,11 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth/authgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/config"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/eventstream"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/eventstream/eventstreamgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/geo"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/geo/geogql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/invitation/invitationgql"
 	invitationstore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/invitation/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging"
@@ -83,7 +88,8 @@ func run() error {
 	if err != nil {
 		return fmt.Errorf("create river insert client: %w", err)
 	}
-	people := store.NewPeople(pool).WithEvents(records.NewRiverPublisher(insertClient))
+	hub := eventstream.NewHub()
+	people := store.NewPeople(pool).WithEvents(eventstream.NewNotifyPublisher(records.NewRiverPublisher(insertClient)))
 
 	recordTools := ai.NewRecordTools(
 		store.NewCompanies(pool), people, store.NewOpportunities(pool), store.NewNotes(pool), store.NewTasks(pool),
@@ -111,6 +117,15 @@ func run() error {
 	)
 	authHandler := authgql.NewHandler(newAuthResolver(pool, cfg, twoFactor, passwordLogins, stack), logger)
 
+	geoDriver, err := geo.NewDriver(geo.Config{
+		Enabled:      os.Getenv("IS_MAPS_AND_ADDRESS_AUTOCOMPLETE_ENABLED") == "true",
+		Driver:       strings.ReplaceAll(strings.ToUpper(valueOrDefault(os.Getenv("ADDRESS_AUTOCOMPLETE_DRIVER"), geo.DriverGooglePlaces)), "-", "_"),
+		GoogleAPIKey: os.Getenv("GOOGLE_MAP_API_KEY"),
+	}, &http.Client{Timeout: 10 * time.Second})
+	if err != nil {
+		return err
+	}
+
 	goGraphQL := http.NewServeMux()
 	goGraphQL.Handle(string(frontdoor.EndpointWorkspace), workspaceHandler(recordsgql.NewHandler(&recordsgql.Resolver{
 		Store:              people,
@@ -135,10 +150,11 @@ func run() error {
 		metagql.NewHandler(metadatastore.NewViews(pool), logger),
 		agentgql.NewHandler(aistore.NewAgents(pool), aistore.NewRuns(pool), logger),
 		messaginggql.NewHandler(&messaginggql.Resolver{
-			Channels:  messagingstore.NewChannels(pool, os.Getenv("INBOUND_EMAIL_DOMAIN")),
-			Campaigns: messagingstore.NewCampaigns(pool),
-			Renderer:  messaging.GoRenderer{},
-			Queue:     queue.Enqueue,
+			Channels:        messagingstore.NewChannels(pool, os.Getenv("INBOUND_EMAIL_DOMAIN")),
+			EmailingDomains: messagingstore.NewEmailingDomains(pool, messagingstore.DNSTXTLookup),
+			Campaigns:       messagingstore.NewCampaigns(pool),
+			Renderer:        messaging.GoRenderer{},
+			Queue:           queue.Enqueue,
 		}, logger),
 		accessgql.NewHandler(&accessgql.Resolver{
 			WebhookStore: accessstore.NewWebhooks(pool),
@@ -152,6 +168,8 @@ func run() error {
 		invitationgql.NewHandler(&invitationgql.Resolver{Store: invitationstore.New(pool)}, logger),
 		pagelayoutgql.NewHandler(&pagelayoutgql.Resolver{Store: pagelayoutstore.New(pool)}, logger),
 		applicationgql.NewHandler(&applicationgql.Resolver{Store: applicationstore.New(pool, cfg.ServerURL)}, logger),
+		geogql.NewHandler(&geogql.Resolver{Driver: geoDriver}, logger),
+		eventstreamgql.NewHandler(hub, logger),
 		agentgql.Operations,
 	))
 
@@ -161,7 +179,9 @@ func run() error {
 			frontdoor.EndpointWorkspace: frontdoor.LoginOperations,
 		}).
 		WithMCP(toolRegistry).
-		WithSubscriber(aigql.NewSubscriber(broker))
+		WithSubscriber(frontdoor.RouteSubscriptions(aigql.NewSubscriber(broker), map[string]frontdoor.Subscriber{
+			eventstream.RootField: eventstream.NewSubscriber(hub),
+		}))
 
 	launcher := &workflow.Launcher{Store: workflowstore.New(pool), Queue: queue.Enqueue}
 
@@ -178,6 +198,7 @@ func run() error {
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
+	go eventstream.Listen(ctx, pool, hub, logger)
 
 	serveErr := make(chan error, 1)
 	go func() { serveErr <- server.ListenAndServe() }()

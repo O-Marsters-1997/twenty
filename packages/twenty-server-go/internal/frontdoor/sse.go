@@ -3,6 +3,7 @@ package frontdoor
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"regexp"
@@ -44,6 +45,11 @@ func (h *Handler) serveSubscription(w http.ResponseWriter, r *http.Request, endp
 	ctx, cancel := context.WithCancel(auth.WithPrincipal(r.Context(), principal))
 	defer cancel()
 	events, err := h.subscriber.Subscribe(ctx, endpoint, body)
+	var failure *SubscribeError
+	if errors.As(err, &failure) {
+		h.writeSubscribeError(w, failure)
+		return
+	}
 	if err != nil {
 		h.logger.Error("subscribe", "err", err)
 		h.writeGraphQLError(w, "Internal server error", "INTERNAL_SERVER_ERROR")
@@ -72,4 +78,32 @@ func (h *Handler) serveSubscription(w http.ResponseWriter, r *http.Request, endp
 			flusher.Flush()
 		}
 	}
+}
+
+type SubscribeError struct{ Message, Code, SubCode string }
+
+func (e *SubscribeError) Error() string { return e.Message }
+
+type routedSubscriber struct {
+	fallback Subscriber
+	routes   map[string]Subscriber
+}
+
+func RouteSubscriptions(fallback Subscriber, byRootField map[string]Subscriber) Subscriber {
+	return routedSubscriber{fallback: fallback, routes: byRootField}
+}
+
+func (r routedSubscriber) Subscribe(ctx context.Context, endpoint Endpoint, request json.RawMessage) (<-chan json.RawMessage, error) {
+	var body struct {
+		Query string `json:"query"`
+	}
+	if err := json.Unmarshal(request, &body); err != nil {
+		return nil, fmt.Errorf("decode subscription request: %w", err)
+	}
+	for rootField, subscriber := range r.routes {
+		if strings.Contains(body.Query, rootField) {
+			return subscriber.Subscribe(ctx, endpoint, request)
+		}
+	}
+	return r.fallback.Subscribe(ctx, endpoint, request)
 }

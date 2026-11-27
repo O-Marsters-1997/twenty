@@ -1,0 +1,9 @@
+{
+  "name": "AddQueryToMissingEventStream",
+  "operation": "AddQueryToEventStream",
+  "fixture": "no open event stream; Node returns false so the front end recreates the stream",
+  "endpoint": "/metadata",
+  "query": "mutation AddQueryToEventStream($input: AddQuerySubscriptionInput!) { addQueryToEventStream(input: $input) }",
+  "variables": {"input": {"eventStreamId": "gone", "queryId": "query-1", "operationSignature": {"objectNameSingular": "person"}}},
+  "response": {"data": {"addQueryToEventStream": false}}
+}
