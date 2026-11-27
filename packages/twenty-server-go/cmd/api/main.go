@@ -28,6 +28,7 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth/authgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/config"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/files/filesgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/invitation/invitationgql"
 	invitationstore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/invitation/store"
@@ -72,6 +73,11 @@ func run() error {
 		return err
 	}
 	passwordLogins, err := passwordLogin(pool, cfg, stack)
+	if err != nil {
+		return err
+	}
+
+	fileSvc, err := fileService(pool, stack)
 	if err != nil {
 		return err
 	}
@@ -152,6 +158,7 @@ func run() error {
 		invitationgql.NewHandler(&invitationgql.Resolver{Store: invitationstore.New(pool)}, logger),
 		pagelayoutgql.NewHandler(&pagelayoutgql.Resolver{Store: pagelayoutstore.New(pool)}, logger),
 		applicationgql.NewHandler(&applicationgql.Resolver{Store: applicationstore.New(pool, cfg.ServerURL)}, logger),
+		filesgql.NewHandler(&filesgql.Resolver{Files: fileSvc}, logger),
 		agentgql.Operations,
 	))
 
@@ -165,7 +172,7 @@ func run() error {
 
 	launcher := &workflow.Launcher{Store: workflowstore.New(pool), Queue: queue.Enqueue}
 
-	routes, err := googleRoutes(pool, cfg.AppSecret, webhookRoutes(launcher, handler, logger), logger)
+	routes, err := googleRoutes(pool, cfg.AppSecret, fileSvc.Handler(webhookRoutes(launcher, handler, logger), logger), logger)
 	if err != nil {
 		return err
 	}
