@@ -2,14 +2,28 @@ package invitationgql
 
 import (
 	"context"
+	"fmt"
+	"net/url"
+	"time"
 
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/invitation/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/systemmail"
 )
 
+const validationTokenTTL = 24 * time.Hour
+
+type DomainTokens interface {
+	IssueApprovedAccessDomainToken(ctx context.Context, email, workspaceID string, ttl time.Duration) (string, error)
+	VerifyApprovedAccessDomainToken(ctx context.Context, token string) (auth.ApprovedAccessDomainClaims, error)
+}
+
 type Resolver struct {
-	Store *store.Store
+	Store    *store.Store
+	Tokens   DomainTokens
+	Sender   systemmail.Sender
+	FrontURL *url.URL
 }
 
 // workspaceID returns the caller's workspace once the caller may manage members.
@@ -50,6 +64,59 @@ func (r *mutationResolver) DeleteApprovedAccessDomain(ctx context.Context, input
 	return true, nil
 }
 
+func (r *mutationResolver) CreateApprovedAccessDomain(ctx context.Context, input CreateApprovedAccessDomainInput) (*ApprovedAccessDomain, error) {
+	workspaceID, err := r.workspaceID(ctx)
+	if err != nil {
+		return nil, err
+	}
+	domain, err := r.Store.CreateApprovedDomain(ctx, workspaceID, input.Domain, input.Email)
+	if err != nil {
+		return nil, err
+	}
+	token, err := r.Tokens.IssueApprovedAccessDomainToken(ctx, input.Email, workspaceID, validationTokenTTL)
+	if err != nil {
+		return nil, err
+	}
+	link := r.FrontURL.JoinPath("settings", "security")
+	link.RawQuery = url.Values{"wtdId": {domain.ID}, "validationToken": {token}}.Encode()
+	message, err := systemmail.ApprovedAccessDomainEmail(input.Email, link.String(), domain.Domain)
+	if err != nil {
+		return nil, err
+	}
+	if err := r.Sender.Send(ctx, message); err != nil {
+		return nil, fmt.Errorf("send approved access domain validation: %w", err)
+	}
+	return toApprovedAccessDomain(domain), nil
+}
+
+func (r *mutationResolver) ValidateApprovedAccessDomain(ctx context.Context, input ValidateApprovedAccessDomainInput) (*ApprovedAccessDomain, error) {
+	principal, ok := auth.PrincipalFrom(ctx)
+	if !ok {
+		return nil, auth.ErrUnauthenticated
+	}
+	claims, err := r.Tokens.VerifyApprovedAccessDomainToken(ctx, input.ValidationToken)
+	if err != nil {
+		return nil, err
+	}
+	if claims.WorkspaceID != principal.WorkspaceID {
+		return nil, auth.ErrInvalidApprovedAccessDomainToken
+	}
+	domain, err := r.Store.ValidateApprovedDomain(ctx, principal.WorkspaceID, input.ApprovedAccessDomainID, claims.Email)
+	if err != nil {
+		return nil, err
+	}
+	return toApprovedAccessDomain(domain), nil
+}
+
+func toApprovedAccessDomain(domain store.ApprovedDomain) *ApprovedAccessDomain {
+	return &ApprovedAccessDomain{
+		ID:          domain.ID,
+		Domain:      domain.Domain,
+		IsValidated: domain.IsValidated,
+		CreatedAt:   metadata.Timestamp{Time: domain.CreatedAt},
+	}
+}
+
 func (r *queryResolver) FindWorkspaceInvitations(ctx context.Context) ([]*WorkspaceInvitation, error) {
 	workspaceID, err := r.workspaceID(ctx)
 	if err != nil {
@@ -82,12 +149,7 @@ func (r *queryResolver) GetApprovedAccessDomains(ctx context.Context) ([]*Approv
 	}
 	result := make([]*ApprovedAccessDomain, 0, len(domains))
 	for _, domain := range domains {
-		result = append(result, &ApprovedAccessDomain{
-			ID:          domain.ID,
-			Domain:      domain.Domain,
-			IsValidated: domain.IsValidated,
-			CreatedAt:   metadata.Timestamp{Time: domain.CreatedAt},
-		})
+		result = append(result, toApprovedAccessDomain(domain))
 	}
 	return result, nil
 }

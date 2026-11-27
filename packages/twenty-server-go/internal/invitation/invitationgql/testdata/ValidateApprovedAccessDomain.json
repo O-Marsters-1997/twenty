@@ -1,0 +1,9 @@
+{
+  "name": "ValidateApprovedAccessDomain",
+  "operation": "ValidateApprovedAccessDomain",
+  "fixture": "workspace with a validated and an unvalidated approved access domain and another workspace's domain",
+  "endpoint": "/metadata",
+  "query": "mutation ValidateApprovedAccessDomain($input: ValidateApprovedAccessDomainInput!) { validateApprovedAccessDomain(input: $input) { id domain isValidated createdAt } }",
+  "variables": {"input": {"validationToken": "token|ada@acme.test|20202020-1c25-4d02-bf25-6aeccf7ea419", "approvedAccessDomainId": "b1000000-0000-4000-8000-000000000002"}},
+  "response": {"data": {"validateApprovedAccessDomain": {"id": "b1000000-0000-4000-8000-000000000002", "domain": "acme.test", "isValidated": true, "createdAt": "2026-01-02T00:00:00.000Z"}}}
+}
