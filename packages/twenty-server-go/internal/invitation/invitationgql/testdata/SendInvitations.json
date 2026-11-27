@@ -1,0 +1,9 @@
+{
+  "name": "SendInvitations",
+  "operation": "SendInvitations",
+  "fixture": "workspace with an invitation for ada@example.com and a member holding member@example.com",
+  "endpoint": "/metadata",
+  "query": "mutation SendInvitations($emails: [String!]!, $roleId: UUID) { sendInvitations(emails: $emails, roleId: $roleId) { success errors result { ... on WorkspaceInvitation { id email roleId expiresAt } } } }",
+  "variables": {"emails": ["new@example.com", "member@example.com"], "roleId": "d0000000-0000-4000-8000-000000000003"},
+  "response": {"data": {"sendInvitations": {"success": false, "errors": ["This user is already a member of the workspace"], "result": [{"id": "ignored", "email": "new@example.com", "roleId": "d0000000-0000-4000-8000-000000000003", "expiresAt": "ignored"}]}}}
+}
