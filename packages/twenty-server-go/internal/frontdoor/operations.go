@@ -27,6 +27,7 @@ var WorkflowOperations = []string{
 var TimelineOperations = []string{
 	"GetTimelineThreadsFromObjectRecord", "GetTimelineThreadsFromPersonId",
 	"GetTimelineThreadsFromCompanyId", "GetTimelineThreadsFromOpportunityId", "DismissReconnectAccountBanner",
+	"GetTimelineCalendarEventsFromObjectRecord",
 }
 
 const AnswerToolCallOperation = "AnswerToolCall"
@@ -59,6 +60,8 @@ var MessagingOperations = []string{
 	"MyMessageChannels", "UpdateMessageChannel", "CreateEmailGroupChannel", "UpdateEmailGroupChannel", "DeleteEmailGroupChannel",
 	"MyCalendarChannels", "UpdateCalendarChannel",
 	"SendMessageCampaign", "CancelMessageCampaign", "SendMessageCampaignTest", "PreviewMessageCampaignAudience",
+	"MyMessageFolders", "UpdateMessageFolders", "MessageSuppressions", "StartChannelSync", "DuplicateMessageList",
+	"CreateUnsubscribeTopic", "UpdateUnsubscribeTopic", "DeleteUnsubscribeTopic", "UnsubscribeTopics", "CreateCalendarEvent",
 }
 
 var LoginOperations = []string{"getAuthTokensFromOTP", "getAuthTokensFromTwoFactorAuthenticationRecoveryCode", "initiateOTPProvisioning"}

@@ -1,0 +1,71 @@
+type LinkMetadata {
+  label: String!
+  url: String!
+}
+
+type LinksMetadata {
+  primaryLinkLabel: String!
+  primaryLinkUrl: String!
+  secondaryLinks: [LinkMetadata!]
+}
+
+type TimelineCalendarEventParticipant {
+  personId: UUID
+  workspaceMemberId: UUID
+  firstName: String!
+  lastName: String!
+  displayName: String!
+  avatarUrl: String!
+  handle: String!
+}
+
+type TimelineCalendarEvent {
+  id: UUID!
+  title: String!
+  isCanceled: Boolean!
+  isFullDay: Boolean!
+  startsAt: DateTime!
+  endsAt: DateTime!
+  description: String!
+  location: String!
+  conferenceSolution: String!
+  conferenceLink: LinksMetadata!
+  participants: [TimelineCalendarEventParticipant!]!
+  visibility: CalendarChannelVisibility!
+}
+
+type TimelineCalendarEventsWithTotal {
+  totalNumberOfCalendarEvents: Int!
+  timelineCalendarEvents: [TimelineCalendarEvent!]!
+  relatedPersonIds: [UUID!]!
+}
+
+input CreateCalendarEventInput {
+  connectedAccountId: String!
+  title: String!
+  description: String
+  location: String
+  startsAt: String!
+  endsAt: String!
+  isFullDay: Boolean
+  timeZone: String
+  attendees: String
+  sendInvitations: Boolean
+  addConferencing: Boolean
+}
+
+type CreateCalendarEventOutput {
+  success: Boolean!
+  error: String
+  iCalUid: String
+  calendarEventId: String
+  conferenceLink: String
+}
+
+extend type Query {
+  getTimelineCalendarEventsFromObjectRecord(objectNameSingular: String!, recordId: UUID!, page: Int!, pageSize: Int!): TimelineCalendarEventsWithTotal!
+}
+
+extend type Mutation {
+  createCalendarEvent(input: CreateCalendarEventInput!): CreateCalendarEventOutput!
+}

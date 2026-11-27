@@ -1,0 +1,9 @@
+{
+  "name": "DeleteUnsubscribeTopic",
+  "operation": "DeleteUnsubscribeTopic",
+  "fixture": "hand-written from the front-end document",
+  "endpoint": "/metadata",
+  "query": "mutation DeleteUnsubscribeTopic($id: String!) { deleteUnsubscribeTopic(id: $id) }",
+  "variables": {"id": "70000000-0000-4000-8000-000000000001"},
+  "response": {"data":{"deleteUnsubscribeTopic":true}}
+}
