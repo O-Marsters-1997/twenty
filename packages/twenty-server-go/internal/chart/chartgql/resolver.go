@@ -50,7 +50,7 @@ func (r *Resolver) PieChartData() PieChartDataResolver { return &pieChartDataRes
 
 type pieChartDataResolver struct{ *Resolver }
 
-func (r *Resolver) Query()QueryResolver { return &queryResolver{r} }
+func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
 type queryResolver struct{ *Resolver }
 
