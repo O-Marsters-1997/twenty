@@ -28,5 +28,9 @@ models:
         resolver: true
       isPasswordAuthEnabled:
         resolver: true
+  User:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workspace.Identity
+  UserWorkspace:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workspace.Identity
   Role:
     model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/workspace.Role
