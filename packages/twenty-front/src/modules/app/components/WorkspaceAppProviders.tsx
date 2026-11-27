@@ -27,7 +27,6 @@ import { ApolloCoreProvider } from '@/object-metadata/components/ApolloCoreProvi
 import { CoreRecordReferenceFieldsContext } from '@/object-record/record-field/ui/contexts/CoreRecordReferenceFieldsContext';
 import { RecordCreationFormProvider } from '@/object-record/record-form/components/RecordCreationFormProvider';
 import { WelcomeOverlay } from '@/onboarding/components/WelcomeOverlay/WelcomeOverlay';
-import { CompanyEnrichmentOnboardingEffect } from '@/onboarding/effect-components/CompanyEnrichmentOnboardingEffect';
 import { SSEProvider } from '@/sse-db-event/components/SSEProvider';
 import { SupportChatEffect } from '@/support/components/SupportChatEffect';
 import { DialogManager } from '@/ui/feedback/dialog-manager/components/DialogManager';
@@ -91,7 +90,6 @@ export const WorkspaceAppProviders = () => {
                 <RequestFreshCaptchaTokenEffect />
                 <PageChangeEffect />
                 <WelcomeOverlay />
-                <CompanyEnrichmentOnboardingEffect />
                 <SignOutOnOtherTabSignOutEffect />
               </SSEProvider>
             </ApolloCoreProvider>
