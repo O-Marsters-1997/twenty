@@ -39,6 +39,9 @@ type DirectiveRoot struct {
 type ComplexityRoot struct {
 	Mutation struct {
 		ActivateWorkspace                   func(childComplexity int, data ActivateWorkspaceInput) int
+		DeleteCurrentWorkspace              func(childComplexity int) int
+		DeleteUser                          func(childComplexity int) int
+		DeleteUserFromWorkspace             func(childComplexity int, workspaceMemberIDToDelete string) int
 		UpdateWorkspace                     func(childComplexity int, data map[string]any) int
 		UpdateWorkspaceAllowedIframeOrigins func(childComplexity int, data UpdateWorkspaceAllowedIframeOriginsInput) int
 	}
@@ -62,6 +65,14 @@ type ComplexityRoot struct {
 		Icon                          func(childComplexity int) int
 		IsEditable                    func(childComplexity int) int
 		Label                         func(childComplexity int) int
+	}
+
+	User struct {
+		ID func(childComplexity int) int
+	}
+
+	UserWorkspace struct {
+		ID func(childComplexity int) int
 	}
 
 	Workspace struct {
@@ -91,6 +102,9 @@ type MutationResolver interface {
 	UpdateWorkspace(ctx context.Context, data map[string]any) (*workspace.Workspace, error)
 	UpdateWorkspaceAllowedIframeOrigins(ctx context.Context, data UpdateWorkspaceAllowedIframeOriginsInput) (*workspace.Workspace, error)
 	ActivateWorkspace(ctx context.Context, data ActivateWorkspaceInput) (*workspace.Workspace, error)
+	DeleteCurrentWorkspace(ctx context.Context) (*workspace.Workspace, error)
+	DeleteUserFromWorkspace(ctx context.Context, workspaceMemberIDToDelete string) (*workspace.Identity, error)
+	DeleteUser(ctx context.Context) (*workspace.Identity, error)
 }
 type QueryResolver interface {
 	Empty(ctx context.Context) (*bool, error)
@@ -133,6 +147,29 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.ActivateWorkspace(childComplexity, args["data"].(ActivateWorkspaceInput)), true
+	case "Mutation.deleteCurrentWorkspace":
+		if e.ComplexityRoot.Mutation.DeleteCurrentWorkspace == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteCurrentWorkspace(childComplexity), true
+	case "Mutation.deleteUser":
+		if e.ComplexityRoot.Mutation.DeleteUser == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteUser(childComplexity), true
+	case "Mutation.deleteUserFromWorkspace":
+		if e.ComplexityRoot.Mutation.DeleteUserFromWorkspace == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteUserFromWorkspace_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DeleteUserFromWorkspace(childComplexity, args["workspaceMemberIdToDelete"].(string)), true
 	case "Mutation.updateWorkspace":
 		if e.ComplexityRoot.Mutation.UpdateWorkspace == nil {
 			break
@@ -247,6 +284,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Role.Label(childComplexity), true
+
+	case "User.id":
+		if e.ComplexityRoot.User.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.User.ID(childComplexity), true
+
+	case "UserWorkspace.id":
+		if e.ComplexityRoot.UserWorkspace.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.UserWorkspace.ID(childComplexity), true
 
 	case "Workspace.allowImpersonation":
 		if e.ComplexityRoot.Workspace.AllowImpersonation == nil {
@@ -480,6 +531,22 @@ func (ec *executionContext) childFields_Role(ctx context.Context, field graphql.
 	return nil, fmt.Errorf("no field named %q was found under type Role", field.Name)
 }
 
+func (ec *executionContext) childFields_User(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_User_id(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type User", field.Name)
+}
+
+func (ec *executionContext) childFields_UserWorkspace(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_UserWorkspace_id(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type UserWorkspace", field.Name)
+}
+
 func (ec *executionContext) childFields_Workspace(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "id":
@@ -643,6 +710,20 @@ func (ec *executionContext) field_Mutation_activateWorkspace_args(ctx context.Co
 		return nil, err
 	}
 	args["data"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteUserFromWorkspace_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "workspaceMemberIdToDelete",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["workspaceMemberIdToDelete"] = arg0
 	return args, nil
 }
 
@@ -890,6 +971,114 @@ func (ec *executionContext) fieldContext_Mutation_activateWorkspace(ctx context.
 	if fc.Args, err = ec.field_Mutation_activateWorkspace_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteCurrentWorkspace(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_deleteCurrentWorkspace(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return ec.Resolvers.Mutation().DeleteCurrentWorkspace(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *workspace.Workspace) graphql.Marshaler {
+			return ec.marshalNWorkspace2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkspaceᚐWorkspace(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_deleteCurrentWorkspace(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Workspace(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteUserFromWorkspace(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_deleteUserFromWorkspace(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().DeleteUserFromWorkspace(ctx, fc.Args["workspaceMemberIdToDelete"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *workspace.Identity) graphql.Marshaler {
+			return ec.marshalNUserWorkspace2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkspaceᚐIdentity(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_deleteUserFromWorkspace(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_UserWorkspace(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteUserFromWorkspace_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_deleteUser(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return ec.Resolvers.Mutation().DeleteUser(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *workspace.Identity) graphql.Marshaler {
+			return ec.marshalNUser2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkspaceᚐIdentity(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_deleteUser(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_User(ctx, field)
+		},
 	}
 	return fc, nil
 }
@@ -1313,6 +1502,52 @@ func (ec *executionContext) _Role_canBeAssignedToApiKeys(ctx context.Context, fi
 }
 func (ec *executionContext) fieldContext_Role_canBeAssignedToApiKeys(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("Role", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *workspace.Identity) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_User_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_User_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("User", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _UserWorkspace_id(ctx context.Context, field graphql.CollectedField, obj *workspace.Identity) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_UserWorkspace_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_UserWorkspace_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("UserWorkspace", field, false, false, "UUID")
 }
 
 func (ec *executionContext) _Workspace_id(ctx context.Context, field graphql.CollectedField, obj *workspace.Workspace) (ret graphql.Marshaler) {
@@ -3092,6 +3327,27 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "deleteCurrentWorkspace":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteCurrentWorkspace(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteUserFromWorkspace":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteUserFromWorkspace(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteUser":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteUser(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -3243,6 +3499,72 @@ func (ec *executionContext) _Role(ctx context.Context, sel ast.SelectionSet, obj
 			}
 		case "canBeAssignedToApiKeys":
 			out.Values[i] = ec._Role_canBeAssignedToApiKeys(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var userImplementors = []string{"User"}
+
+func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj *workspace.Identity) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, userImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("User")
+		case "id":
+			out.Values[i] = ec._User_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var userWorkspaceImplementors = []string{"UserWorkspace"}
+
+func (ec *executionContext) _UserWorkspace(ctx context.Context, sel ast.SelectionSet, obj *workspace.Identity) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, userWorkspaceImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("UserWorkspace")
+		case "id":
+			out.Values[i] = ec._UserWorkspace_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -3816,6 +4138,22 @@ func (ec *executionContext) unmarshalNUpdateWorkspaceAllowedIframeOriginsInput2g
 func (ec *executionContext) unmarshalNUpdateWorkspaceInput2map(ctx context.Context, v any) (map[string]any, error) {
 	res, err := ec.unmarshalInputUpdateWorkspaceInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkspaceᚐIdentity(ctx context.Context, sel ast.SelectionSet, v *workspace.Identity) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "User!")
+		return graphql.Null
+	}
+	return ec._User(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNUserWorkspace2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkspaceᚐIdentity(ctx context.Context, sel ast.SelectionSet, v *workspace.Identity) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "UserWorkspace!")
+		return graphql.Null
+	}
+	return ec._UserWorkspace(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNWorkspace2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋworkspaceᚐWorkspace(ctx context.Context, sel ast.SelectionSet, v *workspace.Workspace) graphql.Marshaler {

@@ -1,0 +1,8 @@
+{
+  "name": "DeleteCurrentWorkspace",
+  "operation": "DeleteCurrentWorkspace",
+  "fixture": "workspace with two admins",
+  "endpoint": "/metadata",
+  "query": "mutation DeleteCurrentWorkspace { deleteCurrentWorkspace { id } }",
+  "response": {"data": {"deleteCurrentWorkspace": {"id": "26a06a83-ad30-4547-9126-7f6339d43e03"}}}
+}
