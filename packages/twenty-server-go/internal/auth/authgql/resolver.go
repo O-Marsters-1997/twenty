@@ -2,6 +2,7 @@ package authgql
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata"
@@ -11,7 +12,8 @@ type Resolver struct {
 	TwoFactor     *auth.TwoFactor
 	Exchange      *auth.SignIn
 	PasswordLogin *auth.PasswordLogin
-	Sessions      *auth.UserSession
+	SignUpFlow    *auth.SignUp
+	Sessions     *auth.UserSession
 	Login         *auth.TwoFactorLogin
 	Tokens        *auth.PGIssuer
 	Public        *auth.PublicData
@@ -181,6 +183,53 @@ func (r *mutationResolver) SignIn(ctx context.Context, email string, password st
 	if err != nil {
 		return nil, err
 	}
+	return r.sessionPayload(ctx, w, req, result)
+}
+
+func (r *mutationResolver) SignUp(ctx context.Context, email string, password string, _ *string, locale *string, _ *string) (*AvailableWorkspacesAndAccessTokens, error) {
+	w, req := exchangeFrom(ctx)
+	result, err := r.SignUpFlow.WithoutWorkspace(ctx, email, password, deref(locale))
+	if err != nil {
+		return nil, err
+	}
+	return r.sessionPayload(ctx, w, req, result)
+}
+
+func (r *mutationResolver) SignUpInWorkspace(ctx context.Context, email string, password string, workspaceInviteHash *string, workspacePersonalInviteToken *string, _ *string, workspaceID *string, locale *string, _ *string) (*SignUpOutput, error) {
+	_, req := exchangeFrom(ctx)
+	result, err := r.SignUpFlow.InWorkspace(ctx, auth.SignUpInWorkspaceInput{
+		Email:               email,
+		Password:            password,
+		Locale:              deref(locale),
+		WorkspaceID:         deref(workspaceID),
+		WorkspaceInviteHash: deref(workspaceInviteHash),
+		PersonalInviteToken: deref(workspacePersonalInviteToken),
+		Origin:              req.Header.Get("Origin"),
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &SignUpOutput{
+		LoginToken: authTokenFrom(result.LoginToken),
+		Workspace:  &SignUpWorkspace{ID: result.WorkspaceID, WorkspaceUrls: &WorkspaceUrls{SubdomainURL: result.SubdomainURL}},
+	}, nil
+}
+
+func (r *mutationResolver) SignUpInNewWorkspace(ctx context.Context, _ *SignUpInNewWorkspaceInput) (*SignUpOutput, error) {
+	if _, err := principalFrom(ctx); err != nil {
+		return nil, err
+	}
+	return nil, r.SignUpFlow.InNewWorkspace()
+}
+
+func deref(value *string) string {
+	if value == nil {
+		return ""
+	}
+	return *value
+}
+
+func (r *mutationResolver) sessionPayload(ctx context.Context, w http.ResponseWriter, req *http.Request, result auth.SignInResult) (*AvailableWorkspacesAndAccessTokens, error) {
 	if err := r.Sessions.IssueForTokenPair(ctx, w, req, result.Pair, auth.SessionOriginSignIn); err != nil {
 		return nil, err
 	}
