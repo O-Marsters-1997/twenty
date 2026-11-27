@@ -1,0 +1,21 @@
+schema:
+  - "*.graphqls"
+exec:
+  filename: generated.go
+  package: chartgql
+model:
+  filename: models_gen.go
+  package: chartgql
+models:
+  UUID:
+    model: github.com/99designs/gqlgen/graphql.String
+  JSON:
+    model: github.com/99designs/gqlgen/graphql.Any
+  BarChartGroupMode:
+    model: github.com/99designs/gqlgen/graphql.String
+  BarChartLayout:
+    model: github.com/99designs/gqlgen/graphql.String
+  BarChartData:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/chart.BarChartData
+  BarChartSeries:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/chart.BarChartSeries
