@@ -107,10 +107,14 @@ type group struct {
 }
 
 func (s *Service) BarChartData(ctx context.Context, objectMetadataID string, configuration map[string]any) (BarChartData, error) {
-	config, err := decodeConfiguration(configuration)
+	config, err := decodeConfiguration[barChartConfiguration](configuration)
 	if err != nil {
 		return BarChartData{}, err
 	}
+	return s.barChart(ctx, objectMetadataID, config)
+}
+
+func (s *Service) barChart(ctx context.Context, objectMetadataID string, config barChartConfiguration) (BarChartData, error) {
 	objects, err := s.Metadata.Objects(ctx)
 	if err != nil {
 		return BarChartData{}, fmt.Errorf("read object metadata: %w", err)
@@ -293,8 +297,8 @@ func orDefault(value, fallback string) string {
 	return value
 }
 
-func decodeConfiguration(configuration map[string]any) (barChartConfiguration, error) {
-	var config barChartConfiguration
+func decodeConfiguration[TConfiguration any](configuration map[string]any) (TConfiguration, error) {
+	var config TConfiguration
 	raw, err := json.Marshal(configuration)
 	if err != nil {
 		return config, fmt.Errorf("%w: %w", ErrInvalidConfiguration, err)

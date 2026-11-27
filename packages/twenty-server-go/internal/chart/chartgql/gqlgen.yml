@@ -19,3 +19,7 @@ models:
     model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/chart.BarChartData
   BarChartSeries:
     model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/chart.BarChartSeries
+  PieChartData:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/chart.PieChartData
+  PieChartDataItem:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/chart.PieChartDataItem

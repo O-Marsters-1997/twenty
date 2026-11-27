@@ -1,0 +1,30 @@
+{
+  "name": "PieChartData",
+  "operation": "PieChartData",
+  "fixture": "opportunities grouped by stage, count of id",
+  "endpoint": "/metadata",
+  "query": "query PieChartData($input: PieChartDataInput!) { pieChartData(input: $input) { data { key value } showLegend showDataLabels showCenterMetric hasTooManyGroups formattedToRawLookup } }",
+  "variables": {
+    "input": {
+      "objectMetadataId": "o-opportunity",
+      "configuration": {
+        "configurationType": "PIE_CHART",
+        "aggregateFieldMetadataId": "f-id",
+        "aggregateOperation": "COUNT",
+        "groupByFieldMetadataId": "f-stage"
+      }
+    }
+  },
+  "response": {
+    "data": {
+      "pieChartData": {
+        "data": [{"key": "New", "value": 3}, {"key": "Won", "value": 2}],
+        "showLegend": true,
+        "showDataLabels": false,
+        "showCenterMetric": false,
+        "hasTooManyGroups": false,
+        "formattedToRawLookup": {"New": "NEW", "Won": "WON"}
+      }
+    }
+  }
+}
