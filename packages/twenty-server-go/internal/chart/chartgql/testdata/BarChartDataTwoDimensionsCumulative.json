@@ -1,0 +1,44 @@
+{
+  "name": "BarChartDataTwoDimensionsCumulative",
+  "operation": "BarChartData",
+  "fixture": "opportunities grouped by stage and close month, cumulative, grouped horizontal bars",
+  "endpoint": "/metadata",
+  "query": "query BarChartData($input: BarChartDataInput!) { barChartData(input: $input) { data indexBy keys series { key label } xAxisLabel yAxisLabel showLegend showDataLabels layout groupMode hasTooManyGroups formattedToRawLookup } }",
+  "variables": {
+    "input": {
+      "objectMetadataId": "o-opportunity",
+      "configuration": {
+        "configurationType": "BAR_CHART",
+        "aggregateFieldMetadataId": "f-id",
+        "aggregateOperation": "COUNT",
+        "primaryAxisGroupByFieldMetadataId": "f-stage",
+        "secondaryAxisGroupByFieldMetadataId": "f-close",
+        "secondaryAxisGroupByDateGranularity": "MONTH",
+        "isCumulative": true,
+        "groupMode": "GROUPED",
+        "layout": "HORIZONTAL"
+      }
+    }
+  },
+  "response": {
+    "data": {
+      "barChartData": {
+        "data": [
+          {"stage": "New", "Jan 2024": 3, "Feb 2024": 0},
+          {"stage": "Won", "Jan 2024": 3, "Feb 2024": 2}
+        ],
+        "indexBy": "stage",
+        "keys": ["Jan 2024", "Feb 2024"],
+        "series": [{"key": "Jan 2024", "label": "Jan 2024"}, {"key": "Feb 2024", "label": "Feb 2024"}],
+        "xAxisLabel": "Count",
+        "yAxisLabel": "Stage",
+        "showLegend": true,
+        "showDataLabels": false,
+        "layout": "HORIZONTAL",
+        "groupMode": "GROUPED",
+        "hasTooManyGroups": false,
+        "formattedToRawLookup": {"New": "NEW", "Won": "WON", "Jan 2024": "2024-01-01", "Feb 2024": "2024-02-01"}
+      }
+    }
+  }
+}
