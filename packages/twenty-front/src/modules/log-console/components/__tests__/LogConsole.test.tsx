@@ -235,13 +235,17 @@ describe('LogConsole', () => {
   it('opens when developer mode is turned on', async () => {
     renderWithLogsFeatureFlag(true);
 
-    expect(screen.queryByText(/Logs require ClickHouse/)).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(/Logs require ClickHouse/),
+    ).not.toBeInTheDocument();
 
     await userEvent.click(
       await screen.findByRole('button', { name: 'Developer mode' }),
     );
 
-    expect(await screen.findByText(/Logs require ClickHouse/)).toBeInTheDocument();
+    expect(
+      await screen.findByText(/Logs require ClickHouse/),
+    ).toBeInTheDocument();
   });
 
   it('hides when developer mode is turned off', async () => {
@@ -252,7 +256,9 @@ describe('LogConsole', () => {
       await screen.findByRole('button', { name: 'Developer mode' }),
     );
 
-    expect(await screen.findByText(/Logs require ClickHouse/)).toBeInTheDocument();
+    expect(
+      await screen.findByText(/Logs require ClickHouse/),
+    ).toBeInTheDocument();
 
     await userEvent.click(
       screen.getByRole('button', { name: 'Developer mode' }),
@@ -311,6 +317,8 @@ describe('LogConsole', () => {
       await screen.findByRole('button', { name: 'Developer mode' }),
     );
 
-    expect(screen.queryByText(/Logs require ClickHouse/)).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(/Logs require ClickHouse/),
+    ).not.toBeInTheDocument();
   });
 });
