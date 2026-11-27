@@ -13,7 +13,7 @@ type Resolver struct {
 	Exchange      *auth.SignIn
 	PasswordLogin *auth.PasswordLogin
 	SignUpFlow    *auth.SignUp
-	Sessions     *auth.UserSession
+	Sessions      *auth.UserSession
 	Login         *auth.TwoFactorLogin
 	Tokens        *auth.PGIssuer
 	Public        *auth.PublicData
