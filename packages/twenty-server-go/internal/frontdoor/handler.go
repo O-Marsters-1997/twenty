@@ -155,9 +155,17 @@ func isJSON(r *http.Request) bool {
 }
 
 func (h *Handler) writeGraphQLError(w http.ResponseWriter, message, code string) {
+	h.writeSubscribeError(w, &SubscribeError{Message: message, Code: code})
+}
+
+func (h *Handler) writeSubscribeError(w http.ResponseWriter, failure *SubscribeError) {
 	w.Header().Set("Content-Type", "application/json")
+	extensions := map[string]string{"code": failure.Code}
+	if failure.SubCode != "" {
+		extensions["subCode"] = failure.SubCode
+	}
 	err := json.NewEncoder(w).Encode(map[string]any{
-		"errors": []map[string]any{{"message": message, "extensions": map[string]string{"code": code}}},
+		"errors": []map[string]any{{"message": failure.Message, "extensions": extensions}},
 	})
 	if err != nil {
 		h.logger.Warn("write graphql error", "err", err)

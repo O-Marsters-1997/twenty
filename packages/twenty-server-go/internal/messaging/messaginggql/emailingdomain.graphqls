@@ -1,0 +1,42 @@
+enum EmailingDomainStatus {
+  PENDING
+  VERIFIED
+  FAILED
+  TEMPORARY_FAILURE
+}
+
+enum EmailingDomainTenantStatus {
+  ACTIVE
+  PAUSED
+  SANDBOX
+}
+
+enum UnsubscribeHostnameStatus {
+  PENDING
+  ACTIVE
+  FAILED
+}
+
+type VerificationRecord {
+  type: String!
+  key: String!
+  value: String!
+  priority: Float
+  status: String
+}
+
+type EmailingDomain {
+  id: UUID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  domain: String!
+  status: EmailingDomainStatus!
+  tenantStatus: EmailingDomainTenantStatus!
+  unsubscribeHostnameStatus: UnsubscribeHostnameStatus
+  verificationRecords: [VerificationRecord!]
+  verifiedAt: DateTime
+}
+
+extend type Query {
+  getEmailingDomains: [EmailingDomain!]!
+}

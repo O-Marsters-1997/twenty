@@ -83,9 +83,14 @@ var MessagingOperations = []string{
 	"MyMessageChannels", "UpdateMessageChannel", "CreateEmailGroupChannel", "UpdateEmailGroupChannel", "DeleteEmailGroupChannel",
 	"MyCalendarChannels", "UpdateCalendarChannel",
 	"SendMessageCampaign", "CancelMessageCampaign", "SendMessageCampaignTest", "PreviewMessageCampaignAudience",
+	"GetEmailingDomains",
 	"MyMessageFolders", "UpdateMessageFolders", "MessageSuppressions", "StartChannelSync", "DuplicateMessageList",
 	"CreateUnsubscribeTopic", "UpdateUnsubscribeTopic", "DeleteUnsubscribeTopic", "UnsubscribeTopics", "CreateCalendarEvent",
 }
+
+var GeoOperations = []string{"GetAutoCompleteAddress", "GetAddressDetails"}
+
+var EventStreamOperations = []string{"AddQueryToEventStream", "RemoveQueryFromEventStream"}
 
 var LoginOperations = []string{"getAuthTokensFromOTP", "getAuthTokensFromTwoFactorAuthenticationRecoveryCode", "initiateOTPProvisioning"}
 var AccessOperations = []string{

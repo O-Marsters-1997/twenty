@@ -1,0 +1,9 @@
+{
+  "name": "RemoveQueryFromEventStream",
+  "operation": "RemoveQueryFromEventStream",
+  "fixture": "an open event stream owned by the caller. Hand-written from EventStreamResolver.removeQueryFromEventStream and RemoveQueryFromEventStreamInput; no Node server was run",
+  "endpoint": "/metadata",
+  "query": "mutation RemoveQueryFromEventStream($input: RemoveQueryFromEventStreamInput!) { removeQueryFromEventStream(input: $input) }",
+  "variables": {"input": {"eventStreamId": "stream-1", "queryId": "query-1"}},
+  "response": {"data": {"removeQueryFromEventStream": true}}
+}

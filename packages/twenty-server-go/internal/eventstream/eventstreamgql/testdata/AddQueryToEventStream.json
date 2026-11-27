@@ -1,0 +1,9 @@
+{
+  "name": "AddQueryToEventStream",
+  "operation": "AddQueryToEventStream",
+  "fixture": "an open event stream owned by the caller. Hand-written from EventStreamResolver.addQueryToEventStream and AddQuerySubscriptionInput; no Node server was run",
+  "endpoint": "/metadata",
+  "query": "mutation AddQueryToEventStream($input: AddQuerySubscriptionInput!) { addQueryToEventStream(input: $input) }",
+  "variables": {"input": {"eventStreamId": "stream-1", "queryId": "query-1", "operationSignature": {"objectNameSingular": "person", "variables": {}, "fields": {"id": true}}}},
+  "response": {"data": {"addQueryToEventStream": true}}
+}
