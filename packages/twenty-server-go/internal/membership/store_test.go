@@ -12,9 +12,8 @@ import (
 )
 
 const (
-	workspaceID   = workspace.PinnedWorkspaceID
-	applicationID = "c2000000-0000-4000-8000-000000000001"
-	roleID        = "d0000000-0000-4000-8000-000000000001"
+	workspaceID = workspace.PinnedWorkspaceID
+	roleID      = "f4cc34a9-a20e-418f-8c5c-78b7b1c77881"
 )
 
 func newStore(t *testing.T) (*membership.Store, *pgxpool.Pool) {
@@ -24,25 +23,6 @@ func newStore(t *testing.T) (*membership.Store, *pgxpool.Pool) {
 		t.Fatalf("connect: %v", err)
 	}
 	t.Cleanup(pool.Close)
-	for _, statement := range []string{
-		`INSERT INTO core.application (id, "universalIdentifier", name, "workspaceId") VALUES ('` + applicationID + `', gen_random_uuid(), 'custom', '` + workspaceID + `')`,
-		`INSERT INTO core.role (id, label, "workspaceId", "universalIdentifier", "applicationId") VALUES ('` + roleID + `', 'Member', '` + workspaceID + `', gen_random_uuid(), '` + applicationID + `')`,
-		`INSERT INTO core.workspace (id, subdomain, "workspaceCustomApplicationId", "activationStatus", "defaultRoleId") VALUES ('` + workspaceID + `', 'acme', '` + applicationID + `', 'PENDING_CREATION', '` + roleID + `')`,
-	} {
-		tx, err := pool.Begin(t.Context())
-		if err != nil {
-			t.Fatal(err)
-		}
-		if _, err := tx.Exec(t.Context(), `SET LOCAL session_replication_role = replica`); err != nil {
-			t.Fatal(err)
-		}
-		if _, err := tx.Exec(t.Context(), statement); err != nil {
-			t.Fatalf("seed: %v", err)
-		}
-		if err := tx.Commit(t.Context()); err != nil {
-			t.Fatal(err)
-		}
-	}
 	return membership.New(pool), pool
 }
 
