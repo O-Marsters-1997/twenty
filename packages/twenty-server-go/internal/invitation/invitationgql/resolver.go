@@ -21,6 +21,7 @@ type DomainTokens interface {
 
 type Resolver struct {
 	Store    *store.Store
+	Inviter  *store.Inviter
 	Tokens   DomainTokens
 	Sender   systemmail.Sender
 	FrontURL *url.URL
@@ -28,14 +29,61 @@ type Resolver struct {
 
 // workspaceID returns the caller's workspace once the caller may manage members.
 func (r *Resolver) workspaceID(ctx context.Context) (string, error) {
+	principal, err := r.principal(ctx)
+	return principal.WorkspaceID, err
+}
+
+func (r *Resolver) principal(ctx context.Context) (auth.Principal, error) {
 	principal, ok := auth.PrincipalFrom(ctx)
 	if !ok {
-		return "", auth.ErrUnauthenticated
+		return auth.Principal{}, auth.ErrUnauthenticated
 	}
 	if err := r.Store.AuthorizeMembers(ctx, principal.WorkspaceID, principal.UserWorkspaceID); err != nil {
-		return "", err
+		return auth.Principal{}, err
 	}
-	return principal.WorkspaceID, nil
+	return principal, nil
+}
+
+func (r *mutationResolver) SendInvitations(ctx context.Context, emails []string, roleID *string) (*SendInvitations, error) {
+	principal, err := r.principal(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if roleID != nil {
+		if err := r.Store.AuthorizeRoles(ctx, principal.WorkspaceID, principal.UserWorkspaceID); err != nil {
+			return nil, err
+		}
+	}
+	result, err := r.Inviter.Send(ctx, principal.WorkspaceID, principal.UserID, roleID, emails)
+	if err != nil {
+		return nil, err
+	}
+	return sendInvitations(result), nil
+}
+
+func (r *mutationResolver) ResendWorkspaceInvitation(ctx context.Context, appTokenID string) (*SendInvitations, error) {
+	principal, err := r.principal(ctx)
+	if err != nil {
+		return nil, err
+	}
+	result, err := r.Inviter.Resend(ctx, principal.WorkspaceID, principal.UserID, appTokenID)
+	if err != nil {
+		return nil, err
+	}
+	return sendInvitations(result), nil
+}
+
+func sendInvitations(result store.SendResult) *SendInvitations {
+	invitations := make([]*WorkspaceInvitation, 0, len(result.Invitations))
+	for _, invitation := range result.Invitations {
+		invitations = append(invitations, &WorkspaceInvitation{
+			ID:        invitation.ID,
+			Email:     invitation.Email,
+			RoleID:    invitation.RoleID,
+			ExpiresAt: metadata.Timestamp{Time: invitation.ExpiresAt},
+		})
+	}
+	return &SendInvitations{Success: result.Success, Errors: result.Errors, Result: invitations}
 }
 
 func (r *mutationResolver) DeleteWorkspaceInvitation(ctx context.Context, appTokenID string) (string, error) {

@@ -1,11 +1,32 @@
 package frontdoor
 
+import (
+	"strings"
+
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/model"
+)
+
 type Endpoint string
 
 const (
 	EndpointWorkspace Endpoint = "/graphql"
 	EndpointMetadata  Endpoint = "/metadata"
 )
+
+var RuntimeBuiltObjects = []string{
+	"person", "company", "note", "task", "opportunity", "dashboard", "attachment", "timelineActivity", "workspaceMember",
+}
+
+func RecordOperations(object model.Object) []string {
+	singular := strings.ToUpper(object.NameSingular[:1]) + object.NameSingular[1:]
+	plural := strings.ToUpper(object.NamePlural[:1]) + object.NamePlural[1:]
+	return []string{
+		"FindMany" + plural, "FindOne" + singular, "FindDuplicate" + singular,
+		"Create" + plural, "CreateOne" + singular, "UpdateOne" + singular, "UpdateMany" + plural,
+		"DeleteOne" + singular, "DeleteMany" + plural, "DestroyOne" + singular, "DestroyMany" + plural,
+		"RestoreMany" + plural, "Merge" + plural, "GroupBy" + plural,
+	}
+}
 
 var SkillOperations = []string{
 	"FindManySkills", "FindOneSkill", "FindManySkillsForSuggestion",
@@ -86,7 +107,7 @@ var SessionManagementOperations = []string{"CurrentUserSessions", "RevokeUserSes
 
 var InvitationOperations = []string{
 	"GetWorkspaceInvitations", "DeleteWorkspaceInvitation", "GetApprovedAccessDomains", "DeleteApprovedAccessDomain",
-	"CreateApprovedAccessDomain", "ValidateApprovedAccessDomain",
+	"SendInvitations", "ResendWorkspaceInvitation", "CreateApprovedAccessDomain", "ValidateApprovedAccessDomain",
 }
 
 var OnboardingOperations = []string{"GoBackToPreviousOnboardingStep", "SkipSyncEmailOnboardingStep"}

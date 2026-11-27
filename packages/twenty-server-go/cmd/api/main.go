@@ -123,6 +123,7 @@ func run() error {
 	)
 	authHandler := authgql.NewHandler(newAuthResolver(pool, cfg, twoFactor, passwordLogins, stack), logger)
 
+	dynamicHandler, isDynamic := dynamicRecords(pool, logger)
 	goGraphQL := http.NewServeMux()
 	goGraphQL.Handle(string(frontdoor.EndpointWorkspace), workspaceHandler(recordsgql.NewHandler(&recordsgql.Resolver{
 		Store:              people,
@@ -137,7 +138,7 @@ func run() error {
 		Tasks:              store.NewTasks(pool),
 		TaskTargets:        store.NewTaskTargets(pool),
 		Searcher:           store.NewSearch(pool),
-	}, logger), chatHandler, workflowHandler, messaginggql.NewHandler(&messaginggql.Resolver{
+	}, logger), dynamicHandler, isDynamic, chatHandler, workflowHandler, messaginggql.NewHandler(&messaginggql.Resolver{
 		Timeline: messagingstore.NewTimeline(pool),
 		Banners:  messagingstore.NewReconnectBanners(pool),
 	}, logger), authHandler))
@@ -168,6 +169,7 @@ func run() error {
 		workspaceSettingsHandler(pool, cfg, passwordLogins, logger),
 		invitationgql.NewHandler(&invitationgql.Resolver{
 			Store:    invitationstore.New(pool),
+			Inviter:  invitationstore.NewInviter(pool, systemmail.NewSMTPSender(smtpConfigFromEnv()), auth.NewMemoryThrottle(), stack.frontURL, cfg.MultiWorkspace),
 			Tokens:   stack.issuer,
 			Sender:   systemmail.NewSMTPSender(smtpConfigFromEnv()),
 			FrontURL: stack.frontURL,
