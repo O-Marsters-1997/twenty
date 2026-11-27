@@ -61,8 +61,16 @@ type DeleteTwoFactorAuthenticationMethod struct {
 	Success bool `json:"success"`
 }
 
+type EmailPasswordResetLink struct {
+	Success bool `json:"success"`
+}
+
 type InitiateTwoFactorAuthenticationProvisioning struct {
 	URI string `json:"uri"`
+}
+
+type InvalidatePassword struct {
+	Success bool `json:"success"`
 }
 
 type LoginToken struct {
@@ -127,6 +135,12 @@ type UserSession struct {
 	LastActiveAt metadata.Timestamp `json:"lastActiveAt"`
 	ExpiresAt    metadata.Timestamp `json:"expiresAt"`
 	IsCurrent    bool               `json:"isCurrent"`
+}
+
+type ValidatePasswordResetToken struct {
+	ID          string `json:"id"`
+	Email       string `json:"email"`
+	HasPassword bool   `json:"hasPassword"`
 }
 
 type VerifyTwoFactorAuthenticationMethod struct {
