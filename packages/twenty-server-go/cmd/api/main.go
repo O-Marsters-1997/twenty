@@ -38,6 +38,8 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/metadatagql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/metagql"
 	metadatastore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/store"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/onboarding"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/onboarding/onboardinggql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/pagelayout/pagelayoutgql"
 	pagelayoutstore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/pagelayout/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records"
@@ -164,6 +166,7 @@ func run() error {
 		pagelayoutgql.NewHandler(&pagelayoutgql.Resolver{Store: pagelayoutstore.New(pool)}, logger),
 		applicationgql.NewHandler(&applicationgql.Resolver{Store: applicationstore.New(pool, cfg.ServerURL)}, logger),
 		filesgql.NewHandler(&filesgql.Resolver{Files: fileSvc}, logger),
+		onboardinggql.NewHandler(&onboardinggql.Resolver{Store: onboarding.New(pool)}, logger),
 		agentgql.Operations,
 	))
 
