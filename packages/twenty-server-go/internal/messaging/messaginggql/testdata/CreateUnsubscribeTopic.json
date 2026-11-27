@@ -1,0 +1,9 @@
+{
+  "name": "CreateUnsubscribeTopic",
+  "operation": "CreateUnsubscribeTopic",
+  "fixture": "hand-written from the front-end document",
+  "endpoint": "/metadata",
+  "query": "mutation CreateUnsubscribeTopic($input: CreateUnsubscribeTopicInput!) { createUnsubscribeTopic(input: $input) { id name description visibility } }",
+  "variables": {"input": {"name": "Billing", "description": "Invoices", "visibility": "PRIVATE"}},
+  "response": {"data":{"createUnsubscribeTopic":{"id":"<ignored>","name":"Billing","description":"Invoices","visibility":"PRIVATE"}}}
+}

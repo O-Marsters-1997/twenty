@@ -16,6 +16,18 @@ type CancelMessageCampaignOutput struct {
 	CanceledMessageCount int    `json:"canceledMessageCount"`
 }
 
+type ChannelSyncSuccess struct {
+	Success bool `json:"success"`
+}
+
+type CreateCalendarEventOutput struct {
+	Success         bool    `json:"success"`
+	Error           *string `json:"error,omitempty"`
+	ICalUID         *string `json:"iCalUid,omitempty"`
+	CalendarEventID *string `json:"calendarEventId,omitempty"`
+	ConferenceLink  *string `json:"conferenceLink,omitempty"`
+}
+
 type Mutation struct {
 }
 

@@ -3,6 +3,8 @@ schema:
   - messaging.graphqls
   - send.graphqls
   - campaign.graphqls
+  - outreach.graphqls
+  - calendar.graphqls
 exec:
   filename: generated.go
   package: messaginggql
@@ -60,6 +62,46 @@ models:
     model: map[string]interface{}
   CampaignAudiencePreview:
     model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging.Audience
+  MessageFolderPendingSyncAction:
+    model: github.com/99designs/gqlgen/graphql.String
+  UnsubscribeTopicVisibility:
+    model: github.com/99designs/gqlgen/graphql.String
+  MessageSuppressionReason:
+    model: github.com/99designs/gqlgen/graphql.String
+  MessageSuppressionSource:
+    model: github.com/99designs/gqlgen/graphql.String
+  MessageFolder:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/store.MessageFolder
+  MessageSuppression:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/store.MessageSuppression
+  MessageSuppressionList:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/store.MessageSuppressionList
+  UnsubscribeTopic:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/store.UnsubscribeTopic
+  DuplicatedMessageList:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/store.DuplicatedMessageList
+  LinksMetadata:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/store.Links
+  LinkMetadata:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/store.Link
+  TimelineCalendarEventParticipant:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/store.CalendarParticipant
+  TimelineCalendarEvent:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/store.CalendarEvent
+  TimelineCalendarEventsWithTotal:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/messaging/store.CalendarEventsWithTotal
+  UpdateMessageFoldersInput:
+    model: map[string]interface{}
+  UpdateMessageFolderInputUpdates:
+    model: map[string]interface{}
+  FindMessageSuppressionsInput:
+    model: map[string]interface{}
+  CreateUnsubscribeTopicInput:
+    model: map[string]interface{}
+  UpdateUnsubscribeTopicInput:
+    model: map[string]interface{}
+  CreateCalendarEventInput:
+    model: map[string]interface{}
   Float:
     model: github.com/99designs/gqlgen/graphql.Int
   TimelineThreadParticipant:

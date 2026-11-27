@@ -1,0 +1,9 @@
+{
+  "name": "UpdateMessageFolders",
+  "operation": "UpdateMessageFolders",
+  "fixture": "hand-written from the front-end document; disabling a synced folder of a configured channel",
+  "endpoint": "/metadata",
+  "query": "mutation UpdateMessageFolders($input: UpdateMessageFoldersInput!) { updateMessageFolders(input: $input) { id isSynced pendingSyncAction } }",
+  "variables": {"input": {"ids": ["f0000000-0000-4000-8000-000000000001"], "update": {"isSynced": false}}},
+  "response": {"data":{"updateMessageFolders":[{"id":"f0000000-0000-4000-8000-000000000001","isSynced":false,"pendingSyncAction":"FOLDER_DELETION"}]}}
+}

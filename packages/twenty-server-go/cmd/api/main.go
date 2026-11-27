@@ -145,6 +145,9 @@ func run() error {
 			Campaigns: messagingstore.NewCampaigns(pool),
 			Renderer:  messaging.GoRenderer{},
 			Queue:     queue.Enqueue,
+			Outreach:  messagingstore.NewOutreach(pool),
+
+			CalendarChannels: messagingstore.NewCalendarChannels(pool),
 		}, logger),
 		accessgql.NewHandler(&accessgql.Resolver{
 			WebhookStore: accessstore.NewWebhooks(pool),

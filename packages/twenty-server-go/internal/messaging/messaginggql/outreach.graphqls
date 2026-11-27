@@ -1,0 +1,117 @@
+enum MessageFolderPendingSyncAction {
+  FOLDER_DELETION
+  FOLDER_IMPORT
+  NONE
+}
+
+enum UnsubscribeTopicVisibility {
+  PUBLIC
+  PRIVATE
+}
+
+enum MessageSuppressionReason {
+  BOUNCE
+  COMPLAINT
+  TRACKING
+  UNSUBSCRIBE
+}
+
+enum MessageSuppressionSource {
+  SYSTEM
+  WEBHOOK
+}
+
+type MessageFolder {
+  id: UUID!
+  name: String
+  isSynced: Boolean!
+  isSentFolder: Boolean!
+  parentFolderId: String
+  externalId: String
+  pendingSyncAction: MessageFolderPendingSyncAction!
+  messageChannelId: UUID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input UpdateMessageFolderInputUpdates {
+  isSynced: Boolean!
+}
+
+input UpdateMessageFoldersInput {
+  ids: [UUID!]!
+  update: UpdateMessageFolderInputUpdates!
+}
+
+type MessageSuppression {
+  id: UUID!
+  emailAddress: String!
+  reason: MessageSuppressionReason!
+  source: MessageSuppressionSource!
+  unsubscribeTopicId: UUID
+  createdAt: DateTime!
+}
+
+type MessageSuppressionList {
+  records: [MessageSuppression!]!
+  totalCount: Int!
+}
+
+input FindMessageSuppressionsInput {
+  limit: Int = 50
+  offset: Int = 0
+  reason: MessageSuppressionReason
+  searchTerm: String
+  unsubscribeTopicId: UUID
+}
+
+type UnsubscribeTopic {
+  id: UUID!
+  name: String
+  description: String
+  visibility: UnsubscribeTopicVisibility!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input CreateUnsubscribeTopicInput {
+  name: String!
+  description: String
+  visibility: UnsubscribeTopicVisibility
+}
+
+input UpdateUnsubscribeTopicInput {
+  id: String!
+  name: String
+  description: String
+  visibility: UnsubscribeTopicVisibility
+}
+
+type DuplicatedMessageList {
+  id: UUID!
+  name: String
+  description: String
+  position: Float!
+  memberCount: Float!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type ChannelSyncSuccess {
+  success: Boolean!
+}
+
+extend type Query {
+  myMessageFolders(messageChannelId: UUID): [MessageFolder!]!
+  messageSuppressions(input: FindMessageSuppressionsInput!): MessageSuppressionList!
+  unsubscribeTopics: [UnsubscribeTopic!]!
+}
+
+extend type Mutation {
+  updateMessageFolders(input: UpdateMessageFoldersInput!): [MessageFolder!]!
+  startChannelSync(connectedAccountId: UUID!): ChannelSyncSuccess!
+  duplicateMessageList(id: UUID!): DuplicatedMessageList!
+  createUnsubscribeTopic(input: CreateUnsubscribeTopicInput!): UnsubscribeTopic!
+  updateUnsubscribeTopic(input: UpdateUnsubscribeTopicInput!): UnsubscribeTopic!
+  deleteUnsubscribeTopic(id: String!): Boolean!
+}

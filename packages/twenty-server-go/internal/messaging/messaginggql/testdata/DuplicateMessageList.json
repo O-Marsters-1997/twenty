@@ -1,0 +1,9 @@
+{
+  "name": "DuplicateMessageList",
+  "operation": "DuplicateMessageList",
+  "fixture": "hand-written from the front-end document; a two-member list",
+  "endpoint": "/metadata",
+  "query": "mutation DuplicateMessageList($id: UUID!) { duplicateMessageList(id: $id) { id name description position memberCount createdAt updatedAt } }",
+  "variables": {"id": "1c2d3e4f-5a6b-4c7d-8e9f-0a1b2c3d4e5a"},
+  "response": {"data":{"duplicateMessageList":{"id":"<ignored>","name":"Launch (copy)","description":null,"position":1,"memberCount":2,"createdAt":"<ignored>","updatedAt":"<ignored>"}}}
+}

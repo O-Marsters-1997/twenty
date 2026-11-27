@@ -1,0 +1,11 @@
+{
+  "name": "MessageSuppressions",
+  "operation": "MessageSuppressions",
+  "fixture": "hand-written from the front-end document; three suppressions, newest two requested",
+  "endpoint": "/metadata",
+  "query": "query MessageSuppressions($input: FindMessageSuppressionsInput!) { messageSuppressions(input: $input) { records { id createdAt emailAddress reason unsubscribeTopicId } totalCount } }",
+  "variables": {"input": {"limit": 2, "offset": 0}},
+  "response": {"data":{"messageSuppressions":{"records":[
+ {"id":"50000000-0000-4000-8000-000000000001","createdAt":"2026-01-03T00:00:00.000Z","emailAddress":"a@example.com","reason":"UNSUBSCRIBE","unsubscribeTopicId":"70000000-0000-4000-8000-000000000001"},
+ {"id":"50000000-0000-4000-8000-000000000002","createdAt":"2026-01-02T00:00:00.000Z","emailAddress":"b@example.com","reason":"BOUNCE","unsubscribeTopicId":null}],"totalCount":3}}}
+}
