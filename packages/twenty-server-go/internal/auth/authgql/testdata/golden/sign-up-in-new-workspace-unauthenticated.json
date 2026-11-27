@@ -1,0 +1,9 @@
+{
+  "name": "sign-up-in-new-workspace-unauthenticated",
+  "operation": "SignUpInNewWorkspace",
+  "fixture": "no access token",
+  "endpoint": "/metadata",
+  "query": "mutation SignUpInNewWorkspace($input: SignUpInNewWorkspaceInput) { signUpInNewWorkspace(input: $input) { loginToken { token expiresAt } workspace { id workspaceUrls { subdomainUrl } } } }",
+  "variables": {"input": {"displayName": "Acme", "subdomain": "acme"}},
+  "response": {"errors":[{"message":"unauthenticated","locations":[{"line":1,"column":68}],"path":["signUpInNewWorkspace"],"extensions":{"code":"UNAUTHENTICATED"}}],"data":null}
+}

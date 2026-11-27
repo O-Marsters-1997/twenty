@@ -98,6 +98,22 @@ type PublicWorkspaceDataSummary struct {
 type Query struct {
 }
 
+type SignUpInNewWorkspaceInput struct {
+	DisplayName *string `json:"displayName,omitempty"`
+	Partner     *string `json:"partner,omitempty"`
+	Subdomain   *string `json:"subdomain,omitempty"`
+}
+
+type SignUpOutput struct {
+	LoginToken *AuthToken       `json:"loginToken"`
+	Workspace  *SignUpWorkspace `json:"workspace"`
+}
+
+type SignUpWorkspace struct {
+	ID            string         `json:"id"`
+	WorkspaceUrls *WorkspaceUrls `json:"workspaceUrls"`
+}
+
 type SubdomainAvailability struct {
 	IsValid             bool     `json:"isValid"`
 	Available           bool     `json:"available"`

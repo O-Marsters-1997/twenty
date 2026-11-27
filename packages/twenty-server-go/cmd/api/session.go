@@ -14,6 +14,7 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth/authgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/config"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/membership"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/systemmail"
 )
 
@@ -103,6 +104,7 @@ func newAuthResolver(pool *pgxpool.Pool, cfg config.Config, twoFactor *auth.TwoF
 		PasswordReset: auth.NewPasswordReset(pool, auth.NewPasswordHasher(), systemmail.NewSMTPSender(smtpConfigFromEnv()), stack.frontURL),
 		TwoFactor:     twoFactor,
 		PasswordLogin: passwordLogin,
+		SignUpFlow:    auth.NewSignUp(passwordLogin, membership.New(pool)),
 		Sessions:      stack.sessions,
 		Tokens:        stack.issuer,
 		Login:         auth.NewTwoFactorLogin(pool, twoFactor, stack.issuer, stack.origins, stack.sessions),
