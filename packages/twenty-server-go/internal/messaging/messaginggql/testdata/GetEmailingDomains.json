@@ -1,0 +1,36 @@
+{
+  "name": "GetEmailingDomains",
+  "operation": "GetEmailingDomains",
+  "fixture": "two domains: a pending subdomain whose _dmarc lookups both miss, and a verified domain that already publishes a DMARC policy. Hand-written from EmailingDomainResolver.getEmailingDomains, EmailingDomainService.getEmailingDomains, DmarcRecordService and EmailingDomainDTO; no Node server was run",
+  "endpoint": "/metadata",
+  "query": "query GetEmailingDomains { getEmailingDomains { id domain status unsubscribeHostnameStatus verifiedAt verificationRecords { type key value priority status } createdAt updatedAt } }",
+  "response": {
+    "data": {
+      "getEmailingDomains": [
+        {
+          "id": "e2222222-2222-4222-8222-222222222222",
+          "domain": "example.org",
+          "status": "VERIFIED",
+          "unsubscribeHostnameStatus": "ACTIVE",
+          "verifiedAt": "2026-02-02T00:00:00.000Z",
+          "verificationRecords": [{"type": "TXT", "key": "selector._domainkey.example.org", "value": "v=DKIM1; p=abc", "priority": null, "status": "SUCCESS"}],
+          "createdAt": "2026-02-01T00:00:00.000Z",
+          "updatedAt": "2026-02-02T00:00:00.000Z"
+        },
+        {
+          "id": "e1111111-1111-4111-8111-111111111111",
+          "domain": "mail.acme.com",
+          "status": "PENDING",
+          "unsubscribeHostnameStatus": null,
+          "verifiedAt": null,
+          "verificationRecords": [
+            {"type": "MX", "key": "mail.acme.com", "value": "feedback-smtp.eu-west-1.amazonses.com", "priority": 10, "status": "PENDING"},
+            {"type": "TXT", "key": "_dmarc.mail.acme.com", "value": "v=DMARC1; p=none; rua=mailto:dmarc@mail.acme.com", "priority": null, "status": null}
+          ],
+          "createdAt": "2026-01-01T00:00:00.000Z",
+          "updatedAt": "2026-01-01T00:00:00.000Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,15 @@
+schema:
+  - geo.graphqls
+exec:
+  filename: generated.go
+  package: geogql
+model:
+  filename: models_gen.go
+  package: geogql
+models:
+  AutocompleteResult:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/geo.Suggestion
+  Location:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/geo.Location
+  PlaceDetailsResult:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/geo.Address

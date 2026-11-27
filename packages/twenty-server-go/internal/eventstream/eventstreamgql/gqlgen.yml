@@ -1,0 +1,15 @@
+schema:
+  - "*.graphqls"
+exec:
+  filename: generated.go
+  package: eventstreamgql
+model:
+  filename: models_gen.go
+  package: eventstreamgql
+models:
+  JSON:
+    model: github.com/99designs/gqlgen/graphql.Any
+  AddQuerySubscriptionInput:
+    model: map[string]interface{}
+  RemoveQueryFromEventStreamInput:
+    model: map[string]interface{}
