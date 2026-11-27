@@ -48,12 +48,20 @@ type ComplexityRoot struct {
 		CreateApprovedAccessDomain   func(childComplexity int, input CreateApprovedAccessDomainInput) int
 		DeleteApprovedAccessDomain   func(childComplexity int, input DeleteApprovedAccessDomainInput) int
 		DeleteWorkspaceInvitation    func(childComplexity int, appTokenID string) int
+		ResendWorkspaceInvitation    func(childComplexity int, appTokenID string) int
+		SendInvitations              func(childComplexity int, emails []string, roleID *string) int
 		ValidateApprovedAccessDomain func(childComplexity int, input ValidateApprovedAccessDomainInput) int
 	}
 
 	Query struct {
 		FindWorkspaceInvitations func(childComplexity int) int
 		GetApprovedAccessDomains func(childComplexity int) int
+	}
+
+	SendInvitations struct {
+		Errors  func(childComplexity int) int
+		Result  func(childComplexity int) int
+		Success func(childComplexity int) int
 	}
 
 	WorkspaceInvitation struct {
@@ -69,6 +77,8 @@ type ComplexityRoot struct {
 // region    ************************** generated!.gotpl **************************
 
 type MutationResolver interface {
+	SendInvitations(ctx context.Context, emails []string, roleID *string) (*SendInvitations, error)
+	ResendWorkspaceInvitation(ctx context.Context, appTokenID string) (*SendInvitations, error)
 	DeleteWorkspaceInvitation(ctx context.Context, appTokenID string) (string, error)
 	DeleteApprovedAccessDomain(ctx context.Context, input DeleteApprovedAccessDomainInput) (bool, error)
 	CreateApprovedAccessDomain(ctx context.Context, input CreateApprovedAccessDomainInput) (*ApprovedAccessDomain, error)
@@ -155,6 +165,28 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteWorkspaceInvitation(childComplexity, args["appTokenId"].(string)), true
+	case "Mutation.resendWorkspaceInvitation":
+		if e.ComplexityRoot.Mutation.ResendWorkspaceInvitation == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_resendWorkspaceInvitation_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.ResendWorkspaceInvitation(childComplexity, args["appTokenId"].(string)), true
+	case "Mutation.sendInvitations":
+		if e.ComplexityRoot.Mutation.SendInvitations == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_sendInvitations_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.SendInvitations(childComplexity, args["emails"].([]string), args["roleId"].(*string)), true
 	case "Mutation.validateApprovedAccessDomain":
 		if e.ComplexityRoot.Mutation.ValidateApprovedAccessDomain == nil {
 			break
@@ -179,6 +211,25 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.GetApprovedAccessDomains(childComplexity), true
+
+	case "SendInvitations.errors":
+		if e.ComplexityRoot.SendInvitations.Errors == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SendInvitations.Errors(childComplexity), true
+	case "SendInvitations.result":
+		if e.ComplexityRoot.SendInvitations.Result == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SendInvitations.Result(childComplexity), true
+	case "SendInvitations.success":
+		if e.ComplexityRoot.SendInvitations.Success == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SendInvitations.Success(childComplexity), true
 
 	case "WorkspaceInvitation.email":
 		if e.ComplexityRoot.WorkspaceInvitation.Email == nil {
@@ -324,6 +375,18 @@ func (ec *executionContext) childFields_ApprovedAccessDomain(ctx context.Context
 		return ec.fieldContext_ApprovedAccessDomain_createdAt(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type ApprovedAccessDomain", field.Name)
+}
+
+func (ec *executionContext) childFields_SendInvitations(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "success":
+		return ec.fieldContext_SendInvitations_success(ctx, field)
+	case "errors":
+		return ec.fieldContext_SendInvitations_errors(ctx, field)
+	case "result":
+		return ec.fieldContext_SendInvitations_result(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type SendInvitations", field.Name)
 }
 
 func (ec *executionContext) childFields_WorkspaceInvitation(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -495,6 +558,42 @@ func (ec *executionContext) field_Mutation_deleteWorkspaceInvitation_args(ctx co
 		return nil, err
 	}
 	args["appTokenId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_resendWorkspaceInvitation_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "appTokenId",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["appTokenId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_sendInvitations_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "emails",
+		func(ctx context.Context, v any) ([]string, error) {
+			return ec.unmarshalNString2ᚕstringᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["emails"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "roleId",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOUUID2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["roleId"] = arg1
 	return args, nil
 }
 
@@ -690,6 +789,94 @@ func (ec *executionContext) _ApprovedAccessDomain_createdAt(ctx context.Context,
 }
 func (ec *executionContext) fieldContext_ApprovedAccessDomain_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("ApprovedAccessDomain", field, false, false, "DateTime")
+}
+
+func (ec *executionContext) _Mutation_sendInvitations(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_sendInvitations(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().SendInvitations(ctx, fc.Args["emails"].([]string), fc.Args["roleId"].(*string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *SendInvitations) graphql.Marshaler {
+			return ec.marshalNSendInvitations2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋinvitationᚋinvitationgqlᚐSendInvitations(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_sendInvitations(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_SendInvitations(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_sendInvitations_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_resendWorkspaceInvitation(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_resendWorkspaceInvitation(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().ResendWorkspaceInvitation(ctx, fc.Args["appTokenId"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *SendInvitations) graphql.Marshaler {
+			return ec.marshalNSendInvitations2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋinvitationᚋinvitationgqlᚐSendInvitations(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_resendWorkspaceInvitation(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_SendInvitations(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_resendWorkspaceInvitation_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
 }
 
 func (ec *executionContext) _Mutation_deleteWorkspaceInvitation(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -1003,6 +1190,84 @@ func (ec *executionContext) fieldContext_Query___schema(_ context.Context, field
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return ec.childFields___Schema(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SendInvitations_success(ctx context.Context, field graphql.CollectedField, obj *SendInvitations) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SendInvitations_success(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Success, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SendInvitations_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SendInvitations", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _SendInvitations_errors(ctx context.Context, field graphql.CollectedField, obj *SendInvitations) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SendInvitations_errors(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Errors, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNString2ᚕstringᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SendInvitations_errors(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SendInvitations", field, false, false, "String")
+}
+
+func (ec *executionContext) _SendInvitations_result(ctx context.Context, field graphql.CollectedField, obj *SendInvitations) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SendInvitations_result(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Result, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*WorkspaceInvitation) graphql.Marshaler {
+			return ec.marshalNWorkspaceInvitation2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋinvitationᚋinvitationgqlᚐWorkspaceInvitationᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SendInvitations_result(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SendInvitations",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_WorkspaceInvitation(ctx, field)
 		},
 	}
 	return fc, nil
@@ -2388,6 +2653,20 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Mutation")
+		case "sendInvitations":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_sendInvitations(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "resendWorkspaceInvitation":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_resendWorkspaceInvitation(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "deleteWorkspaceInvitation":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteWorkspaceInvitation(ctx, field)
@@ -2477,6 +2756,49 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			})
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&out.Invalids, 1)
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var sendInvitationsImplementors = []string{"SendInvitations"}
+
+func (ec *executionContext) _SendInvitations(ctx context.Context, sel ast.SelectionSet, obj *SendInvitations) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, sendInvitationsImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SendInvitations")
+		case "success":
+			out.Values[i] = ec._SendInvitations_success(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "errors":
+			out.Values[i] = ec._SendInvitations_errors(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "result":
+			out.Values[i] = ec._SendInvitations_result(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
 			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -2963,6 +3285,14 @@ func (ec *executionContext) unmarshalNDeleteApprovedAccessDomainInput2githubᚗc
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) marshalNSendInvitations2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋinvitationᚋinvitationgqlᚐSendInvitations(ctx context.Context, sel ast.SelectionSet, v *SendInvitations) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "SendInvitations!")
+		return graphql.Null
+	}
+	return ec._SendInvitations(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v any) (string, error) {
 	res, err := graphql.UnmarshalString(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -2975,6 +3305,35 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 		graphql.AddInvalidNullFromMarshaler(ctx, "String!")
 	}
 	return res
+}
+
+func (ec *executionContext) unmarshalNString2ᚕstringᚄ(ctx context.Context, v any) ([]string, error) {
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]string, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNString2string(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalNString2ᚕstringᚄ(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNString2string(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
 }
 
 func (ec *executionContext) unmarshalNUUID2string(ctx context.Context, v any) (string, error) {

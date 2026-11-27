@@ -169,6 +169,7 @@ func run() error {
 		workspaceSettingsHandler(pool, cfg, passwordLogins, logger),
 		invitationgql.NewHandler(&invitationgql.Resolver{
 			Store:    invitationstore.New(pool),
+			Inviter:  invitationstore.NewInviter(pool, systemmail.NewSMTPSender(smtpConfigFromEnv()), auth.NewMemoryThrottle(), stack.frontURL, cfg.MultiWorkspace),
 			Tokens:   stack.issuer,
 			Sender:   systemmail.NewSMTPSender(smtpConfigFromEnv()),
 			FrontURL: stack.frontURL,

@@ -25,7 +25,9 @@ func NewHandler(resolver *Resolver, logger *slog.Logger) http.Handler {
 			presented.Extensions = map[string]any{"code": "UNAUTHENTICATED"}
 		case errors.Is(err, store.ErrPermissionDenied), errors.Is(err, store.ErrDomainNotFound), errors.Is(err, auth.ErrInvalidApprovedAccessDomainToken):
 			presented.Extensions = map[string]any{"code": "FORBIDDEN"}
-		case errors.Is(err, store.ErrInvalidID), errors.Is(err, store.ErrDomainMismatch),
+		case errors.Is(err, store.ErrInvitationNotFound):
+			presented.Extensions = map[string]any{"code": "NOT_FOUND"}
+		case errors.Is(err, store.ErrInvalidID), errors.Is(err, store.ErrRoleNotFound), errors.Is(err, store.ErrDomainMismatch),
 			errors.Is(err, store.ErrDomainNotCompany), errors.Is(err, store.ErrDomainRegistered):
 			presented.Extensions = map[string]any{"code": "BAD_USER_INPUT"}
 		default:

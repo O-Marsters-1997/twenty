@@ -115,6 +115,10 @@ func (l *PasswordLogin) SignIn(ctx context.Context, email, password string) (Sig
 	if err := l.checkPassword(user, password); err != nil {
 		return SignInResult{}, err
 	}
+	return l.sessionFor(ctx, user)
+}
+
+func (l *PasswordLogin) sessionFor(ctx context.Context, user loginUser) (SignInResult, error) {
 	forSignIn, forSignUp, err := l.availableWorkspaces(ctx, user)
 	if err != nil {
 		return SignInResult{}, err

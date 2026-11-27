@@ -108,7 +108,7 @@ var SessionManagementOperations = []string{"CurrentUserSessions", "RevokeUserSes
 
 var InvitationOperations = []string{
 	"GetWorkspaceInvitations", "DeleteWorkspaceInvitation", "GetApprovedAccessDomains", "DeleteApprovedAccessDomain",
-	"CreateApprovedAccessDomain", "ValidateApprovedAccessDomain",
+	"SendInvitations", "ResendWorkspaceInvitation", "CreateApprovedAccessDomain", "ValidateApprovedAccessDomain",
 }
 
 var OnboardingOperations = []string{"GoBackToPreviousOnboardingStep", "SkipSyncEmailOnboardingStep"}
@@ -134,6 +134,7 @@ var blockedMetadataFields = []string{
 
 var PasswordLoginOperations = []string{
 	"GetLoginTokenFromCredentials", "SignIn", "EmailPasswordResetLink", "ValidatePasswordResetToken", "UpdatePasswordViaResetToken",
+	"SignUp", "SignUpInWorkspace", "SignUpInNewWorkspace",
 }
 
 var PublicWorkspaceOperations = []string{
