@@ -1,0 +1,9 @@
+{
+  "name": "verify-email-and-get-login-token-mismatch",
+  "operation": "VerifyEmailAndGetLoginToken",
+  "fixture": "unverified user in acme with a live verification token, email verification required",
+  "endpoint": "/metadata",
+  "query": "mutation VerifyEmailAndGetLoginToken($emailVerificationToken: String!, $email: String!, $captchaToken: String, $origin: String!) { verifyEmailAndGetLoginToken(emailVerificationToken: $emailVerificationToken, email: $email, captchaToken: $captchaToken, origin: $origin) { loginToken { token expiresAt } workspaceUrls { subdomainUrl } } }",
+  "variables": {"emailVerificationToken": "live-verification-token", "email": "someone-else@example.com", "origin": "http://acme.localhost:3001"},
+  "response": {"errors":[{"message":"Email does not match verification token","locations":[{"line":1,"column":132}],"path":["verifyEmailAndGetLoginToken"],"extensions":{"code":"FORBIDDEN","subCode":"FORBIDDEN_EXCEPTION","userFriendlyMessage":"Email does not match verification token."}}],"data":null}
+}

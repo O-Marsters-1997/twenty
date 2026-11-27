@@ -98,6 +98,10 @@ type PublicWorkspaceDataSummary struct {
 type Query struct {
 }
 
+type ResendEmailVerificationToken struct {
+	Success bool `json:"success"`
+}
+
 type SubdomainAvailability struct {
 	IsValid             bool     `json:"isValid"`
 	Available           bool     `json:"available"`
@@ -141,6 +145,11 @@ type ValidatePasswordResetToken struct {
 	ID          string `json:"id"`
 	Email       string `json:"email"`
 	HasPassword bool   `json:"hasPassword"`
+}
+
+type VerifyEmailAndGetLoginToken struct {
+	LoginToken    *AuthToken     `json:"loginToken"`
+	WorkspaceUrls *WorkspaceUrls `json:"workspaceUrls"`
 }
 
 type VerifyTwoFactorAuthenticationMethod struct {

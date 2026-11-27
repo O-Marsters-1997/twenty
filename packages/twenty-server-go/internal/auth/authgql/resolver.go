@@ -2,20 +2,22 @@ package authgql
 
 import (
 	"context"
+	"net/http"
 
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata"
 )
 
 type Resolver struct {
-	TwoFactor     *auth.TwoFactor
-	Exchange      *auth.SignIn
-	PasswordLogin *auth.PasswordLogin
-	Sessions      *auth.UserSession
-	Login         *auth.TwoFactorLogin
-	Tokens        *auth.PGIssuer
-	Public        *auth.PublicData
-	PasswordReset *auth.PasswordReset
+	EmailVerification *auth.EmailVerification
+	TwoFactor         *auth.TwoFactor
+	Exchange          *auth.SignIn
+	PasswordLogin     *auth.PasswordLogin
+	Sessions          *auth.UserSession
+	Login             *auth.TwoFactorLogin
+	Tokens            *auth.PGIssuer
+	Public            *auth.PublicData
+	PasswordReset     *auth.PasswordReset
 }
 
 func (r *mutationResolver) EmailPasswordResetLink(ctx context.Context, email string, workspaceID *string, _ *string) (*EmailPasswordResetLink, error) {
@@ -181,6 +183,10 @@ func (r *mutationResolver) SignIn(ctx context.Context, email string, password st
 	if err != nil {
 		return nil, err
 	}
+	return r.signedIn(ctx, w, req, result)
+}
+
+func (r *Resolver) signedIn(ctx context.Context, w http.ResponseWriter, req *http.Request, result auth.SignInResult) (*AvailableWorkspacesAndAccessTokens, error) {
 	if err := r.Sessions.IssueForTokenPair(ctx, w, req, result.Pair, auth.SessionOriginSignIn); err != nil {
 		return nil, err
 	}

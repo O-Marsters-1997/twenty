@@ -1,0 +1,15 @@
+type ResendEmailVerificationToken {
+  success: Boolean!
+}
+
+type VerifyEmailAndGetLoginToken {
+  loginToken: AuthToken!
+  workspaceUrls: WorkspaceUrls!
+}
+
+extend type Mutation {
+  resendEmailVerificationToken(email: String!, origin: String!): ResendEmailVerificationToken!
+  verifyEmailAndGetLoginToken(emailVerificationToken: String!, email: String!, captchaToken: String, origin: String!): VerifyEmailAndGetLoginToken!
+  verifyEmailAndGetWorkspaceAgnosticToken(emailVerificationToken: String!, email: String!, captchaToken: String): AvailableWorkspacesAndAccessTokens!
+  updateUserEmail(newEmail: String!, verifyEmailRedirectPath: String): Boolean!
+}

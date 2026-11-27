@@ -1,0 +1,9 @@
+{
+  "name": "verify-email-and-get-workspace-agnostic-token",
+  "operation": "VerifyEmailAndGetWorkspaceAgnosticToken",
+  "fixture": "unverified user in acme with a live verification token, email verification required",
+  "endpoint": "/metadata",
+  "query": "mutation VerifyEmailAndGetWorkspaceAgnosticToken($emailVerificationToken: String!, $email: String!, $captchaToken: String) { verifyEmailAndGetWorkspaceAgnosticToken(emailVerificationToken: $emailVerificationToken, email: $email, captchaToken: $captchaToken) { availableWorkspaces { availableWorkspacesForSignIn { id displayName loginToken inviteHash personalInviteToken workspaceUrls { subdomainUrl } logo } availableWorkspacesForSignUp { id displayName loginToken inviteHash personalInviteToken workspaceUrls { subdomainUrl } logo } } tokens { accessOrWorkspaceAgnosticToken { token expiresAt } refreshToken { token expiresAt } } } }",
+  "variables": {"emailVerificationToken": "live-verification-token", "email": "unverified@example.com"},
+  "response": {"data":{"verifyEmailAndGetWorkspaceAgnosticToken":{"availableWorkspaces":{"availableWorkspacesForSignIn":[{"id":"20202020-1c25-4d02-bf25-6aeccf7ea419","displayName":"Acme","loginToken":"x","inviteHash":null,"personalInviteToken":null,"workspaceUrls":{"subdomainUrl":"http://acme.localhost:3001/"},"logo":""}],"availableWorkspacesForSignUp":[]},"tokens":{"accessOrWorkspaceAgnosticToken":{"token":"x","expiresAt":"x"},"refreshToken":{"token":"x","expiresAt":"x"}}}}}
+}

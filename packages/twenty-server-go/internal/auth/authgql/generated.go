@@ -120,12 +120,16 @@ type ComplexityRoot struct {
 		InitiateOTPProvisioning                                 func(childComplexity int, loginToken string, origin string) int
 		InitiateOTPProvisioningForAuthenticatedUser             func(childComplexity int) int
 		RenewToken                                              func(childComplexity int, appToken string) int
+		ResendEmailVerificationToken                            func(childComplexity int, email string, origin string) int
 		RevokeAllOtherUserSessions                              func(childComplexity int) int
 		RevokeTwoFactorAuthenticationRecoveryCode               func(childComplexity int, userID string) int
 		RevokeUserSession                                       func(childComplexity int, userSessionID string) int
 		SignIn                                                  func(childComplexity int, email string, password string, captchaToken *string, locale *string, verifyEmailRedirectPath *string) int
 		SignOut                                                 func(childComplexity int, refreshToken *string) int
 		UpdatePasswordViaResetToken                             func(childComplexity int, passwordResetToken string, newPassword string) int
+		UpdateUserEmail                                         func(childComplexity int, newEmail string, verifyEmailRedirectPath *string) int
+		VerifyEmailAndGetLoginToken                             func(childComplexity int, emailVerificationToken string, email string, captchaToken *string, origin string) int
+		VerifyEmailAndGetWorkspaceAgnosticToken                 func(childComplexity int, emailVerificationToken string, email string, captchaToken *string) int
 		VerifyTwoFactorAuthenticationMethodForAuthenticatedUser func(childComplexity int, otp string) int
 	}
 
@@ -155,6 +159,10 @@ type ComplexityRoot struct {
 		GetWorkspaceCreationDefaults          func(childComplexity int) int
 		TwoFactorAuthenticationRecoveryStatus func(childComplexity int, userID string) int
 		ValidatePasswordResetToken            func(childComplexity int, passwordResetToken string) int
+	}
+
+	ResendEmailVerificationToken struct {
+		Success func(childComplexity int) int
 	}
 
 	SubdomainAvailability struct {
@@ -202,6 +210,11 @@ type ComplexityRoot struct {
 		ID          func(childComplexity int) int
 	}
 
+	VerifyEmailAndGetLoginToken struct {
+		LoginToken    func(childComplexity int) int
+		WorkspaceUrls func(childComplexity int) int
+	}
+
 	VerifyTwoFactorAuthenticationMethod struct {
 		Success func(childComplexity int) int
 	}
@@ -234,6 +247,10 @@ type MutationResolver interface {
 	DeleteTwoFactorAuthenticationMethod(ctx context.Context, twoFactorAuthenticationMethodID string) (*DeleteTwoFactorAuthenticationMethod, error)
 	GenerateTwoFactorAuthenticationRecoveryCode(ctx context.Context, userID string, otp *string) (*TwoFactorAuthenticationRecoveryCode, error)
 	RevokeTwoFactorAuthenticationRecoveryCode(ctx context.Context, userID string) (bool, error)
+	ResendEmailVerificationToken(ctx context.Context, email string, origin string) (*ResendEmailVerificationToken, error)
+	VerifyEmailAndGetLoginToken(ctx context.Context, emailVerificationToken string, email string, captchaToken *string, origin string) (*VerifyEmailAndGetLoginToken, error)
+	VerifyEmailAndGetWorkspaceAgnosticToken(ctx context.Context, emailVerificationToken string, email string, captchaToken *string) (*AvailableWorkspacesAndAccessTokens, error)
+	UpdateUserEmail(ctx context.Context, newEmail string, verifyEmailRedirectPath *string) (bool, error)
 	GetLoginTokenFromCredentials(ctx context.Context, email string, password string, captchaToken *string, locale *string, verifyEmailRedirectPath *string, origin string) (*LoginToken, error)
 	SignIn(ctx context.Context, email string, password string, captchaToken *string, locale *string, verifyEmailRedirectPath *string) (*AvailableWorkspacesAndAccessTokens, error)
 	GetAuthTokensFromOtp(ctx context.Context, loginToken string, otp string, captchaToken *string, origin string) (*AuthTokens, error)
@@ -578,6 +595,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.RenewToken(childComplexity, args["appToken"].(string)), true
+	case "Mutation.resendEmailVerificationToken":
+		if e.ComplexityRoot.Mutation.ResendEmailVerificationToken == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_resendEmailVerificationToken_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.ResendEmailVerificationToken(childComplexity, args["email"].(string), args["origin"].(string)), true
 	case "Mutation.revokeAllOtherUserSessions":
 		if e.ComplexityRoot.Mutation.RevokeAllOtherUserSessions == nil {
 			break
@@ -639,6 +667,39 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdatePasswordViaResetToken(childComplexity, args["passwordResetToken"].(string), args["newPassword"].(string)), true
+	case "Mutation.updateUserEmail":
+		if e.ComplexityRoot.Mutation.UpdateUserEmail == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateUserEmail_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateUserEmail(childComplexity, args["newEmail"].(string), args["verifyEmailRedirectPath"].(*string)), true
+	case "Mutation.verifyEmailAndGetLoginToken":
+		if e.ComplexityRoot.Mutation.VerifyEmailAndGetLoginToken == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_verifyEmailAndGetLoginToken_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.VerifyEmailAndGetLoginToken(childComplexity, args["emailVerificationToken"].(string), args["email"].(string), args["captchaToken"].(*string), args["origin"].(string)), true
+	case "Mutation.verifyEmailAndGetWorkspaceAgnosticToken":
+		if e.ComplexityRoot.Mutation.VerifyEmailAndGetWorkspaceAgnosticToken == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_verifyEmailAndGetWorkspaceAgnosticToken_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.VerifyEmailAndGetWorkspaceAgnosticToken(childComplexity, args["emailVerificationToken"].(string), args["email"].(string), args["captchaToken"].(*string)), true
 	case "Mutation.verifyTwoFactorAuthenticationMethodForAuthenticatedUser":
 		if e.ComplexityRoot.Mutation.VerifyTwoFactorAuthenticationMethodForAuthenticatedUser == nil {
 			break
@@ -804,6 +865,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.Query.ValidatePasswordResetToken(childComplexity, args["passwordResetToken"].(string)), true
 
+	case "ResendEmailVerificationToken.success":
+		if e.ComplexityRoot.ResendEmailVerificationToken.Success == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ResendEmailVerificationToken.Success(childComplexity), true
+
 	case "SubdomainAvailability.available":
 		if e.ComplexityRoot.SubdomainAvailability.Available == nil {
 			break
@@ -955,6 +1023,19 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.ValidatePasswordResetToken.ID(childComplexity), true
 
+	case "VerifyEmailAndGetLoginToken.loginToken":
+		if e.ComplexityRoot.VerifyEmailAndGetLoginToken.LoginToken == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VerifyEmailAndGetLoginToken.LoginToken(childComplexity), true
+	case "VerifyEmailAndGetLoginToken.workspaceUrls":
+		if e.ComplexityRoot.VerifyEmailAndGetLoginToken.WorkspaceUrls == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VerifyEmailAndGetLoginToken.WorkspaceUrls(childComplexity), true
+
 	case "VerifyTwoFactorAuthenticationMethod.success":
 		if e.ComplexityRoot.VerifyTwoFactorAuthenticationMethod.Success == nil {
 			break
@@ -1096,7 +1177,7 @@ func newExecutionContext(
 	}
 }
 
-//go:embed "login.graphqls" "publicdata.graphqls" "reset.graphqls" "session.graphqls" "twofactor.graphqls"
+//go:embed "emailverification.graphqls" "login.graphqls" "publicdata.graphqls" "reset.graphqls" "session.graphqls" "twofactor.graphqls"
 var sourcesFS embed.FS
 
 func sourceData(filename string) string {
@@ -1108,6 +1189,7 @@ func sourceData(filename string) string {
 }
 
 var sources = []*ast.Source{
+	{Name: "emailverification.graphqls", Input: sourceData("emailverification.graphqls"), BuiltIn: false},
 	{Name: "login.graphqls", Input: sourceData("login.graphqls"), BuiltIn: false},
 	{Name: "publicdata.graphqls", Input: sourceData("publicdata.graphqls"), BuiltIn: false},
 	{Name: "reset.graphqls", Input: sourceData("reset.graphqls"), BuiltIn: false},
@@ -1292,6 +1374,14 @@ func (ec *executionContext) childFields_PublicWorkspaceDataSummary(ctx context.C
 	return nil, fmt.Errorf("no field named %q was found under type PublicWorkspaceDataSummary", field.Name)
 }
 
+func (ec *executionContext) childFields_ResendEmailVerificationToken(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "success":
+		return ec.fieldContext_ResendEmailVerificationToken_success(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type ResendEmailVerificationToken", field.Name)
+}
+
 func (ec *executionContext) childFields_SubdomainAvailability(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "isValid":
@@ -1380,6 +1470,16 @@ func (ec *executionContext) childFields_ValidatePasswordResetToken(ctx context.C
 		return ec.fieldContext_ValidatePasswordResetToken_hasPassword(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type ValidatePasswordResetToken", field.Name)
+}
+
+func (ec *executionContext) childFields_VerifyEmailAndGetLoginToken(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "loginToken":
+		return ec.fieldContext_VerifyEmailAndGetLoginToken_loginToken(ctx, field)
+	case "workspaceUrls":
+		return ec.fieldContext_VerifyEmailAndGetLoginToken_workspaceUrls(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type VerifyEmailAndGetLoginToken", field.Name)
 }
 
 func (ec *executionContext) childFields_VerifyTwoFactorAuthenticationMethod(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -1794,6 +1894,28 @@ func (ec *executionContext) field_Mutation_renewToken_args(ctx context.Context, 
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_resendEmailVerificationToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "email",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["email"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "origin",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["origin"] = arg1
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_revokeTwoFactorAuthenticationRecoveryCode_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -1901,6 +2023,96 @@ func (ec *executionContext) field_Mutation_updatePasswordViaResetToken_args(ctx 
 		return nil, err
 	}
 	args["newPassword"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateUserEmail_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "newEmail",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["newEmail"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "verifyEmailRedirectPath",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["verifyEmailRedirectPath"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_verifyEmailAndGetLoginToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "emailVerificationToken",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["emailVerificationToken"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "email",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["email"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "captchaToken",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["captchaToken"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "origin",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["origin"] = arg3
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_verifyEmailAndGetWorkspaceAgnosticToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "emailVerificationToken",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["emailVerificationToken"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "email",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["email"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "captchaToken",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["captchaToken"] = arg2
 	return args, nil
 }
 
@@ -3062,6 +3274,182 @@ func (ec *executionContext) fieldContext_Mutation_revokeTwoFactorAuthenticationR
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_revokeTwoFactorAuthenticationRecoveryCode_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_resendEmailVerificationToken(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_resendEmailVerificationToken(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().ResendEmailVerificationToken(ctx, fc.Args["email"].(string), fc.Args["origin"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *ResendEmailVerificationToken) graphql.Marshaler {
+			return ec.marshalNResendEmailVerificationToken2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐResendEmailVerificationToken(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_resendEmailVerificationToken(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ResendEmailVerificationToken(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_resendEmailVerificationToken_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_verifyEmailAndGetLoginToken(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_verifyEmailAndGetLoginToken(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().VerifyEmailAndGetLoginToken(ctx, fc.Args["emailVerificationToken"].(string), fc.Args["email"].(string), fc.Args["captchaToken"].(*string), fc.Args["origin"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *VerifyEmailAndGetLoginToken) graphql.Marshaler {
+			return ec.marshalNVerifyEmailAndGetLoginToken2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐVerifyEmailAndGetLoginToken(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_verifyEmailAndGetLoginToken(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_VerifyEmailAndGetLoginToken(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_verifyEmailAndGetLoginToken_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_verifyEmailAndGetWorkspaceAgnosticToken(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_verifyEmailAndGetWorkspaceAgnosticToken(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().VerifyEmailAndGetWorkspaceAgnosticToken(ctx, fc.Args["emailVerificationToken"].(string), fc.Args["email"].(string), fc.Args["captchaToken"].(*string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *AvailableWorkspacesAndAccessTokens) graphql.Marshaler {
+			return ec.marshalNAvailableWorkspacesAndAccessTokens2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAvailableWorkspacesAndAccessTokens(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_verifyEmailAndGetWorkspaceAgnosticToken(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AvailableWorkspacesAndAccessTokens(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_verifyEmailAndGetWorkspaceAgnosticToken_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateUserEmail(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_updateUserEmail(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().UpdateUserEmail(ctx, fc.Args["newEmail"].(string), fc.Args["verifyEmailRedirectPath"].(*string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_updateUserEmail(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateUserEmail_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -4321,6 +4709,29 @@ func (ec *executionContext) fieldContext_Query___schema(_ context.Context, field
 	return fc, nil
 }
 
+func (ec *executionContext) _ResendEmailVerificationToken_success(ctx context.Context, field graphql.CollectedField, obj *ResendEmailVerificationToken) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_ResendEmailVerificationToken_success(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Success, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_ResendEmailVerificationToken_success(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("ResendEmailVerificationToken", field, false, false, "Boolean")
+}
+
 func (ec *executionContext) _SubdomainAvailability_isValid(ctx context.Context, field graphql.CollectedField, obj *SubdomainAvailability) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -4889,6 +5300,70 @@ func (ec *executionContext) _ValidatePasswordResetToken_hasPassword(ctx context.
 }
 func (ec *executionContext) fieldContext_ValidatePasswordResetToken_hasPassword(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("ValidatePasswordResetToken", field, false, false, "Boolean")
+}
+
+func (ec *executionContext) _VerifyEmailAndGetLoginToken_loginToken(ctx context.Context, field graphql.CollectedField, obj *VerifyEmailAndGetLoginToken) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VerifyEmailAndGetLoginToken_loginToken(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.LoginToken, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *AuthToken) graphql.Marshaler {
+			return ec.marshalNAuthToken2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAuthToken(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_VerifyEmailAndGetLoginToken_loginToken(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "VerifyEmailAndGetLoginToken",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AuthToken(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _VerifyEmailAndGetLoginToken_workspaceUrls(ctx context.Context, field graphql.CollectedField, obj *VerifyEmailAndGetLoginToken) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_VerifyEmailAndGetLoginToken_workspaceUrls(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.WorkspaceUrls, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *WorkspaceUrls) graphql.Marshaler {
+			return ec.marshalNWorkspaceUrls2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐWorkspaceUrls(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_VerifyEmailAndGetLoginToken_workspaceUrls(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "VerifyEmailAndGetLoginToken",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_WorkspaceUrls(ctx, field)
+		},
+	}
+	return fc, nil
 }
 
 func (ec *executionContext) _VerifyTwoFactorAuthenticationMethod_success(ctx context.Context, field graphql.CollectedField, obj *VerifyTwoFactorAuthenticationMethod) (ret graphql.Marshaler) {
@@ -6770,6 +7245,34 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "resendEmailVerificationToken":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_resendEmailVerificationToken(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "verifyEmailAndGetLoginToken":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_verifyEmailAndGetLoginToken(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "verifyEmailAndGetWorkspaceAgnosticToken":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_verifyEmailAndGetWorkspaceAgnosticToken(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateUserEmail":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateUserEmail(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "getLoginTokenFromCredentials":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_getLoginTokenFromCredentials(ctx, field)
@@ -7089,6 +7592,39 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 	return out
 }
 
+var resendEmailVerificationTokenImplementors = []string{"ResendEmailVerificationToken"}
+
+func (ec *executionContext) _ResendEmailVerificationToken(ctx context.Context, sel ast.SelectionSet, obj *ResendEmailVerificationToken) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, resendEmailVerificationTokenImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ResendEmailVerificationToken")
+		case "success":
+			out.Values[i] = ec._ResendEmailVerificationToken_success(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
 var subdomainAvailabilityImplementors = []string{"SubdomainAvailability"}
 
 func (ec *executionContext) _SubdomainAvailability(ctx context.Context, sel ast.SelectionSet, obj *SubdomainAvailability) graphql.Marshaler {
@@ -7385,6 +7921,44 @@ func (ec *executionContext) _ValidatePasswordResetToken(ctx context.Context, sel
 			}
 		case "hasPassword":
 			out.Values[i] = ec._ValidatePasswordResetToken_hasPassword(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var verifyEmailAndGetLoginTokenImplementors = []string{"VerifyEmailAndGetLoginToken"}
+
+func (ec *executionContext) _VerifyEmailAndGetLoginToken(ctx context.Context, sel ast.SelectionSet, obj *VerifyEmailAndGetLoginToken) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, verifyEmailAndGetLoginTokenImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("VerifyEmailAndGetLoginToken")
+		case "loginToken":
+			out.Values[i] = ec._VerifyEmailAndGetLoginToken_loginToken(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "workspaceUrls":
+			out.Values[i] = ec._VerifyEmailAndGetLoginToken_workspaceUrls(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -8112,6 +8686,14 @@ func (ec *executionContext) marshalNPublicWorkspaceDataSummary2ᚖgithubᚗcom�
 	return ec._PublicWorkspaceDataSummary(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalNResendEmailVerificationToken2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐResendEmailVerificationToken(ctx context.Context, sel ast.SelectionSet, v *ResendEmailVerificationToken) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "ResendEmailVerificationToken!")
+		return graphql.Null
+	}
+	return ec._ResendEmailVerificationToken(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v any) (string, error) {
 	res, err := graphql.UnmarshalString(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -8239,6 +8821,14 @@ func (ec *executionContext) marshalNValidatePasswordResetToken2ᚖgithubᚗcom�
 		return graphql.Null
 	}
 	return ec._ValidatePasswordResetToken(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNVerifyEmailAndGetLoginToken2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐVerifyEmailAndGetLoginToken(ctx context.Context, sel ast.SelectionSet, v *VerifyEmailAndGetLoginToken) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "VerifyEmailAndGetLoginToken!")
+		return graphql.Null
+	}
+	return ec._VerifyEmailAndGetLoginToken(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNVerifyTwoFactorAuthenticationMethod2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐVerifyTwoFactorAuthenticationMethod(ctx context.Context, sel ast.SelectionSet, v *VerifyTwoFactorAuthenticationMethod) graphql.Marshaler {
