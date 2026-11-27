@@ -65,7 +65,7 @@ func (d *Dynamic) Merge(ctx context.Context, actor records.Actor, ids []string, 
 	}
 
 	priorityID := ids[priorityIndex]
-	others := slices.Delete(slices.Clone(ids), priorityIndex, priorityIndex+1)
+	others := slices.DeleteFunc(slices.Clone(ids), func(id string) bool { return id == priorityID })
 	tx, err := d.pool.Begin(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("begin merge %s: %w", d.object.NamePlural, err)
