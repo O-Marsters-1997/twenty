@@ -88,6 +88,8 @@ var InvitationOperations = []string{
 	"SendInvitations", "ResendWorkspaceInvitation",
 }
 
+var OnboardingOperations = []string{"GoBackToPreviousOnboardingStep", "SkipSyncEmailOnboardingStep"}
+
 var PageLayoutOperations = []string{
 	"FindAllRecordFormPageLayouts", "FindAllRecordPageLayouts", "FindAllStandalonePageLayouts", "FindOnePageLayout", "FindOnePageLayoutType",
 	"UpdatePageLayoutWidgetIsActive", "UpdatePageLayoutWithTabsAndWidgets", "DuplicateDashboard",
