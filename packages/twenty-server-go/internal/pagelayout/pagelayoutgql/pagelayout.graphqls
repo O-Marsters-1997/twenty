@@ -454,6 +454,44 @@ input UpdatePageLayoutWidgetInput {
   isActive: Boolean
 }
 
+input UpdatePageLayoutWidgetWithIdInput {
+  id: UUID!
+  pageLayoutTabId: UUID!
+  title: String!
+  type: WidgetType!
+  objectMetadataId: UUID
+  position: JSON
+  configuration: JSON
+  conditionalDisplay: JSON
+  conditionalAvailabilityExpression: String
+}
+
+input UpdatePageLayoutTabWithWidgetsInput {
+  id: UUID!
+  title: String!
+  position: Float!
+  icon: String
+  layoutMode: PageLayoutTabLayoutMode
+  widgets: [UpdatePageLayoutWidgetWithIdInput!]!
+}
+
+input UpdatePageLayoutWithTabsInput {
+  name: String!
+  type: PageLayoutType!
+  objectMetadataId: UUID
+  isFirstTabPinned: Boolean
+  tabs: [UpdatePageLayoutTabWithWidgetsInput!]!
+}
+
+type DuplicatedDashboard {
+  id: UUID!
+  title: String
+  pageLayoutId: UUID
+  position: Float!
+  createdAt: String!
+  updatedAt: String!
+}
+
 extend type Query {
   getPageLayouts(objectMetadataId: String, pageLayoutType: PageLayoutType): [PageLayout!]!
   getPageLayout(id: String!): PageLayout
@@ -461,4 +499,6 @@ extend type Query {
 
 extend type Mutation {
   updatePageLayoutWidget(id: String!, input: UpdatePageLayoutWidgetInput!): PageLayoutWidget!
+  updatePageLayoutWithTabsAndWidgets(id: String!, input: UpdatePageLayoutWithTabsInput!): PageLayout!
+  duplicateDashboard(id: UUID!): DuplicatedDashboard!
 }

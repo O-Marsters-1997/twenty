@@ -10,7 +10,6 @@ import { useSaveNavigationMenuItemsDraft } from '@/navigation-menu-item/edit/hoo
 import { useUpdateOneObjectMetadataItem } from '@/object-metadata/hooks/useUpdateOneObjectMetadataItem';
 import { useCreatePendingFieldsWidgetViews } from '@/page-layout/hooks/useCreatePendingFieldsWidgetViews';
 import { useCreatePendingRecordTableWidgetViews } from '@/page-layout/hooks/useCreatePendingRecordTableWidgetViews';
-import { useSavePageLayoutWidgetsData } from '@/page-layout/hooks/useSavePageLayoutWidgetsData';
 import { useUpdatePageLayoutWithTabsAndWidgets } from '@/page-layout/hooks/useUpdatePageLayoutWithTabsAndWidgets';
 import { pageLayoutCurrentLayoutsComponentState } from '@/page-layout/states/pageLayoutCurrentLayoutsComponentState';
 import { pageLayoutDraftComponentState } from '@/page-layout/states/pageLayoutDraftComponentState';
@@ -46,7 +45,6 @@ export const useSaveLayoutCustomization = () => {
   const { createPendingRecordTableWidgetViews } =
     useCreatePendingRecordTableWidgetViews();
   const { exitLayoutCustomizationMode } = useExitLayoutCustomizationMode();
-  const { savePageLayoutWidgetsData } = useSavePageLayoutWidgetsData();
 
   const save = useCallback(async () => {
     setIsSaving(true);
@@ -178,8 +176,6 @@ export const useSaveLayoutCustomization = () => {
             continue;
           }
         }
-
-        await savePageLayoutWidgetsData(pageLayoutId);
       }
 
       if (hasAnyFailure) {
@@ -209,7 +205,6 @@ export const useSaveLayoutCustomization = () => {
     createPendingFieldsWidgetViews,
     createPendingRecordTableWidgetViews,
     updatePageLayoutWithTabsAndWidgets,
-    savePageLayoutWidgetsData,
     exitLayoutCustomizationMode,
     enqueueToast,
     store,
