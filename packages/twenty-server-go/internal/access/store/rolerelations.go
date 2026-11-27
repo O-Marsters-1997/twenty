@@ -2,7 +2,6 @@ package store
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workspace"
 )
@@ -13,12 +12,21 @@ type FullName struct {
 }
 
 type WorkspaceMember struct {
-	ID              string   `json:"id"`
-	Name            FullName `json:"name"`
-	AvatarURL       *string  `json:"avatarUrl"`
-	UserEmail       string   `json:"userEmail"`
-	UserID          string   `json:"userId"`
-	UserWorkspaceID string   `json:"userWorkspaceId"`
+	ID               string   `json:"id"`
+	Name             FullName `json:"name"`
+	AvatarURL        *string  `json:"avatarUrl"`
+	UserEmail        string   `json:"userEmail"`
+	UserID           string   `json:"userId"`
+	UserWorkspaceID  string   `json:"userWorkspaceId"`
+	ColorScheme      string   `json:"colorScheme"`
+	UIScale          string   `json:"uiScale"`
+	OpenRecordIn     string   `json:"openRecordIn"`
+	Locale           *string  `json:"locale"`
+	TimeZone         *string  `json:"timeZone"`
+	DateFormat       *string  `json:"dateFormat"`
+	TimeFormat       *string  `json:"timeFormat"`
+	CalendarStartDay *int     `json:"calendarStartDay"`
+	NumberFormat     *string  `json:"numberFormat"`
 }
 
 type RoleAgent struct {
@@ -121,10 +129,7 @@ const (
 )
 
 var (
-	selectWorkspaceMembers = `SELECT jsonb_build_object('id', wm.id,
-			'name', jsonb_build_object('firstName', COALESCE(wm."nameFirstName", ''), 'lastName', COALESCE(wm."nameLastName", '')),
-			'avatarUrl', wm."avatarUrl", 'userEmail', COALESCE(wm."userEmail", ''), 'userId', wm."userId", 'userWorkspaceId', uw.id)
-		FROM ` + fmt.Sprintf(`%q`, workspace.SchemaName()) + `."workspaceMember" wm
+	selectWorkspaceMembers = `SELECT ` + memberDocument + ` FROM ` + memberTable + ` wm
 		JOIN core."userWorkspace" uw ON uw."userId" = wm."userId" AND uw."workspaceId" = $1::uuid
 		JOIN core."roleTarget" rt ON rt."userWorkspaceId" = uw.id AND rt."roleId" = $2::uuid
 		WHERE wm."deletedAt" IS NULL ORDER BY wm."createdAt", wm.id`

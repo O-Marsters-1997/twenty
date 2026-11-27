@@ -1,0 +1,21 @@
+{
+  "name": "UpdateWorkspaceMemberRole",
+  "operation": "UpdateWorkspaceMemberRole",
+  "fixture": "workspace member Ada Lovelace holding a custom role, reassigned to the seeded Member role by an admin",
+  "endpoint": "/metadata",
+  "query": "mutation UpdateWorkspaceMemberRole($workspaceMemberId: UUID!, $roleId: UUID!) { updateWorkspaceMemberRole(workspaceMemberId: $workspaceMemberId, roleId: $roleId) { id name { firstName lastName } colorScheme uiScale openRecordIn avatarUrl locale userEmail userId userWorkspaceId timeZone dateFormat timeFormat calendarStartDay numberFormat roles { id label description icon canUpdateAllSettings canAccessAllTools isEditable canReadAllObjectRecords canUpdateAllObjectRecords canSoftDeleteAllObjectRecords canDestroyAllObjectRecords canBeAssignedToUsers canBeAssignedToAgents canBeAssignedToApiKeys } } }",
+  "variables": {"workspaceMemberId": "0b7a6c1e-3f55-4a47-8d6e-6c1f1b7f2a05", "roleId": "f4cc34a9-a20e-418f-8c5c-78b7b1c77881"},
+  "response": {"data": {"updateWorkspaceMemberRole": {
+    "id": "0b7a6c1e-3f55-4a47-8d6e-6c1f1b7f2a05",
+    "name": {"firstName": "Ada", "lastName": "Lovelace"},
+    "colorScheme": "System", "uiScale": "Default", "openRecordIn": "SIDE_PANEL",
+    "avatarUrl": null, "locale": "en", "userEmail": "ada@example.com",
+    "userId": "0b7a6c1e-3f55-4a47-8d6e-6c1f1b7f2a03", "userWorkspaceId": "0b7a6c1e-3f55-4a47-8d6e-6c1f1b7f2a04",
+    "timeZone": "system", "dateFormat": "SYSTEM", "timeFormat": "SYSTEM", "calendarStartDay": 7, "numberFormat": "SYSTEM",
+    "roles": [{
+      "id": "f4cc34a9-a20e-418f-8c5c-78b7b1c77881", "label": "Member", "description": "Member role", "icon": "IconUser",
+      "canUpdateAllSettings": false, "canAccessAllTools": true, "isEditable": true, "canReadAllObjectRecords": true, "canUpdateAllObjectRecords": true,
+      "canSoftDeleteAllObjectRecords": true, "canDestroyAllObjectRecords": true, "canBeAssignedToUsers": true, "canBeAssignedToAgents": false, "canBeAssignedToApiKeys": false
+    }]
+  }}}
+}
