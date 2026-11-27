@@ -1,0 +1,9 @@
+{
+  "name": "DeleteUserWorkspace",
+  "operation": "DeleteUserWorkspace",
+  "fixture": "workspace with two admins, the caller removes the second",
+  "endpoint": "/metadata",
+  "query": "mutation DeleteUserWorkspace($workspaceMemberIdToDelete: String!) { deleteUserFromWorkspace(workspaceMemberIdToDelete: $workspaceMemberIdToDelete) { id } }",
+  "variables": {"workspaceMemberIdToDelete": "<second-workspace-member>"},
+  "response": {"data": {"deleteUserFromWorkspace": {"id": "<second-user-workspace>"}}}
+}

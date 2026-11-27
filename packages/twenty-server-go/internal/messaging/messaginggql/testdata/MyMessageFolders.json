@@ -1,0 +1,12 @@
+{
+  "name": "MyMessageFolders",
+  "operation": "MyMessageFolders",
+  "fixture": "hand-written from the front-end document and MessageFolder DTO; three folders on the caller's own account, one on another member's private account",
+  "endpoint": "/metadata",
+  "query": "query MyMessageFolders($messageChannelId: UUID) { myMessageFolders(messageChannelId: $messageChannelId) { id name isSynced isSentFolder parentFolderId externalId pendingSyncAction messageChannelId createdAt updatedAt } }",
+  "variables": {},
+  "response": {"data":{"myMessageFolders":[
+ {"id":"f0000000-0000-4000-8000-000000000001","name":"INBOX","isSynced":true,"isSentFolder":false,"parentFolderId":null,"externalId":"ext-inbox","pendingSyncAction":"NONE","messageChannelId":"bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbb1","createdAt":"2026-01-01T00:00:00.000Z","updatedAt":"2026-01-01T00:00:00.000Z"},
+ {"id":"f0000000-0000-4000-8000-000000000002","name":"Archive","isSynced":false,"isSentFolder":false,"parentFolderId":null,"externalId":"ext-archive","pendingSyncAction":"NONE","messageChannelId":"bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbb1","createdAt":"2026-01-02T00:00:00.000Z","updatedAt":"2026-01-02T00:00:00.000Z"},
+ {"id":"f0000000-0000-4000-8000-000000000004","name":"Fresh","isSynced":true,"isSentFolder":false,"parentFolderId":null,"externalId":null,"pendingSyncAction":"NONE","messageChannelId":"bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbb4","createdAt":"2026-01-04T00:00:00.000Z","updatedAt":"2026-01-04T00:00:00.000Z"}]}}
+}

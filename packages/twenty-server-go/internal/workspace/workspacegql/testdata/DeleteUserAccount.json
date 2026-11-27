@@ -1,0 +1,8 @@
+{
+  "name": "DeleteUserAccount",
+  "operation": "DeleteUserAccount",
+  "fixture": "workspace with two admins",
+  "endpoint": "/metadata",
+  "query": "mutation DeleteUserAccount { deleteUser { id } }",
+  "response": {"data": {"deleteUser": {"id": "a1000000-0000-4000-8000-000000000001"}}}
+}

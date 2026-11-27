@@ -10,9 +10,9 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
 )
 
-var objectOperations = []string{"ObjectMetadataItems", "GetToolIndex", "GetToolInputSchema"}
+var objectOperations = []string{"ObjectMetadataItems", "GetToolIndex", "GetToolInputSchema", "ObjectRecordCounts", "MostlyEmptyFieldMetadataIds", "FindMinimalMetadata"}
 
-func metadataHandler(objects, chat, skills, views, agents, messaging, access, twoFactor, workspace, invitations, pageLayouts, applications http.Handler, agentOperations []string) http.Handler {
+func metadataHandler(objects, chat, skills, views, agents, messaging, access, twoFactor, workspace, invitations, pageLayouts, applications, files, onboarding, charts http.Handler, agentOperations []string) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		body, err := io.ReadAll(r.Body)
 		if err != nil {
@@ -48,8 +48,14 @@ func metadataHandler(objects, chat, skills, views, agents, messaging, access, tw
 			pageLayouts.ServeHTTP(w, r)
 		case slices.Contains(frontdoor.InvitationOperations, request.OperationName):
 			invitations.ServeHTTP(w, r)
+		case slices.Contains(frontdoor.OnboardingOperations, request.OperationName):
+			onboarding.ServeHTTP(w, r)
+		case slices.Contains(frontdoor.ChartOperations, request.OperationName):
+			charts.ServeHTTP(w, r)
 		case slices.Contains(frontdoor.ApplicationOperations, request.OperationName):
 			applications.ServeHTTP(w, r)
+		case slices.Contains(frontdoor.FileOperations, request.OperationName):
+			files.ServeHTTP(w, r)
 		case slices.Contains(frontdoor.ChatOperations, request.OperationName):
 			chat.ServeHTTP(w, r)
 		case slices.Contains(frontdoor.SkillOperations, request.OperationName):

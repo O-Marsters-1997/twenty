@@ -51,6 +51,7 @@ func (noCache) Delete(context.Context, ...string) error                         
 type loginHarness struct {
 	pool    *pgxpool.Pool
 	handler http.Handler
+	mail    *recordingSender
 }
 
 func newPasswordHarness(t *testing.T, emailVerificationRequired bool) *loginHarness {
@@ -93,8 +94,10 @@ func newPasswordHarness(t *testing.T, emailVerificationRequired bool) *loginHarn
 	origins := auth.NewOriginResolver(pool, auth.OriginConfig{MultiWorkspace: true, FrontURL: "http://localhost:3001", DefaultSubdomain: "app"})
 	logger := slog.New(slog.NewTextHandler(io.Discard, nil))
 	passwordLogin := auth.NewPasswordLogin(pool, auth.NewPasswordHasher(), issuer, origins, config)
+	h.mail = &recordingSender{}
 	h.handler = authgql.NewHandler(&authgql.Resolver{
 		PasswordLogin: passwordLogin,
+		PasswordReset: auth.NewPasswordReset(pool, auth.NewPasswordHasher(), h.mail, frontURL),
 		Sessions:      auth.NewUserSession(pool, noCache{}, issuer, auth.SessionConfig{ServerURL: "http://localhost:3000"}, logger),
 		Public: auth.NewPublicData(pool, passwordLogin, auth.PublicDataConfig{
 			GoogleAuthEnabled: true, PasswordAuthEnabled: true, DefaultSubdomain: "app",

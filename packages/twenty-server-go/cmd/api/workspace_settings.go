@@ -8,6 +8,7 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 
+	accessstore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/access/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/config"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workspace"
@@ -25,8 +26,10 @@ func workspaceSettingsHandler(pool *pgxpool.Pool, cfg config.Config, passwordLog
 		return availability.IsValid, availability.Available, err
 	}
 	return workspacegql.NewHandler(&workspacegql.Resolver{
-		Settings: workspace.NewSettings(pool, system, checkSubdomain),
-		System:   system,
-		LogoURL:  passwordLogin.LogoURL,
+		Settings:    workspace.NewSettings(pool, system, checkSubdomain),
+		Removal:     workspace.NewRemoval(pool),
+		Permissions: accessstore.NewPermissions(pool),
+		System:      system,
+		LogoURL:     passwordLogin.LogoURL,
 	}, logger)
 }

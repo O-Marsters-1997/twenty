@@ -52,6 +52,7 @@ func newServerWithPool(t *testing.T) (*httptest.Server, *pgxpool.Pool) {
 		NoteTargets:        store.NewNoteTargets(pool),
 		Tasks:              store.NewTasks(pool),
 		TaskTargets:        store.NewTaskTargets(pool),
+		Searcher:           store.NewSearch(pool),
 	}, logger), logger))
 	t.Cleanup(server.Close)
 	return server, pool

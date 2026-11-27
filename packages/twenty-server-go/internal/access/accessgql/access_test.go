@@ -65,7 +65,7 @@ func newHarness(t *testing.T) harness {
 	}
 	t.Cleanup(pool.Close)
 	graphql := accessgql.NewHandler(&accessgql.Resolver{
-		WebhookStore: store.NewWebhooks(pool), APIKeyStore: store.NewAPIKeys(pool), RoleStore: store.NewRoles(pool), Permissions: store.NewPermissions(pool), Tokens: fakeTokens{},
+		WebhookStore: store.NewWebhooks(pool), APIKeyStore: store.NewAPIKeys(pool), RoleStore: store.NewRoles(pool), Permissions: store.NewPermissions(pool), Tokens: fakeTokens{}, FeatureFlags: store.NewFeatureFlags(pool, nil),
 	}, slog.New(slog.NewTextHandler(io.Discard, nil)))
 	h := harness{graphql: graphql, pool: pool}
 	h.seedSession(t, adminUserID, adminUserWorkspaceID, "Workspace admin", true)

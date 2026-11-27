@@ -1,0 +1,9 @@
+{
+  "name": "UpdateUnsubscribeTopic",
+  "operation": "UpdateUnsubscribeTopic",
+  "fixture": "hand-written from the front-end document; renames the seeded topic",
+  "endpoint": "/metadata",
+  "query": "mutation UpdateUnsubscribeTopic($input: UpdateUnsubscribeTopicInput!) { updateUnsubscribeTopic(input: $input) { id name description visibility } }",
+  "variables": {"input": {"id": "70000000-0000-4000-8000-000000000001", "name": "Product updates"}},
+  "response": {"data":{"updateUnsubscribeTopic":{"id":"70000000-0000-4000-8000-000000000001","name":"Product updates","description":null,"visibility":"PUBLIC"}}}
+}

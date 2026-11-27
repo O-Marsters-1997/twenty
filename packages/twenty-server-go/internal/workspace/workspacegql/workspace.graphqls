@@ -87,6 +87,14 @@ input ActivateWorkspaceInput {
   displayName: String
 }
 
+type User {
+  id: UUID!
+}
+
+type UserWorkspace {
+  id: UUID!
+}
+
 type Query {
   _empty: Boolean
 }
@@ -95,4 +103,7 @@ type Mutation {
   updateWorkspace(data: UpdateWorkspaceInput!): Workspace!
   updateWorkspaceAllowedIframeOrigins(data: UpdateWorkspaceAllowedIframeOriginsInput!): Workspace!
   activateWorkspace(data: ActivateWorkspaceInput!): Workspace!
+  deleteCurrentWorkspace: Workspace!
+  deleteUserFromWorkspace(workspaceMemberIdToDelete: String!): UserWorkspace!
+  deleteUser: User!
 }

@@ -1,0 +1,48 @@
+scalar UUID
+scalar DateTime
+
+enum FileFolder {
+  AgentChat
+  AppTarball
+  BuiltFrontComponent
+  BuiltLogicFunction
+  CorePicture
+  Dependencies
+  Dpa
+  EmailAttachment
+  EmailImage
+  FilesField
+  GeneratedSdkClient
+  PublicAsset
+  RecordExport
+  Source
+  Workflow
+}
+
+type FileUploadTarget {
+  fileId: UUID!
+  uploadUrl: String!
+  contentType: String!
+  expiresAt: DateTime!
+}
+
+type FileWithSignedUrl {
+  id: UUID!
+  path: String!
+  size: Float!
+  createdAt: DateTime!
+  url: String!
+}
+
+type Query {
+  _empty: Boolean
+}
+
+type Mutation {
+  createFileUpload(filename: String!, size: Float!, fileFolder: FileFolder!, fieldMetadataId: String, fieldMetadataUniversalIdentifier: String): FileUploadTarget!
+  completeFileUpload(fileId: String!): FileWithSignedUrl!
+  completeWorkspaceLogoUpload(fileId: String!): FileWithSignedUrl!
+  completeWorkspaceMemberProfilePictureUpload(fileId: String!): FileWithSignedUrl!
+  createNewWorkspaceLogoUpload(workspaceId: String!, filename: String!, size: Float!): FileUploadTarget!
+  completeNewWorkspaceLogoUpload(workspaceId: String!, fileId: String!): FileWithSignedUrl!
+}

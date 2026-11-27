@@ -19,6 +19,16 @@ input DeleteApprovedAccessDomainInput {
   id: UUID!
 }
 
+input CreateApprovedAccessDomainInput {
+  domain: String!
+  email: String!
+}
+
+input ValidateApprovedAccessDomainInput {
+  validationToken: String!
+  approvedAccessDomainId: UUID!
+}
+
 extend type Query {
   findWorkspaceInvitations: [WorkspaceInvitation!]!
   getApprovedAccessDomains: [ApprovedAccessDomain!]!
@@ -27,4 +37,6 @@ extend type Query {
 extend type Mutation {
   deleteWorkspaceInvitation(appTokenId: String!): String!
   deleteApprovedAccessDomain(input: DeleteApprovedAccessDomainInput!): Boolean!
+  createApprovedAccessDomain(input: CreateApprovedAccessDomainInput!): ApprovedAccessDomain!
+  validateApprovedAccessDomain(input: ValidateApprovedAccessDomainInput!): ApprovedAccessDomain!
 }

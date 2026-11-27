@@ -1,0 +1,9 @@
+{
+  "name": "CreateNewWorkspaceLogoUpload",
+  "operation": "CreateNewWorkspaceLogoUpload",
+  "fixture": "a user belonging to a workspace still PENDING_CREATION. Hand-written from FileUploadResolver, FileCorePictureResolver, AuthResolver, FileUploadService, FileCorePictureService, FileUploadTargetService, FileUrlService, FileUploadTargetDTO and FileWithSignedUrlDTO at 0963016d86; no Node server was run",
+  "endpoint": "/metadata",
+  "query": "mutation CreateNewWorkspaceLogoUpload($workspaceId: String!, $filename: String!, $size: Float!) { createNewWorkspaceLogoUpload(workspaceId: $workspaceId, filename: $filename, size: $size) { fileId uploadUrl contentType expiresAt } }",
+  "variables": {"workspaceId": "20202020-0000-4000-8000-000000000003", "filename": "logo.png", "size": 32},
+  "response": {"data": {"createNewWorkspaceLogoUpload": {"fileId": "<ignored>", "uploadUrl": "<ignored>", "contentType": "application/octet-stream", "expiresAt": "<ignored>"}}}
+}

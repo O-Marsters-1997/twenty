@@ -1,0 +1,41 @@
+scalar UUID
+scalar JSON
+
+enum BarChartGroupMode {
+  GROUPED
+  STACKED
+}
+
+enum BarChartLayout {
+  HORIZONTAL
+  VERTICAL
+}
+
+type BarChartSeries {
+  key: String!
+  label: String!
+}
+
+type BarChartData {
+  data: [JSON!]!
+  indexBy: String!
+  keys: [String!]!
+  series: [BarChartSeries!]!
+  xAxisLabel: String!
+  yAxisLabel: String!
+  showLegend: Boolean!
+  showDataLabels: Boolean!
+  layout: BarChartLayout!
+  groupMode: BarChartGroupMode!
+  hasTooManyGroups: Boolean!
+  formattedToRawLookup: JSON!
+}
+
+input BarChartDataInput {
+  objectMetadataId: UUID!
+  configuration: JSON!
+}
+
+type Query {
+  barChartData(input: BarChartDataInput!): BarChartData!
+}

@@ -115,7 +115,7 @@ func (c *Channels) DisconnectAccount(ctx context.Context, id, userWorkspaceID st
 
 func (c *Channels) MessageChannels(ctx context.Context, userWorkspaceID string, connectedAccountID *string) ([]MessageChannel, error) {
 	if connectedAccountID != nil {
-		if err := c.usableAccount(ctx, *connectedAccountID, userWorkspaceID); err != nil {
+		if err := c.UsableAccount(ctx, *connectedAccountID, userWorkspaceID); err != nil {
 			return nil, err
 		}
 		return collect[MessageChannel](ctx, c.pool, `SELECT to_jsonb(m) FROM core."messageChannel" m
@@ -249,7 +249,7 @@ func (c *Channels) DeleteEmailGroupChannel(ctx context.Context, id, userWorkspac
 
 func (c *Channels) CalendarChannels(ctx context.Context, userWorkspaceID string, connectedAccountID *string) ([]CalendarChannel, error) {
 	if connectedAccountID != nil {
-		if err := c.usableAccount(ctx, *connectedAccountID, userWorkspaceID); err != nil {
+		if err := c.UsableAccount(ctx, *connectedAccountID, userWorkspaceID); err != nil {
 			return nil, err
 		}
 		return collect[CalendarChannel](ctx, c.pool, `SELECT to_jsonb(k) FROM core."calendarChannel" k
@@ -312,7 +312,7 @@ func (c *Channels) account(ctx context.Context, db queryExecer, id string) (Acco
 	return accounts[0], nil
 }
 
-func (c *Channels) usableAccount(ctx context.Context, id, userWorkspaceID string) error {
+func (c *Channels) UsableAccount(ctx context.Context, id, userWorkspaceID string) error {
 	account, err := c.account(ctx, c.pool, id)
 	if err != nil {
 		return err

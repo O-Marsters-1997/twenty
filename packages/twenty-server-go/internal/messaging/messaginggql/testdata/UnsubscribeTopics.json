@@ -1,0 +1,9 @@
+{
+  "name": "UnsubscribeTopics",
+  "operation": "UnsubscribeTopics",
+  "fixture": "hand-written from the front-end document; one public topic",
+  "endpoint": "/metadata",
+  "query": "query UnsubscribeTopics { unsubscribeTopics { id name description visibility } }",
+  "variables": {},
+  "response": {"data":{"unsubscribeTopics":[{"id":"70000000-0000-4000-8000-000000000001","name":"Product news","description":null,"visibility":"PUBLIC"}]}}
+}

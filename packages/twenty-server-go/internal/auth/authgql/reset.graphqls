@@ -1,0 +1,22 @@
+type EmailPasswordResetLink {
+  success: Boolean!
+}
+
+type InvalidatePassword {
+  success: Boolean!
+}
+
+type ValidatePasswordResetToken {
+  id: UUID!
+  email: String!
+  hasPassword: Boolean!
+}
+
+extend type Mutation {
+  emailPasswordResetLink(email: String!, workspaceId: UUID, captchaToken: String): EmailPasswordResetLink!
+  updatePasswordViaResetToken(passwordResetToken: String!, newPassword: String!): InvalidatePassword!
+}
+
+extend type Query {
+  validatePasswordResetToken(passwordResetToken: String!): ValidatePasswordResetToken!
+}

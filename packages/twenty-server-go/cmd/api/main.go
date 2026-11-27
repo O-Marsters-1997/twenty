@@ -27,7 +27,10 @@ import (
 	applicationstore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/application/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth/authgql"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/chart"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/chart/chartgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/config"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/files/filesgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/invitation/invitationgql"
 	invitationstore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/invitation/store"
@@ -37,11 +40,15 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/metadatagql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/metagql"
 	metadatastore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/store"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/model"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/onboarding"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/onboarding/onboardinggql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/pagelayout/pagelayoutgql"
 	pagelayoutstore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/pagelayout/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records/recordsgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records/store"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/systemmail"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow"
 	workflowstore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/workflowgql"
@@ -72,6 +79,11 @@ func run() error {
 		return err
 	}
 	passwordLogins, err := passwordLogin(pool, cfg, stack)
+	if err != nil {
+		return err
+	}
+
+	fileSvc, err := fileService(pool, stack)
 	if err != nil {
 		return err
 	}
@@ -125,6 +137,7 @@ func run() error {
 		NoteTargets:        store.NewNoteTargets(pool),
 		Tasks:              store.NewTasks(pool),
 		TaskTargets:        store.NewTaskTargets(pool),
+		Searcher:           store.NewSearch(pool),
 	}, logger), dynamicHandler, isDynamic, chatHandler, workflowHandler, messaginggql.NewHandler(&messaginggql.Resolver{
 		Timeline: messagingstore.NewTimeline(pool),
 		Banners:  messagingstore.NewReconnectBanners(pool),
@@ -140,6 +153,9 @@ func run() error {
 			Campaigns: messagingstore.NewCampaigns(pool),
 			Renderer:  messaging.GoRenderer{},
 			Queue:     queue.Enqueue,
+			Outreach:  messagingstore.NewOutreach(pool),
+
+			CalendarChannels: messagingstore.NewCalendarChannels(pool),
 		}, logger),
 		accessgql.NewHandler(&accessgql.Resolver{
 			WebhookStore: accessstore.NewWebhooks(pool),
@@ -147,12 +163,26 @@ func run() error {
 			RoleStore:    accessstore.NewRoles(pool),
 			Permissions:  accessstore.NewPermissions(pool),
 			Tokens:       stack.issuer,
+			FeatureFlags: accessstore.NewFeatureFlags(pool, nil),
 		}, logger),
 		authHandler,
 		workspaceSettingsHandler(pool, cfg, passwordLogins, logger),
-		invitationgql.NewHandler(&invitationgql.Resolver{Store: invitationstore.New(pool)}, logger),
+		invitationgql.NewHandler(&invitationgql.Resolver{
+			Store:    invitationstore.New(pool),
+			Tokens:   stack.issuer,
+			Sender:   systemmail.NewSMTPSender(smtpConfigFromEnv()),
+			FrontURL: stack.frontURL,
+		}, logger),
 		pagelayoutgql.NewHandler(&pagelayoutgql.Resolver{Store: pagelayoutstore.New(pool)}, logger),
 		applicationgql.NewHandler(&applicationgql.Resolver{Store: applicationstore.New(pool, cfg.ServerURL)}, logger),
+		filesgql.NewHandler(&filesgql.Resolver{Files: fileSvc}, logger),
+		onboardinggql.NewHandler(&onboardinggql.Resolver{Store: onboarding.New(pool)}, logger),
+		chartgql.NewHandler(&chartgql.Resolver{Charts: &chart.Service{
+			Metadata: metadatastore.New(pool),
+			NewGrouper: func(object model.Object, fields []records.FieldMetadata) chart.Grouper {
+				return store.NewGroupByEngine(pool, object, fields)
+			},
+		}}, logger),
 		agentgql.Operations,
 	))
 
@@ -166,7 +196,7 @@ func run() error {
 
 	launcher := &workflow.Launcher{Store: workflowstore.New(pool), Queue: queue.Enqueue}
 
-	routes, err := googleRoutes(pool, cfg.AppSecret, webhookRoutes(launcher, handler, logger), logger)
+	routes, err := googleRoutes(pool, cfg.AppSecret, fileSvc.Handler(webhookRoutes(launcher, handler, logger), logger), logger)
 	if err != nil {
 		return err
 	}
