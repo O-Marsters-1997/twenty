@@ -48,6 +48,7 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records/recordsgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records/store"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/systemmail"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow"
 	workflowstore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/workflowgql"
@@ -165,7 +166,12 @@ func run() error {
 		}, logger),
 		authHandler,
 		workspaceSettingsHandler(pool, cfg, passwordLogins, logger),
-		invitationgql.NewHandler(&invitationgql.Resolver{Store: invitationstore.New(pool)}, logger),
+		invitationgql.NewHandler(&invitationgql.Resolver{
+			Store:    invitationstore.New(pool),
+			Tokens:   stack.issuer,
+			Sender:   systemmail.NewSMTPSender(smtpConfigFromEnv()),
+			FrontURL: stack.frontURL,
+		}, logger),
 		pagelayoutgql.NewHandler(&pagelayoutgql.Resolver{Store: pagelayoutstore.New(pool)}, logger),
 		applicationgql.NewHandler(&applicationgql.Resolver{Store: applicationstore.New(pool, cfg.ServerURL)}, logger),
 		filesgql.NewHandler(&filesgql.Resolver{Files: fileSvc}, logger),
