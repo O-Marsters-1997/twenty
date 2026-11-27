@@ -8,7 +8,11 @@ import (
 	"log/slog"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
+	"strings"
+	"sync"
 	"testing"
+	"time"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -18,6 +22,7 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/invitation/invitationgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/invitation/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/pgtest"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/systemmail"
 )
 
 const (
@@ -48,6 +53,7 @@ func newHarness(t *testing.T) *harness {
 	h := &harness{pool: pool}
 	statements := []string{
 		`SET LOCAL session_replication_role = replica`,
+		`INSERT INTO core.workspace (id, subdomain, "workspaceCustomApplicationId", "activationStatus") VALUES ('` + workspaceID + `', 'acme', '` + applicationID + `', 'PENDING_CREATION')`,
 		`INSERT INTO core.role (id, label, "canUpdateAllSettings", "workspaceId", "universalIdentifier", "applicationId") VALUES ('` + adminRoleID + `', 'Admin', true, '` + workspaceID + `', gen_random_uuid(), '` + applicationID + `')`,
 		`INSERT INTO core.role (id, label, "workspaceId", "universalIdentifier", "applicationId") VALUES ('` + flaggedRoleID + `', 'Members', '` + workspaceID + `', gen_random_uuid(), '` + applicationID + `')`,
 		`INSERT INTO core.role (id, label, "workspaceId", "universalIdentifier", "applicationId") VALUES ('` + memberRoleID + `', 'Member', '` + workspaceID + `', gen_random_uuid(), '` + applicationID + `')`,
@@ -235,5 +241,128 @@ func TestOperations_RequirePrincipal(t *testing.T) {
 	graphql := invitationgql.NewHandler(&invitationgql.Resolver{Store: store.New(h.pool)}, slog.New(slog.NewTextHandler(io.Discard, nil)))
 	if code := errorCode(h.send(t, graphql, `{ findWorkspaceInvitations { id } }`, nil)); code != "UNAUTHENTICATED" {
 		t.Errorf("error code = %v, want UNAUTHENTICATED", code)
+	}
+}
+
+type fakeTokens struct{}
+
+func (fakeTokens) IssueApprovedAccessDomainToken(_ context.Context, email, workspace string, _ time.Duration) (string, error) {
+	return "token|" + email + "|" + workspace, nil
+}
+
+func (fakeTokens) VerifyApprovedAccessDomainToken(_ context.Context, token string) (auth.ApprovedAccessDomainClaims, error) {
+	parts := strings.Split(token, "|")
+	if len(parts) != 3 || parts[0] != "token" {
+		return auth.ApprovedAccessDomainClaims{}, auth.ErrInvalidApprovedAccessDomainToken
+	}
+	return auth.ApprovedAccessDomainClaims{Email: parts[1], WorkspaceID: parts[2]}, nil
+}
+
+type recordingSender struct {
+	mu   sync.Mutex
+	sent []systemmail.Message
+}
+
+func (s *recordingSender) Send(_ context.Context, message systemmail.Message) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.sent = append(s.sent, message)
+	return nil
+}
+
+func (h *harness) domainHandler(sender systemmail.Sender) http.Handler {
+	graphql := invitationgql.NewHandler(&invitationgql.Resolver{
+		Store:    store.New(h.pool),
+		Tokens:   fakeTokens{},
+		Sender:   sender,
+		FrontURL: &url.URL{Scheme: "https", Host: "app.test"},
+	}, slog.New(slog.NewTextHandler(io.Discard, nil)))
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		principal := auth.Principal{UserID: "u", WorkspaceID: workspaceID, UserWorkspaceID: adminWorkspaceID}
+		graphql.ServeHTTP(w, r.WithContext(auth.WithPrincipal(r.Context(), principal)))
+	})
+}
+
+func TestCreateAndValidateApprovedAccessDomain_MatchNodeGolden(t *testing.T) {
+	t.Parallel()
+	t.Run("CreateApprovedAccessDomain", func(t *testing.T) {
+		t.Parallel()
+		h := newHarness(t)
+		golden.Assert(t, h.domainHandler(&recordingSender{}), "testdata", "CreateApprovedAccessDomain",
+			"data.createApprovedAccessDomain.id", "data.createApprovedAccessDomain.createdAt")
+	})
+	t.Run("ValidateApprovedAccessDomain", func(t *testing.T) {
+		t.Parallel()
+		h := newHarness(t)
+		golden.Assert(t, h.domainHandler(&recordingSender{}), "testdata", "ValidateApprovedAccessDomain")
+	})
+}
+
+func TestCreateApprovedAccessDomain(t *testing.T) {
+	t.Parallel()
+	const mutation = `mutation($input: CreateApprovedAccessDomainInput!) { createApprovedAccessDomain(input: $input) { id } }`
+	t.Run("mails a validation link to the address", func(t *testing.T) {
+		t.Parallel()
+		h := newHarness(t)
+		sender := &recordingSender{}
+		got := h.send(t, h.domainHandler(sender), mutation, map[string]any{"input": map[string]any{"domain": "newco.test", "email": "ada@newco.test"}})
+		if got["errors"] != nil {
+			t.Fatalf("errors = %v", got["errors"])
+		}
+		if len(sender.sent) != 1 || sender.sent[0].To != "ada@newco.test" {
+			t.Fatalf("sent = %+v, want one message to ada@newco.test", sender.sent)
+		}
+		for _, want := range []string{"https://app.test/settings/security?", "validationToken=token%7Cada%40newco.test%7C" + workspaceID, "wtdId="} {
+			if !strings.Contains(sender.sent[0].Text, want) {
+				t.Errorf("message %q missing %q", sender.sent[0].Text, want)
+			}
+		}
+	})
+	tests := []struct{ name, domain, email string }{
+		{"email outside the domain", "newco.test", "ada@other.test"},
+		{"public mailbox provider", "gmail.com", "ada@gmail.com"},
+		{"domain already registered", "acme.test", "ada@acme.test"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			h := newHarness(t)
+			sender := &recordingSender{}
+			got := h.send(t, h.domainHandler(sender), mutation, map[string]any{"input": map[string]any{"domain": tt.domain, "email": tt.email}})
+			if code := errorCode(got); code != "BAD_USER_INPUT" {
+				t.Errorf("error code = %v, want BAD_USER_INPUT", code)
+			}
+			if len(sender.sent) != 0 {
+				t.Errorf("sent %d messages, want none", len(sender.sent))
+			}
+			if n := h.count(t, `SELECT count(*) FROM core."approvedAccessDomain"`); n != 3 {
+				t.Errorf("approvedAccessDomain rows = %d, want 3", n)
+			}
+		})
+	}
+}
+
+func TestValidateApprovedAccessDomain_Rejects(t *testing.T) {
+	t.Parallel()
+	const mutation = `mutation($input: ValidateApprovedAccessDomainInput!) { validateApprovedAccessDomain(input: $input) { id } }`
+	const acme = "b1000000-0000-4000-8000-000000000002"
+	tests := []struct{ name, token, id, wantCode string }{
+		{"token that is not signed", "garbage", acme, "FORBIDDEN"},
+		{"token for another workspace", "token|ada@acme.test|" + otherWorkspaceID, acme, "FORBIDDEN"},
+		{"email outside the domain", "token|ada@other.test|" + workspaceID, acme, "BAD_USER_INPUT"},
+		{"another workspace's domain", "token|ada@other.test|" + workspaceID, otherDomain, "FORBIDDEN"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			h := newHarness(t)
+			got := h.send(t, h.domainHandler(&recordingSender{}), mutation, map[string]any{"input": map[string]any{"validationToken": tt.token, "approvedAccessDomainId": tt.id}})
+			if code := errorCode(got); code != tt.wantCode {
+				t.Errorf("error code = %v, want %s", code, tt.wantCode)
+			}
+			if n := h.count(t, `SELECT count(*) FROM core."approvedAccessDomain" WHERE "isValidated"`); n != 2 {
+				t.Errorf("validated rows = %d, want 2", n)
+			}
+		})
 	}
 }
