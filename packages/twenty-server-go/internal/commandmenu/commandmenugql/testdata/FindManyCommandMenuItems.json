@@ -1,0 +1,105 @@
+{
+  "name": "FindManyCommandMenuItems",
+  "operation": "FindManyCommandMenuItems",
+  "fixture": "a standard navigation item targeting person, a standard item overridden by the custom application, a custom item with a path payload, a public and a private workflow trigger. Hand-written from CommandMenuItemResolver, CommandMenuItemService and CoreWorkflowAccessService; no Node server was run",
+  "endpoint": "/metadata",
+  "query": "query FindManyCommandMenuItems { commandMenuItems { ...CommandMenuItemFields } } fragment CommandMenuItemFields on CommandMenuItem { id universalIdentifier applicationId coreWorkflowVersionId workflowVersionId engineComponentKey label icon shortLabel position isPinned payload { ... on PathCommandMenuItemPayload { path } } hotKeys conditionalAvailabilityExpression conditionalPinnedExpression availabilityType availabilityObjectMetadataId navigationTargetObjectMetadataId pageLayoutId isActive }",
+  "response": {
+    "data": {
+      "commandMenuItems": [
+        {
+          "id": "b1000000-0000-4000-8000-000000000001",
+          "universalIdentifier": "d1000000-0000-4000-8000-000000000001",
+          "applicationId": "c2000000-0000-4000-8000-000000000002",
+          "coreWorkflowVersionId": null,
+          "workflowVersionId": null,
+          "engineComponentKey": "NAVIGATION",
+          "label": "Go to People",
+          "icon": "IconUser",
+          "shortLabel": "People",
+          "position": 1,
+          "isPinned": false,
+          "payload": null,
+          "hotKeys": null,
+          "conditionalAvailabilityExpression": null,
+          "conditionalPinnedExpression": null,
+          "availabilityType": "GLOBAL",
+          "availabilityObjectMetadataId": null,
+          "navigationTargetObjectMetadataId": "a0000000-0000-4000-8000-000000000001",
+          "pageLayoutId": null,
+          "isActive": true
+        },
+        {
+          "id": "b1000000-0000-4000-8000-000000000002",
+          "universalIdentifier": "d1000000-0000-4000-8000-000000000002",
+          "applicationId": "c2000000-0000-4000-8000-000000000002",
+          "coreWorkflowVersionId": null,
+          "workflowVersionId": null,
+          "engineComponentKey": "CREATE_NEW_RECORD",
+          "label": "Add record",
+          "icon": "IconPlus",
+          "shortLabel": "Create",
+          "position": 5,
+          "isPinned": true,
+          "payload": null,
+          "hotKeys": [
+            "c"
+          ],
+          "conditionalAvailabilityExpression": null,
+          "conditionalPinnedExpression": null,
+          "availabilityType": "GLOBAL_OBJECT_CONTEXT",
+          "availabilityObjectMetadataId": "a0000000-0000-4000-8000-000000000001",
+          "navigationTargetObjectMetadataId": null,
+          "pageLayoutId": null,
+          "isActive": true
+        },
+        {
+          "id": "b1000000-0000-4000-8000-000000000003",
+          "universalIdentifier": "d1000000-0000-4000-8000-000000000003",
+          "applicationId": "c2000000-0000-4000-8000-000000000001",
+          "coreWorkflowVersionId": null,
+          "workflowVersionId": null,
+          "engineComponentKey": "NAVIGATION",
+          "label": "Settings",
+          "icon": null,
+          "shortLabel": null,
+          "position": 3,
+          "isPinned": false,
+          "payload": {
+            "path": "/settings"
+          },
+          "hotKeys": null,
+          "conditionalAvailabilityExpression": null,
+          "conditionalPinnedExpression": null,
+          "availabilityType": "GLOBAL",
+          "availabilityObjectMetadataId": null,
+          "navigationTargetObjectMetadataId": null,
+          "pageLayoutId": null,
+          "isActive": true
+        },
+        {
+          "id": "b1000000-0000-4000-8000-000000000004",
+          "universalIdentifier": "d1000000-0000-4000-8000-000000000004",
+          "applicationId": "c2000000-0000-4000-8000-000000000001",
+          "coreWorkflowVersionId": "f2000000-0000-4000-8000-000000000001",
+          "workflowVersionId": null,
+          "engineComponentKey": "TRIGGER_WORKFLOW_VERSION",
+          "label": "Run public workflow",
+          "icon": null,
+          "shortLabel": null,
+          "position": 4,
+          "isPinned": false,
+          "payload": null,
+          "hotKeys": null,
+          "conditionalAvailabilityExpression": null,
+          "conditionalPinnedExpression": null,
+          "availabilityType": "GLOBAL",
+          "availabilityObjectMetadataId": null,
+          "navigationTargetObjectMetadataId": null,
+          "pageLayoutId": null,
+          "isActive": true
+        }
+      ]
+    }
+  }
+}

@@ -96,6 +96,8 @@ var PageLayoutOperations = []string{
 	"UpdatePageLayoutWidgetIsActive", "UpdatePageLayoutWithTabsAndWidgets", "DuplicateDashboard",
 }
 
+var CommandMenuOperations = []string{"FindManyCommandMenuItems", "UpdateCommandMenuItem", "ResetCommandMenuItem"}
+
 var ChartOperations = []string{"BarChartData"}
 
 var ApplicationOperations = []string{"FindManyApplications", "FindManyApplicationsForToolTable", "FindManyTimelineActivityTypes"}

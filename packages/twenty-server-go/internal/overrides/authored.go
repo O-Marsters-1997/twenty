@@ -28,6 +28,13 @@ var CommandMenuItem = Kind{
 	Translatable: []string{"label", "shortLabel"},
 }
 
+var ObjectMetadata = Kind{
+	Name:         "objectMetadata",
+	Overridable:  []string{"isActive", "labelSingular", "labelPlural", "description", "icon", "color", "imageIdentifierFieldMetadataId"},
+	EntryKeys:    []string{"translations", "isActive", "labelSingular", "labelPlural", "description", "icon", "color", "imageIdentifierFieldMetadataId"},
+	Translatable: []string{"labelSingular", "labelPlural", "description"},
+}
+
 type Authors struct {
 	Custom string
 	Owner  string

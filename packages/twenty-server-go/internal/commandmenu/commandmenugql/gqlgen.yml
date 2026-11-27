@@ -1,0 +1,23 @@
+schema:
+  - "*.graphqls"
+exec:
+  filename: generated.go
+  package: commandmenugql
+model:
+  filename: models_gen.go
+  package: commandmenugql
+models:
+  UUID:
+    model: github.com/99designs/gqlgen/graphql.String
+  DateTime:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata.Timestamp
+  EngineComponentKey:
+    model: github.com/99designs/gqlgen/graphql.String
+  CommandMenuItemAvailabilityType:
+    model: github.com/99designs/gqlgen/graphql.String
+  CommandMenuItem:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/commandmenu.Item
+  PathCommandMenuItemPayload:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/commandmenu.PathPayload
+  UpdateCommandMenuItemInput:
+    model: map[string]interface{}

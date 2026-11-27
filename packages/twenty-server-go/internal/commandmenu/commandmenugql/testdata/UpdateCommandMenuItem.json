@@ -1,0 +1,42 @@
+{
+  "name": "UpdateCommandMenuItem",
+  "operation": "UpdateCommandMenuItem",
+  "fixture": "a standard navigation item targeting person, a standard item overridden by the custom application, a custom item with a path payload, a public and a private workflow trigger. Hand-written from CommandMenuItemResolver, CommandMenuItemService and CoreWorkflowAccessService; no Node server was run",
+  "endpoint": "/metadata",
+  "query": "mutation UpdateCommandMenuItem($input: UpdateCommandMenuItemInput!) { updateCommandMenuItem(input: $input) { ...CommandMenuItemFields } } fragment CommandMenuItemFields on CommandMenuItem { id universalIdentifier applicationId coreWorkflowVersionId workflowVersionId engineComponentKey label icon shortLabel position isPinned payload { ... on PathCommandMenuItemPayload { path } } hotKeys conditionalAvailabilityExpression conditionalPinnedExpression availabilityType availabilityObjectMetadataId navigationTargetObjectMetadataId pageLayoutId isActive }",
+  "variables": {
+    "input": {
+      "id": "b1000000-0000-4000-8000-000000000002",
+      "label": "Add a record",
+      "isPinned": false
+    }
+  },
+  "response": {
+    "data": {
+      "updateCommandMenuItem": {
+        "id": "b1000000-0000-4000-8000-000000000002",
+        "universalIdentifier": "d1000000-0000-4000-8000-000000000002",
+        "applicationId": "c2000000-0000-4000-8000-000000000002",
+        "coreWorkflowVersionId": null,
+        "workflowVersionId": null,
+        "engineComponentKey": "CREATE_NEW_RECORD",
+        "label": "Add a record",
+        "icon": "IconPlus",
+        "shortLabel": "Create",
+        "position": 5,
+        "isPinned": false,
+        "payload": null,
+        "hotKeys": [
+          "c"
+        ],
+        "conditionalAvailabilityExpression": null,
+        "conditionalPinnedExpression": null,
+        "availabilityType": "GLOBAL_OBJECT_CONTEXT",
+        "availabilityObjectMetadataId": "a0000000-0000-4000-8000-000000000001",
+        "navigationTargetObjectMetadataId": null,
+        "pageLayoutId": null,
+        "isActive": true
+      }
+    }
+  }
+}

@@ -29,6 +29,8 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth/authgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/chart"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/chart/chartgql"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/commandmenu"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/commandmenu/commandmenugql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/config"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/files/filesgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
@@ -182,6 +184,7 @@ func run() error {
 				return store.NewGroupByEngine(pool, object, fields)
 			},
 		}}, logger),
+		commandmenugql.NewHandler(&commandmenugql.Resolver{Store: commandmenu.New(pool), Permissions: pagelayoutstore.New(pool)}, logger),
 		agentgql.Operations,
 	))
 
