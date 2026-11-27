@@ -1,0 +1,9 @@
+{
+  "name": "sign-up-in-workspace",
+  "operation": "SignUpInWorkspace",
+  "fixture": "workspace with a personal invitation for the new email",
+  "endpoint": "/metadata",
+  "query": "mutation SignUpInWorkspace($email: String!, $password: String!, $workspaceInviteHash: String, $workspacePersonalInviteToken: String = null, $captchaToken: String, $workspaceId: UUID, $locale: String, $verifyEmailRedirectPath: String) { signUpInWorkspace(email: $email, password: $password, workspaceInviteHash: $workspaceInviteHash, workspacePersonalInviteToken: $workspacePersonalInviteToken, captchaToken: $captchaToken, workspaceId: $workspaceId, locale: $locale, verifyEmailRedirectPath: $verifyEmailRedirectPath) { loginToken { token expiresAt } workspace { id workspaceUrls { subdomainUrl } } } }",
+  "variables": {"email": "newcomer@example.com", "password": "correct horse", "workspaceId": "26a06a83-ad30-4547-9126-7f6339d43e03", "workspacePersonalInviteToken": "pinned-invite-token"},
+  "response": {"data":{"signUpInWorkspace":{"loginToken":{"token":"x","expiresAt":"x"},"workspace":{"id":"26a06a83-ad30-4547-9126-7f6339d43e03","workspaceUrls":{"subdomainUrl":"http://pinned.localhost:3001/"}}}}}
+}

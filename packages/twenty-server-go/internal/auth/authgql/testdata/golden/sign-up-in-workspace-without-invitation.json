@@ -1,0 +1,9 @@
+{
+  "name": "sign-up-in-workspace-without-invitation",
+  "operation": "SignUpInWorkspace",
+  "fixture": "workspace with a personal invitation for another email",
+  "endpoint": "/metadata",
+  "query": "mutation SignUpInWorkspace($email: String!, $password: String!, $workspaceInviteHash: String, $workspacePersonalInviteToken: String = null, $captchaToken: String, $workspaceId: UUID, $locale: String, $verifyEmailRedirectPath: String) { signUpInWorkspace(email: $email, password: $password, workspaceInviteHash: $workspaceInviteHash, workspacePersonalInviteToken: $workspacePersonalInviteToken, captchaToken: $captchaToken, workspaceId: $workspaceId, locale: $locale, verifyEmailRedirectPath: $verifyEmailRedirectPath) { loginToken { token expiresAt } workspace { id workspaceUrls { subdomainUrl } } } }",
+  "variables": {"email": "stranger@example.com", "password": "correct horse", "workspaceId": "26a06a83-ad30-4547-9126-7f6339d43e03"},
+  "response": {"errors":[{"message":"An invitation is required to join this workspace","locations":[{"line":1,"column":237}],"path":["signUpInWorkspace"],"extensions":{"code":"FORBIDDEN","subCode":"FORBIDDEN_EXCEPTION","userFriendlyMessage":"You do not have permission to perform this action."}}],"data":null}
+}

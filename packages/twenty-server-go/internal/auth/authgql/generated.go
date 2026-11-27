@@ -125,6 +125,9 @@ type ComplexityRoot struct {
 		RevokeUserSession                                       func(childComplexity int, userSessionID string) int
 		SignIn                                                  func(childComplexity int, email string, password string, captchaToken *string, locale *string, verifyEmailRedirectPath *string) int
 		SignOut                                                 func(childComplexity int, refreshToken *string) int
+		SignUp                                                  func(childComplexity int, email string, password string, captchaToken *string, locale *string, verifyEmailRedirectPath *string) int
+		SignUpInNewWorkspace                                    func(childComplexity int, input *SignUpInNewWorkspaceInput) int
+		SignUpInWorkspace                                       func(childComplexity int, email string, password string, workspaceInviteHash *string, workspacePersonalInviteToken *string, captchaToken *string, workspaceID *string, locale *string, verifyEmailRedirectPath *string) int
 		UpdatePasswordViaResetToken                             func(childComplexity int, passwordResetToken string, newPassword string) int
 		VerifyTwoFactorAuthenticationMethodForAuthenticatedUser func(childComplexity int, otp string) int
 	}
@@ -155,6 +158,16 @@ type ComplexityRoot struct {
 		GetWorkspaceCreationDefaults          func(childComplexity int) int
 		TwoFactorAuthenticationRecoveryStatus func(childComplexity int, userID string) int
 		ValidatePasswordResetToken            func(childComplexity int, passwordResetToken string) int
+	}
+
+	SignUpOutput struct {
+		LoginToken func(childComplexity int) int
+		Workspace  func(childComplexity int) int
+	}
+
+	SignUpWorkspace struct {
+		ID            func(childComplexity int) int
+		WorkspaceUrls func(childComplexity int) int
 	}
 
 	SubdomainAvailability struct {
@@ -238,6 +251,9 @@ type MutationResolver interface {
 	SignIn(ctx context.Context, email string, password string, captchaToken *string, locale *string, verifyEmailRedirectPath *string) (*AvailableWorkspacesAndAccessTokens, error)
 	GetAuthTokensFromOtp(ctx context.Context, loginToken string, otp string, captchaToken *string, origin string) (*AuthTokens, error)
 	GetAuthTokensFromTwoFactorAuthenticationRecoveryCode(ctx context.Context, loginToken string, recoveryCode string, captchaToken *string, origin string) (*TwoFactorAuthenticationRecoveryCodeRedemption, error)
+	SignUp(ctx context.Context, email string, password string, captchaToken *string, locale *string, verifyEmailRedirectPath *string) (*AvailableWorkspacesAndAccessTokens, error)
+	SignUpInWorkspace(ctx context.Context, email string, password string, workspaceInviteHash *string, workspacePersonalInviteToken *string, captchaToken *string, workspaceID *string, locale *string, verifyEmailRedirectPath *string) (*SignUpOutput, error)
+	SignUpInNewWorkspace(ctx context.Context, input *SignUpInNewWorkspaceInput) (*SignUpOutput, error)
 	InitiateOTPProvisioning(ctx context.Context, loginToken string, origin string) (*InitiateTwoFactorAuthenticationProvisioning, error)
 	EmailPasswordResetLink(ctx context.Context, email string, workspaceID *string, captchaToken *string) (*EmailPasswordResetLink, error)
 	UpdatePasswordViaResetToken(ctx context.Context, passwordResetToken string, newPassword string) (*InvalidatePassword, error)
@@ -628,6 +644,39 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.SignOut(childComplexity, args["refreshToken"].(*string)), true
+	case "Mutation.signUp":
+		if e.ComplexityRoot.Mutation.SignUp == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_signUp_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.SignUp(childComplexity, args["email"].(string), args["password"].(string), args["captchaToken"].(*string), args["locale"].(*string), args["verifyEmailRedirectPath"].(*string)), true
+	case "Mutation.signUpInNewWorkspace":
+		if e.ComplexityRoot.Mutation.SignUpInNewWorkspace == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_signUpInNewWorkspace_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.SignUpInNewWorkspace(childComplexity, args["input"].(*SignUpInNewWorkspaceInput)), true
+	case "Mutation.signUpInWorkspace":
+		if e.ComplexityRoot.Mutation.SignUpInWorkspace == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_signUpInWorkspace_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.SignUpInWorkspace(childComplexity, args["email"].(string), args["password"].(string), args["workspaceInviteHash"].(*string), args["workspacePersonalInviteToken"].(*string), args["captchaToken"].(*string), args["workspaceId"].(*string), args["locale"].(*string), args["verifyEmailRedirectPath"].(*string)), true
 	case "Mutation.updatePasswordViaResetToken":
 		if e.ComplexityRoot.Mutation.UpdatePasswordViaResetToken == nil {
 			break
@@ -803,6 +852,32 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.ValidatePasswordResetToken(childComplexity, args["passwordResetToken"].(string)), true
+
+	case "SignUpOutput.loginToken":
+		if e.ComplexityRoot.SignUpOutput.LoginToken == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SignUpOutput.LoginToken(childComplexity), true
+	case "SignUpOutput.workspace":
+		if e.ComplexityRoot.SignUpOutput.Workspace == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SignUpOutput.Workspace(childComplexity), true
+
+	case "SignUpWorkspace.id":
+		if e.ComplexityRoot.SignUpWorkspace.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SignUpWorkspace.ID(childComplexity), true
+	case "SignUpWorkspace.workspaceUrls":
+		if e.ComplexityRoot.SignUpWorkspace.WorkspaceUrls == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SignUpWorkspace.WorkspaceUrls(childComplexity), true
 
 	case "SubdomainAvailability.available":
 		if e.ComplexityRoot.SubdomainAvailability.Available == nil {
@@ -1021,7 +1096,9 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	opCtx := graphql.GetOperationContext(ctx)
 	ec := newExecutionContext(opCtx, e, make(chan graphql.DeferredResult))
 	inputUnmarshalers := func() *graphql.InputUnmarshalerIndex {
-		return graphql.NewInputUnmarshalerIndex()
+		return graphql.NewInputUnmarshalerIndex(
+			graphql.NewInputUnmarshaler("SignUpInNewWorkspaceInput", ec.unmarshalInputSignUpInNewWorkspaceInput),
+		)
 	}
 	first := true
 
@@ -1290,6 +1367,26 @@ func (ec *executionContext) childFields_PublicWorkspaceDataSummary(ctx context.C
 		return ec.fieldContext_PublicWorkspaceDataSummary_displayName(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type PublicWorkspaceDataSummary", field.Name)
+}
+
+func (ec *executionContext) childFields_SignUpOutput(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "loginToken":
+		return ec.fieldContext_SignUpOutput_loginToken(ctx, field)
+	case "workspace":
+		return ec.fieldContext_SignUpOutput_workspace(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type SignUpOutput", field.Name)
+}
+
+func (ec *executionContext) childFields_SignUpWorkspace(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_SignUpWorkspace_id(ctx, field)
+	case "workspaceUrls":
+		return ec.fieldContext_SignUpWorkspace_workspaceUrls(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type SignUpWorkspace", field.Name)
 }
 
 func (ec *executionContext) childFields_SubdomainAvailability(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -1879,6 +1976,136 @@ func (ec *executionContext) field_Mutation_signOut_args(ctx context.Context, raw
 		return nil, err
 	}
 	args["refreshToken"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_signUpInNewWorkspace_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
+		func(ctx context.Context, v any) (*SignUpInNewWorkspaceInput, error) {
+			return ec.unmarshalOSignUpInNewWorkspaceInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐSignUpInNewWorkspaceInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_signUpInWorkspace_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "email",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["email"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "password",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["password"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "workspaceInviteHash",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["workspaceInviteHash"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "workspacePersonalInviteToken",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["workspacePersonalInviteToken"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "captchaToken",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["captchaToken"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "workspaceId",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOUUID2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["workspaceId"] = arg5
+	arg6, err := graphql.ProcessArgField(ctx, rawArgs, "locale",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["locale"] = arg6
+	arg7, err := graphql.ProcessArgField(ctx, rawArgs, "verifyEmailRedirectPath",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["verifyEmailRedirectPath"] = arg7
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_signUp_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "email",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["email"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "password",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["password"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "captchaToken",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["captchaToken"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "locale",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["locale"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "verifyEmailRedirectPath",
+		func(ctx context.Context, v any) (*string, error) {
+			return ec.unmarshalOString2ᚖstring(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["verifyEmailRedirectPath"] = arg4
 	return args, nil
 }
 
@@ -3244,6 +3471,138 @@ func (ec *executionContext) fieldContext_Mutation_getAuthTokensFromTwoFactorAuth
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_signUp(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_signUp(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().SignUp(ctx, fc.Args["email"].(string), fc.Args["password"].(string), fc.Args["captchaToken"].(*string), fc.Args["locale"].(*string), fc.Args["verifyEmailRedirectPath"].(*string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *AvailableWorkspacesAndAccessTokens) graphql.Marshaler {
+			return ec.marshalNAvailableWorkspacesAndAccessTokens2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAvailableWorkspacesAndAccessTokens(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_signUp(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AvailableWorkspacesAndAccessTokens(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_signUp_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_signUpInWorkspace(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_signUpInWorkspace(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().SignUpInWorkspace(ctx, fc.Args["email"].(string), fc.Args["password"].(string), fc.Args["workspaceInviteHash"].(*string), fc.Args["workspacePersonalInviteToken"].(*string), fc.Args["captchaToken"].(*string), fc.Args["workspaceId"].(*string), fc.Args["locale"].(*string), fc.Args["verifyEmailRedirectPath"].(*string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *SignUpOutput) graphql.Marshaler {
+			return ec.marshalNSignUpOutput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐSignUpOutput(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_signUpInWorkspace(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_SignUpOutput(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_signUpInWorkspace_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_signUpInNewWorkspace(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_signUpInNewWorkspace(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().SignUpInNewWorkspace(ctx, fc.Args["input"].(*SignUpInNewWorkspaceInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *SignUpOutput) graphql.Marshaler {
+			return ec.marshalNSignUpOutput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐSignUpOutput(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_signUpInNewWorkspace(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_SignUpOutput(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_signUpInNewWorkspace_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_initiateOTPProvisioning(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -4316,6 +4675,125 @@ func (ec *executionContext) fieldContext_Query___schema(_ context.Context, field
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return ec.childFields___Schema(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SignUpOutput_loginToken(ctx context.Context, field graphql.CollectedField, obj *SignUpOutput) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SignUpOutput_loginToken(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.LoginToken, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *AuthToken) graphql.Marshaler {
+			return ec.marshalNAuthToken2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐAuthToken(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SignUpOutput_loginToken(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SignUpOutput",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_AuthToken(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SignUpOutput_workspace(ctx context.Context, field graphql.CollectedField, obj *SignUpOutput) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SignUpOutput_workspace(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Workspace, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *SignUpWorkspace) graphql.Marshaler {
+			return ec.marshalNSignUpWorkspace2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐSignUpWorkspace(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SignUpOutput_workspace(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SignUpOutput",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_SignUpWorkspace(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _SignUpWorkspace_id(ctx context.Context, field graphql.CollectedField, obj *SignUpWorkspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SignUpWorkspace_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SignUpWorkspace_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("SignUpWorkspace", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _SignUpWorkspace_workspaceUrls(ctx context.Context, field graphql.CollectedField, obj *SignUpWorkspace) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_SignUpWorkspace_workspaceUrls(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.WorkspaceUrls, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *WorkspaceUrls) graphql.Marshaler {
+			return ec.marshalNWorkspaceUrls2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐWorkspaceUrls(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_SignUpWorkspace_workspaceUrls(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "SignUpWorkspace",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_WorkspaceUrls(ctx, field)
 		},
 	}
 	return fc, nil
@@ -6171,6 +6649,62 @@ func (ec *executionContext) fieldContext___Type_isOneOf(_ context.Context, field
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputSignUpInNewWorkspaceInput(ctx context.Context, obj any) (SignUpInNewWorkspaceInput, error) {
+	var it SignUpInNewWorkspaceInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"displayName", "partner", "subdomain"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "displayName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("displayName"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DisplayName = data
+		case "partner":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("partner"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Partner = data
+		case "subdomain":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("subdomain"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Subdomain = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalSignUpInNewWorkspaceInput unmarshals raw into the SignUpInNewWorkspaceInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalSignUpInNewWorkspaceInput(ctx context.Context, raw any) (SignUpInNewWorkspaceInput, error) {
+	var out SignUpInNewWorkspaceInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "SignUpInNewWorkspaceInput", raw, &out)
+	return out, err
+}
+
 // endregion **************************** input.gotpl *****************************
 
 // region    ************************** interface.gotpl ***************************
@@ -6798,6 +7332,27 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "signUp":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_signUp(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "signUpInWorkspace":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_signUpInWorkspace(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "signUpInNewWorkspace":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_signUpInNewWorkspace(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "initiateOTPProvisioning":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_initiateOTPProvisioning(ctx, field)
@@ -7071,6 +7626,82 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 			})
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&out.Invalids, 1)
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var signUpOutputImplementors = []string{"SignUpOutput"}
+
+func (ec *executionContext) _SignUpOutput(ctx context.Context, sel ast.SelectionSet, obj *SignUpOutput) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, signUpOutputImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SignUpOutput")
+		case "loginToken":
+			out.Values[i] = ec._SignUpOutput_loginToken(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "workspace":
+			out.Values[i] = ec._SignUpOutput_workspace(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var signUpWorkspaceImplementors = []string{"SignUpWorkspace"}
+
+func (ec *executionContext) _SignUpWorkspace(ctx context.Context, sel ast.SelectionSet, obj *SignUpWorkspace) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, signUpWorkspaceImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SignUpWorkspace")
+		case "id":
+			out.Values[i] = ec._SignUpWorkspace_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "workspaceUrls":
+			out.Values[i] = ec._SignUpWorkspace_workspaceUrls(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
 			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
@@ -8112,6 +8743,22 @@ func (ec *executionContext) marshalNPublicWorkspaceDataSummary2ᚖgithubᚗcom�
 	return ec._PublicWorkspaceDataSummary(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalNSignUpOutput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐSignUpOutput(ctx context.Context, sel ast.SelectionSet, v *SignUpOutput) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "SignUpOutput!")
+		return graphql.Null
+	}
+	return ec._SignUpOutput(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNSignUpWorkspace2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐSignUpWorkspace(ctx context.Context, sel ast.SelectionSet, v *SignUpWorkspace) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "SignUpWorkspace!")
+		return graphql.Null
+	}
+	return ec._SignUpWorkspace(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v any) (string, error) {
 	res, err := graphql.UnmarshalString(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -8473,6 +9120,14 @@ func (ec *executionContext) marshalODateTime2ᚖgithubᚗcomᚋtwentyhqᚋtwenty
 		return graphql.Null
 	}
 	return v
+}
+
+func (ec *executionContext) unmarshalOSignUpInNewWorkspaceInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋauthᚋauthgqlᚐSignUpInNewWorkspaceInput(ctx context.Context, v any) (*SignUpInNewWorkspaceInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalInputSignUpInNewWorkspaceInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v any) (*string, error) {
