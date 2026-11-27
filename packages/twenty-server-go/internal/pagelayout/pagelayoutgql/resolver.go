@@ -141,7 +141,7 @@ func (r *mutationResolver) UpdatePageLayoutWithTabsAndWidgets(ctx context.Contex
 			tabInput.Widgets = append(tabInput.Widgets, store.WidgetInput{
 				ID: widget.ID, PageLayoutTabID: widget.PageLayoutTabID, Title: widget.Title, Type: string(widget.Type),
 				ObjectMetadataID: widget.ObjectMetadataID, Position: widget.Position, Configuration: widget.Configuration,
-				ConditionalAvailabilityExpression: widget.ConditionalAvailabilityExpression,
+				ConditionalAvailabilityExpression: widget.ConditionalAvailabilityExpression, ConditionalDisplay: widget.ConditionalDisplay,
 			})
 		}
 		layoutInput.Tabs = append(layoutInput.Tabs, tabInput)

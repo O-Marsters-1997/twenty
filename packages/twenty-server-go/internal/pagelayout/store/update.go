@@ -63,6 +63,7 @@ type WidgetInput struct {
 	ObjectMetadataID                  *string
 	Position, Configuration           any
 	ConditionalAvailabilityExpression *string
+	ConditionalDisplay                any
 }
 
 type tabRecord struct {
@@ -360,6 +361,9 @@ func updateTab(ctx context.Context, tx pgx.Tx, current tabRecord, input TabInput
 		layoutMode = *input.LayoutMode
 	}
 	effective := effectiveTab(current)
+	if input.Icon == nil {
+		input.Icon = effective.icon
+	}
 	if effective.isActive && effective.title == input.Title && effective.position == input.Position &&
 		reflect.DeepEqual(effective.icon, input.Icon) && current.layoutMode == layoutMode {
 		return nil
@@ -461,17 +465,25 @@ func upsertWidget(ctx context.Context, tx pgx.Tx, workspaceID string, custom app
 	}
 	current := existing[index]
 	effective := effectiveWidget(current)
+	if input.ConditionalAvailabilityExpression == nil {
+		input.ConditionalAvailabilityExpression = effective.expression
+	}
+	if input.ConditionalDisplay == nil {
+		input.ConditionalDisplay = jsonValue(effective.display)
+	}
 	if effective.isActive && effective.title == input.Title && effective.widgetType == input.Type &&
 		reflect.DeepEqual(effective.objectMetadataID, input.ObjectMetadataID) && effective.tabID == input.PageLayoutTabID &&
 		reflect.DeepEqual(jsonValue(effective.position), normalized(input.Position)) &&
 		reflect.DeepEqual(jsonValue(effective.configuration), normalized(input.Configuration)) &&
-		reflect.DeepEqual(effective.expression, input.ConditionalAvailabilityExpression) {
+		reflect.DeepEqual(effective.expression, input.ConditionalAvailabilityExpression) &&
+		reflect.DeepEqual(jsonValue(effective.display), normalized(input.ConditionalDisplay)) {
 		return nil
 	}
 	updated := map[string]any{
 		"title": input.Title, "type": input.Type, "objectMetadataId": stringOrNil(input.ObjectMetadataID),
 		"position": normalized(input.Position), "configuration": normalized(input.Configuration),
 		"pageLayoutTabId": input.PageLayoutTabID, "conditionalAvailabilityExpression": stringOrNil(input.ConditionalAvailabilityExpression),
+		"conditionalDisplay": normalized(input.ConditionalDisplay),
 	}
 	if !isOverridingCaller(current.owner, custom, current.isSystemSideEffect) {
 		if !effective.isActive {
