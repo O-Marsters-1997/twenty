@@ -138,6 +138,7 @@ var blockedMetadataFields = []string{
 
 var PasswordLoginOperations = []string{
 	"GetLoginTokenFromCredentials", "SignIn", "EmailPasswordResetLink", "ValidatePasswordResetToken", "UpdatePasswordViaResetToken",
+	"SignUp", "SignUpInWorkspace", "SignUpInNewWorkspace",
 }
 
 var PublicWorkspaceOperations = []string{
