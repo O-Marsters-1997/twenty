@@ -39,6 +39,31 @@ type WorkspaceMember {
   userEmail: String!
   userId: UUID!
   userWorkspaceId: UUID
+  colorScheme: String!
+  uiScale: String!
+  openRecordIn: String!
+  locale: String
+  timeZone: String
+  dateFormat: String
+  timeFormat: String
+  calendarStartDay: Int
+  numberFormat: String
+  roles: [Role!]
+}
+
+type FeatureFlag {
+  key: String!
+  value: Boolean!
+}
+
+input UpdateWorkspaceMemberSettingsInput {
+  workspaceMemberId: UUID!
+  update: JSON!
+}
+
+input UpdateLabPublicFeatureFlagInput {
+  publicFeatureFlag: String!
+  value: Boolean!
 }
 
 type Agent {
@@ -292,4 +317,7 @@ type Mutation {
   upsertObjectPermissions(upsertObjectPermissionsInput: UpsertObjectPermissionsInput!): [ObjectPermission!]!
   upsertFieldPermissions(upsertFieldPermissionsInput: UpsertFieldPermissionsInput!): [FieldPermission!]!
   upsertPermissionFlags(upsertPermissionFlagsInput: UpsertPermissionFlagsInput!): [RolePermissionFlag!]!
+  updateWorkspaceMemberRole(workspaceMemberId: UUID!, roleId: UUID!): WorkspaceMember!
+  updateWorkspaceMemberSettings(input: UpdateWorkspaceMemberSettingsInput!): Boolean!
+  updateLabPublicFeatureFlag(input: UpdateLabPublicFeatureFlagInput!): FeatureFlag!
 }

@@ -71,6 +71,7 @@ var AccessOperations = []string{
 	"GenerateApiKeyToken", "GeneratePlaygroundToken",
 	"GetRoles", "GetRole", "CreateOneRole", "UpdateOneRole", "DeleteOneRole",
 	"UpsertFieldPermissions", "UpsertObjectPermissions", "UpsertPermissionFlags",
+	"UpdateWorkspaceMemberRole", "UpdateWorkspaceMemberSettings", "UpdateLabPublicFeatureFlag",
 }
 
 var TwoFactorOperations = []string{

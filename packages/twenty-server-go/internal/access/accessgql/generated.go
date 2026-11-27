@@ -33,6 +33,7 @@ type ResolverRoot interface {
 	Mutation() MutationResolver
 	Query() QueryResolver
 	Role() RoleResolver
+	WorkspaceMember() WorkspaceMemberResolver
 }
 
 type DirectiveRoot struct {
@@ -83,6 +84,11 @@ type ComplexityRoot struct {
 		Token     func(childComplexity int) int
 	}
 
+	FeatureFlag struct {
+		Key   func(childComplexity int) int
+		Value func(childComplexity int) int
+	}
+
 	FieldPermission struct {
 		CanReadFieldValue   func(childComplexity int) int
 		CanUpdateFieldValue func(childComplexity int) int
@@ -98,21 +104,24 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		AssignRoleToAPIKey      func(childComplexity int, apiKeyID string, roleID string) int
-		CreateAPIKey            func(childComplexity int, input map[string]any) int
-		CreateOneRole           func(childComplexity int, createRoleInput map[string]any) int
-		CreateWebhook           func(childComplexity int, input map[string]any) int
-		DeleteOneRole           func(childComplexity int, roleID string) int
-		DeleteWebhook           func(childComplexity int, id string) int
-		GenerateAPIKeyToken     func(childComplexity int, apiKeyID string, expiresAt string) int
-		GeneratePlaygroundToken func(childComplexity int) int
-		RevokeAPIKey            func(childComplexity int, input map[string]any) int
-		UpdateAPIKey            func(childComplexity int, input map[string]any) int
-		UpdateOneRole           func(childComplexity int, updateRoleInput map[string]any) int
-		UpdateWebhook           func(childComplexity int, input map[string]any) int
-		UpsertFieldPermissions  func(childComplexity int, upsertFieldPermissionsInput map[string]any) int
-		UpsertObjectPermissions func(childComplexity int, upsertObjectPermissionsInput map[string]any) int
-		UpsertPermissionFlags   func(childComplexity int, upsertPermissionFlagsInput map[string]any) int
+		AssignRoleToAPIKey            func(childComplexity int, apiKeyID string, roleID string) int
+		CreateAPIKey                  func(childComplexity int, input map[string]any) int
+		CreateOneRole                 func(childComplexity int, createRoleInput map[string]any) int
+		CreateWebhook                 func(childComplexity int, input map[string]any) int
+		DeleteOneRole                 func(childComplexity int, roleID string) int
+		DeleteWebhook                 func(childComplexity int, id string) int
+		GenerateAPIKeyToken           func(childComplexity int, apiKeyID string, expiresAt string) int
+		GeneratePlaygroundToken       func(childComplexity int) int
+		RevokeAPIKey                  func(childComplexity int, input map[string]any) int
+		UpdateAPIKey                  func(childComplexity int, input map[string]any) int
+		UpdateLabPublicFeatureFlag    func(childComplexity int, input map[string]any) int
+		UpdateOneRole                 func(childComplexity int, updateRoleInput map[string]any) int
+		UpdateWebhook                 func(childComplexity int, input map[string]any) int
+		UpdateWorkspaceMemberRole     func(childComplexity int, workspaceMemberID string, roleID string) int
+		UpdateWorkspaceMemberSettings func(childComplexity int, input map[string]any) int
+		UpsertFieldPermissions        func(childComplexity int, upsertFieldPermissionsInput map[string]any) int
+		UpsertObjectPermissions       func(childComplexity int, upsertObjectPermissionsInput map[string]any) int
+		UpsertPermissionFlags         func(childComplexity int, upsertPermissionFlagsInput map[string]any) int
 	}
 
 	ObjectPermission struct {
@@ -215,12 +224,22 @@ type ComplexityRoot struct {
 	}
 
 	WorkspaceMember struct {
-		AvatarURL       func(childComplexity int) int
-		ID              func(childComplexity int) int
-		Name            func(childComplexity int) int
-		UserEmail       func(childComplexity int) int
-		UserID          func(childComplexity int) int
-		UserWorkspaceID func(childComplexity int) int
+		AvatarURL        func(childComplexity int) int
+		CalendarStartDay func(childComplexity int) int
+		ColorScheme      func(childComplexity int) int
+		DateFormat       func(childComplexity int) int
+		ID               func(childComplexity int) int
+		Locale           func(childComplexity int) int
+		Name             func(childComplexity int) int
+		NumberFormat     func(childComplexity int) int
+		OpenRecordIn     func(childComplexity int) int
+		Roles            func(childComplexity int) int
+		TimeFormat       func(childComplexity int) int
+		TimeZone         func(childComplexity int) int
+		UIScale          func(childComplexity int) int
+		UserEmail        func(childComplexity int) int
+		UserID           func(childComplexity int) int
+		UserWorkspaceID  func(childComplexity int) int
 	}
 }
 
@@ -247,6 +266,9 @@ type MutationResolver interface {
 	UpsertObjectPermissions(ctx context.Context, upsertObjectPermissionsInput map[string]any) ([]*store.ObjectPermission, error)
 	UpsertFieldPermissions(ctx context.Context, upsertFieldPermissionsInput map[string]any) ([]*store.FieldPermission, error)
 	UpsertPermissionFlags(ctx context.Context, upsertPermissionFlagsInput map[string]any) ([]*store.RolePermissionFlag, error)
+	UpdateWorkspaceMemberRole(ctx context.Context, workspaceMemberID string, roleID string) (*store.WorkspaceMember, error)
+	UpdateWorkspaceMemberSettings(ctx context.Context, input map[string]any) (bool, error)
+	UpdateLabPublicFeatureFlag(ctx context.Context, input map[string]any) (*store.FeatureFlag, error)
 }
 type QueryResolver interface {
 	Webhooks(ctx context.Context) ([]*store.Webhook, error)
@@ -267,6 +289,9 @@ type RoleResolver interface {
 	FieldPermissions(ctx context.Context, obj *store.Role) ([]*store.FieldPermission, error)
 	RowLevelPermissionPredicates(ctx context.Context, obj *store.Role) ([]*store.RowLevelPermissionPredicate, error)
 	RowLevelPermissionPredicateGroups(ctx context.Context, obj *store.Role) ([]*store.RowLevelPermissionPredicateGroup, error)
+}
+type WorkspaceMemberResolver interface {
+	Roles(ctx context.Context, obj *store.WorkspaceMember) ([]*store.Role, error)
 }
 
 // endregion ************************** generated!.gotpl **************************
@@ -466,6 +491,19 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.AuthToken.Token(childComplexity), true
 
+	case "FeatureFlag.key":
+		if e.ComplexityRoot.FeatureFlag.Key == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FeatureFlag.Key(childComplexity), true
+	case "FeatureFlag.value":
+		if e.ComplexityRoot.FeatureFlag.Value == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FeatureFlag.Value(childComplexity), true
+
 	case "FieldPermission.canReadFieldValue":
 		if e.ComplexityRoot.FieldPermission.CanReadFieldValue == nil {
 			break
@@ -621,6 +659,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateAPIKey(childComplexity, args["input"].(map[string]any)), true
+	case "Mutation.updateLabPublicFeatureFlag":
+		if e.ComplexityRoot.Mutation.UpdateLabPublicFeatureFlag == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateLabPublicFeatureFlag_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateLabPublicFeatureFlag(childComplexity, args["input"].(map[string]any)), true
 	case "Mutation.updateOneRole":
 		if e.ComplexityRoot.Mutation.UpdateOneRole == nil {
 			break
@@ -643,6 +692,28 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdateWebhook(childComplexity, args["input"].(map[string]any)), true
+	case "Mutation.updateWorkspaceMemberRole":
+		if e.ComplexityRoot.Mutation.UpdateWorkspaceMemberRole == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateWorkspaceMemberRole_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateWorkspaceMemberRole(childComplexity, args["workspaceMemberId"].(string), args["roleId"].(string)), true
+	case "Mutation.updateWorkspaceMemberSettings":
+		if e.ComplexityRoot.Mutation.UpdateWorkspaceMemberSettings == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateWorkspaceMemberSettings_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdateWorkspaceMemberSettings(childComplexity, args["input"].(map[string]any)), true
 	case "Mutation.upsertFieldPermissions":
 		if e.ComplexityRoot.Mutation.UpsertFieldPermissions == nil {
 			break
@@ -1157,18 +1228,78 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.WorkspaceMember.AvatarURL(childComplexity), true
+	case "WorkspaceMember.calendarStartDay":
+		if e.ComplexityRoot.WorkspaceMember.CalendarStartDay == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkspaceMember.CalendarStartDay(childComplexity), true
+	case "WorkspaceMember.colorScheme":
+		if e.ComplexityRoot.WorkspaceMember.ColorScheme == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkspaceMember.ColorScheme(childComplexity), true
+	case "WorkspaceMember.dateFormat":
+		if e.ComplexityRoot.WorkspaceMember.DateFormat == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkspaceMember.DateFormat(childComplexity), true
 	case "WorkspaceMember.id":
 		if e.ComplexityRoot.WorkspaceMember.ID == nil {
 			break
 		}
 
 		return e.ComplexityRoot.WorkspaceMember.ID(childComplexity), true
+	case "WorkspaceMember.locale":
+		if e.ComplexityRoot.WorkspaceMember.Locale == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkspaceMember.Locale(childComplexity), true
 	case "WorkspaceMember.name":
 		if e.ComplexityRoot.WorkspaceMember.Name == nil {
 			break
 		}
 
 		return e.ComplexityRoot.WorkspaceMember.Name(childComplexity), true
+	case "WorkspaceMember.numberFormat":
+		if e.ComplexityRoot.WorkspaceMember.NumberFormat == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkspaceMember.NumberFormat(childComplexity), true
+	case "WorkspaceMember.openRecordIn":
+		if e.ComplexityRoot.WorkspaceMember.OpenRecordIn == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkspaceMember.OpenRecordIn(childComplexity), true
+	case "WorkspaceMember.roles":
+		if e.ComplexityRoot.WorkspaceMember.Roles == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkspaceMember.Roles(childComplexity), true
+	case "WorkspaceMember.timeFormat":
+		if e.ComplexityRoot.WorkspaceMember.TimeFormat == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkspaceMember.TimeFormat(childComplexity), true
+	case "WorkspaceMember.timeZone":
+		if e.ComplexityRoot.WorkspaceMember.TimeZone == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkspaceMember.TimeZone(childComplexity), true
+	case "WorkspaceMember.uiScale":
+		if e.ComplexityRoot.WorkspaceMember.UIScale == nil {
+			break
+		}
+
+		return e.ComplexityRoot.WorkspaceMember.UIScale(childComplexity), true
 	case "WorkspaceMember.userEmail":
 		if e.ComplexityRoot.WorkspaceMember.UserEmail == nil {
 			break
@@ -1205,10 +1336,12 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			graphql.NewInputUnmarshaler("ObjectPermissionInput", ec.unmarshalInputObjectPermissionInput),
 			graphql.NewInputUnmarshaler("RevokeApiKeyInput", ec.unmarshalInputRevokeApiKeyInput),
 			graphql.NewInputUnmarshaler("UpdateApiKeyInput", ec.unmarshalInputUpdateApiKeyInput),
+			graphql.NewInputUnmarshaler("UpdateLabPublicFeatureFlagInput", ec.unmarshalInputUpdateLabPublicFeatureFlagInput),
 			graphql.NewInputUnmarshaler("UpdateRoleInput", ec.unmarshalInputUpdateRoleInput),
 			graphql.NewInputUnmarshaler("UpdateRolePayload", ec.unmarshalInputUpdateRolePayload),
 			graphql.NewInputUnmarshaler("UpdateWebhookInput", ec.unmarshalInputUpdateWebhookInput),
 			graphql.NewInputUnmarshaler("UpdateWebhookInputUpdates", ec.unmarshalInputUpdateWebhookInputUpdates),
+			graphql.NewInputUnmarshaler("UpdateWorkspaceMemberSettingsInput", ec.unmarshalInputUpdateWorkspaceMemberSettingsInput),
 			graphql.NewInputUnmarshaler("UpsertFieldPermissionsInput", ec.unmarshalInputUpsertFieldPermissionsInput),
 			graphql.NewInputUnmarshaler("UpsertObjectPermissionsInput", ec.unmarshalInputUpsertObjectPermissionsInput),
 			graphql.NewInputUnmarshaler("UpsertPermissionFlagsInput", ec.unmarshalInputUpsertPermissionFlagsInput),
@@ -1393,6 +1526,16 @@ func (ec *executionContext) childFields_AuthToken(ctx context.Context, field gra
 		return ec.fieldContext_AuthToken_expiresAt(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type AuthToken", field.Name)
+}
+
+func (ec *executionContext) childFields_FeatureFlag(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "key":
+		return ec.fieldContext_FeatureFlag_key(ctx, field)
+	case "value":
+		return ec.fieldContext_FeatureFlag_value(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type FeatureFlag", field.Name)
 }
 
 func (ec *executionContext) childFields_FieldPermission(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
@@ -1613,6 +1756,26 @@ func (ec *executionContext) childFields_WorkspaceMember(ctx context.Context, fie
 		return ec.fieldContext_WorkspaceMember_userId(ctx, field)
 	case "userWorkspaceId":
 		return ec.fieldContext_WorkspaceMember_userWorkspaceId(ctx, field)
+	case "colorScheme":
+		return ec.fieldContext_WorkspaceMember_colorScheme(ctx, field)
+	case "uiScale":
+		return ec.fieldContext_WorkspaceMember_uiScale(ctx, field)
+	case "openRecordIn":
+		return ec.fieldContext_WorkspaceMember_openRecordIn(ctx, field)
+	case "locale":
+		return ec.fieldContext_WorkspaceMember_locale(ctx, field)
+	case "timeZone":
+		return ec.fieldContext_WorkspaceMember_timeZone(ctx, field)
+	case "dateFormat":
+		return ec.fieldContext_WorkspaceMember_dateFormat(ctx, field)
+	case "timeFormat":
+		return ec.fieldContext_WorkspaceMember_timeFormat(ctx, field)
+	case "calendarStartDay":
+		return ec.fieldContext_WorkspaceMember_calendarStartDay(ctx, field)
+	case "numberFormat":
+		return ec.fieldContext_WorkspaceMember_numberFormat(ctx, field)
+	case "roles":
+		return ec.fieldContext_WorkspaceMember_roles(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type WorkspaceMember", field.Name)
 }
@@ -1875,6 +2038,20 @@ func (ec *executionContext) field_Mutation_updateApiKey_args(ctx context.Context
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_updateLabPublicFeatureFlag_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
+		func(ctx context.Context, v any) (map[string]any, error) {
+			return ec.unmarshalNUpdateLabPublicFeatureFlagInput2map(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_updateOneRole_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -1895,6 +2072,42 @@ func (ec *executionContext) field_Mutation_updateWebhook_args(ctx context.Contex
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
 		func(ctx context.Context, v any) (map[string]any, error) {
 			return ec.unmarshalNUpdateWebhookInput2map(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateWorkspaceMemberRole_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "workspaceMemberId",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNUUID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["workspaceMemberId"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "roleId",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNUUID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["roleId"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateWorkspaceMemberSettings_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
+		func(ctx context.Context, v any) (map[string]any, error) {
+			return ec.unmarshalNUpdateWorkspaceMemberSettingsInput2map(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -2751,6 +2964,52 @@ func (ec *executionContext) fieldContext_AuthToken_expiresAt(_ context.Context, 
 	return graphql.NewScalarFieldContext("AuthToken", field, false, false, "DateTime")
 }
 
+func (ec *executionContext) _FeatureFlag_key(ctx context.Context, field graphql.CollectedField, obj *store.FeatureFlag) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_FeatureFlag_key(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Key, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_FeatureFlag_key(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("FeatureFlag", field, false, false, "String")
+}
+
+func (ec *executionContext) _FeatureFlag_value(ctx context.Context, field graphql.CollectedField, obj *store.FeatureFlag) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_FeatureFlag_value(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Value, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_FeatureFlag_value(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("FeatureFlag", field, false, false, "Boolean")
+}
+
 func (ec *executionContext) _FieldPermission_id(ctx context.Context, field graphql.CollectedField, obj *store.FieldPermission) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -3577,6 +3836,138 @@ func (ec *executionContext) fieldContext_Mutation_upsertPermissionFlags(ctx cont
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_upsertPermissionFlags_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateWorkspaceMemberRole(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_updateWorkspaceMemberRole(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().UpdateWorkspaceMemberRole(ctx, fc.Args["workspaceMemberId"].(string), fc.Args["roleId"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *store.WorkspaceMember) graphql.Marshaler {
+			return ec.marshalNWorkspaceMember2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋaccessᚋstoreᚐWorkspaceMember(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_updateWorkspaceMemberRole(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_WorkspaceMember(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateWorkspaceMemberRole_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateWorkspaceMemberSettings(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_updateWorkspaceMemberSettings(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().UpdateWorkspaceMemberSettings(ctx, fc.Args["input"].(map[string]any))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_updateWorkspaceMemberSettings(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Boolean does not have child fields")
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateWorkspaceMemberSettings_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateLabPublicFeatureFlag(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_updateLabPublicFeatureFlag(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().UpdateLabPublicFeatureFlag(ctx, fc.Args["input"].(map[string]any))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *store.FeatureFlag) graphql.Marshaler {
+			return ec.marshalNFeatureFlag2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋaccessᚋstoreᚐFeatureFlag(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_updateLabPublicFeatureFlag(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_FeatureFlag(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateLabPublicFeatureFlag_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -5711,6 +6102,245 @@ func (ec *executionContext) fieldContext_WorkspaceMember_userWorkspaceId(_ conte
 	return graphql.NewScalarFieldContext("WorkspaceMember", field, false, false, "UUID")
 }
 
+func (ec *executionContext) _WorkspaceMember_colorScheme(ctx context.Context, field graphql.CollectedField, obj *store.WorkspaceMember) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkspaceMember_colorScheme(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ColorScheme, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_WorkspaceMember_colorScheme(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("WorkspaceMember", field, false, false, "String")
+}
+
+func (ec *executionContext) _WorkspaceMember_uiScale(ctx context.Context, field graphql.CollectedField, obj *store.WorkspaceMember) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkspaceMember_uiScale(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UIScale, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_WorkspaceMember_uiScale(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("WorkspaceMember", field, false, false, "String")
+}
+
+func (ec *executionContext) _WorkspaceMember_openRecordIn(ctx context.Context, field graphql.CollectedField, obj *store.WorkspaceMember) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkspaceMember_openRecordIn(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.OpenRecordIn, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_WorkspaceMember_openRecordIn(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("WorkspaceMember", field, false, false, "String")
+}
+
+func (ec *executionContext) _WorkspaceMember_locale(ctx context.Context, field graphql.CollectedField, obj *store.WorkspaceMember) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkspaceMember_locale(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Locale, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_WorkspaceMember_locale(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("WorkspaceMember", field, false, false, "String")
+}
+
+func (ec *executionContext) _WorkspaceMember_timeZone(ctx context.Context, field graphql.CollectedField, obj *store.WorkspaceMember) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkspaceMember_timeZone(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TimeZone, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_WorkspaceMember_timeZone(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("WorkspaceMember", field, false, false, "String")
+}
+
+func (ec *executionContext) _WorkspaceMember_dateFormat(ctx context.Context, field graphql.CollectedField, obj *store.WorkspaceMember) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkspaceMember_dateFormat(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.DateFormat, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_WorkspaceMember_dateFormat(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("WorkspaceMember", field, false, false, "String")
+}
+
+func (ec *executionContext) _WorkspaceMember_timeFormat(ctx context.Context, field graphql.CollectedField, obj *store.WorkspaceMember) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkspaceMember_timeFormat(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TimeFormat, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_WorkspaceMember_timeFormat(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("WorkspaceMember", field, false, false, "String")
+}
+
+func (ec *executionContext) _WorkspaceMember_calendarStartDay(ctx context.Context, field graphql.CollectedField, obj *store.WorkspaceMember) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkspaceMember_calendarStartDay(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CalendarStartDay, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *int) graphql.Marshaler {
+			return ec.marshalOInt2ᚖint(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_WorkspaceMember_calendarStartDay(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("WorkspaceMember", field, false, false, "Int")
+}
+
+func (ec *executionContext) _WorkspaceMember_numberFormat(ctx context.Context, field graphql.CollectedField, obj *store.WorkspaceMember) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkspaceMember_numberFormat(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.NumberFormat, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_WorkspaceMember_numberFormat(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("WorkspaceMember", field, false, false, "String")
+}
+
+func (ec *executionContext) _WorkspaceMember_roles(ctx context.Context, field graphql.CollectedField, obj *store.WorkspaceMember) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_WorkspaceMember_roles(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return ec.Resolvers.WorkspaceMember().Roles(ctx, obj)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*store.Role) graphql.Marshaler {
+			return ec.marshalORole2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋaccessᚋstoreᚐRoleᚄ(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_WorkspaceMember_roles(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "WorkspaceMember",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Role(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) ___Directive_name(ctx context.Context, field graphql.CollectedField, obj *introspection.Directive) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -7331,6 +7961,56 @@ func UnmarshalUpdateApiKeyInput(ctx context.Context, raw any) (map[string]any, e
 	return out, err
 }
 
+func (ec *executionContext) unmarshalInputUpdateLabPublicFeatureFlagInput(ctx context.Context, obj any) (map[string]any, error) {
+	var it map[string]any
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"publicFeatureFlag", "value"}
+	it = make(map[string]any, len(asMap))
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "publicFeatureFlag":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("publicFeatureFlag"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["publicFeatureFlag"] = data
+		case "value":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("value"))
+			data, err := ec.unmarshalNBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["value"] = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalUpdateLabPublicFeatureFlagInput unmarshals raw into the UpdateLabPublicFeatureFlagInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalUpdateLabPublicFeatureFlagInput(ctx context.Context, raw any) (map[string]any, error) {
+	var out map[string]any
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "UpdateLabPublicFeatureFlagInput", raw, &out)
+	return out, err
+}
+
 func (ec *executionContext) unmarshalInputUpdateRoleInput(ctx context.Context, obj any) (map[string]any, error) {
 	var it map[string]any
 	if obj == nil {
@@ -7612,6 +8292,56 @@ func (ec *executionContext) unmarshalInputUpdateWebhookInputUpdates(ctx context.
 func UnmarshalUpdateWebhookInputUpdates(ctx context.Context, raw any) (map[string]any, error) {
 	var out map[string]any
 	err := graphql.UnmarshalNamedInputFromContext(ctx, "UpdateWebhookInputUpdates", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputUpdateWorkspaceMemberSettingsInput(ctx context.Context, obj any) (map[string]any, error) {
+	var it map[string]any
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"workspaceMemberId", "update"}
+	it = make(map[string]any, len(asMap))
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "workspaceMemberId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("workspaceMemberId"))
+			data, err := ec.unmarshalNUUID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["workspaceMemberId"] = data
+		case "update":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("update"))
+			data, err := ec.unmarshalNJSON2interface(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it["update"] = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalUpdateWorkspaceMemberSettingsInput unmarshals raw into the UpdateWorkspaceMemberSettingsInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalUpdateWorkspaceMemberSettingsInput(ctx context.Context, raw any) (map[string]any, error) {
+	var out map[string]any
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "UpdateWorkspaceMemberSettingsInput", raw, &out)
 	return out, err
 }
 
@@ -8059,6 +8789,44 @@ func (ec *executionContext) _AuthToken(ctx context.Context, sel ast.SelectionSet
 	return out
 }
 
+var featureFlagImplementors = []string{"FeatureFlag"}
+
+func (ec *executionContext) _FeatureFlag(ctx context.Context, sel ast.SelectionSet, obj *store.FeatureFlag) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, featureFlagImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("FeatureFlag")
+		case "key":
+			out.Values[i] = ec._FeatureFlag_key(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "value":
+			out.Values[i] = ec._FeatureFlag_value(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
 var fieldPermissionImplementors = []string{"FieldPermission"}
 
 func (ec *executionContext) _FieldPermission(ctx context.Context, sel ast.SelectionSet, obj *store.FieldPermission) graphql.Marshaler {
@@ -8275,6 +9043,27 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "upsertPermissionFlags":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_upsertPermissionFlags(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateWorkspaceMemberRole":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateWorkspaceMemberRole(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateWorkspaceMemberSettings":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateWorkspaceMemberSettings(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateLabPublicFeatureFlag":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateLabPublicFeatureFlag(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -8947,33 +9736,84 @@ func (ec *executionContext) _WorkspaceMember(ctx context.Context, sel ast.Select
 		case "id":
 			out.Values[i] = ec._WorkspaceMember_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "name":
 			out.Values[i] = ec._WorkspaceMember_name(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "avatarUrl":
 			out.Values[i] = ec._WorkspaceMember_avatarUrl(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "userEmail":
 			out.Values[i] = ec._WorkspaceMember_userEmail(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "userId":
 			out.Values[i] = ec._WorkspaceMember_userId(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "userWorkspaceId":
 			out.Values[i] = ec._WorkspaceMember_userWorkspaceId(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
+				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "colorScheme":
+			out.Values[i] = ec._WorkspaceMember_colorScheme(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "uiScale":
+			out.Values[i] = ec._WorkspaceMember_uiScale(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "openRecordIn":
+			out.Values[i] = ec._WorkspaceMember_openRecordIn(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "locale":
+			out.Values[i] = ec._WorkspaceMember_locale(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "timeZone":
+			out.Values[i] = ec._WorkspaceMember_timeZone(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "dateFormat":
+			out.Values[i] = ec._WorkspaceMember_dateFormat(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "timeFormat":
+			out.Values[i] = ec._WorkspaceMember_timeFormat(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "calendarStartDay":
+			out.Values[i] = ec._WorkspaceMember_calendarStartDay(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "numberFormat":
+			out.Values[i] = ec._WorkspaceMember_numberFormat(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "roles":
+			out.ResolveConcurrently(ec.OperationContext, &deferred, i,
+				true, false,
+				func(ctx context.Context) graphql.Marshaler {
+					return ec._WorkspaceMember_roles(ctx, field, obj)
+				})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -9484,6 +10324,14 @@ func (ec *executionContext) marshalNDateTime2string(ctx context.Context, sel ast
 	return res
 }
 
+func (ec *executionContext) marshalNFeatureFlag2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋaccessᚋstoreᚐFeatureFlag(ctx context.Context, sel ast.SelectionSet, v *store.FeatureFlag) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "FeatureFlag!")
+		return graphql.Null
+	}
+	return ec._FeatureFlag(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNFieldPermission2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋaccessᚋstoreᚐFieldPermissionᚄ(ctx context.Context, sel ast.SelectionSet, v []*store.FieldPermission) graphql.Marshaler {
 	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
 		fc := graphql.GetFieldContext(ctx)
@@ -9781,6 +10629,11 @@ func (ec *executionContext) unmarshalNUpdateApiKeyInput2map(ctx context.Context,
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
+func (ec *executionContext) unmarshalNUpdateLabPublicFeatureFlagInput2map(ctx context.Context, v any) (map[string]any, error) {
+	res, err := ec.unmarshalInputUpdateLabPublicFeatureFlagInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNUpdateRoleInput2map(ctx context.Context, v any) (map[string]any, error) {
 	res, err := ec.unmarshalInputUpdateRoleInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -9798,6 +10651,11 @@ func (ec *executionContext) unmarshalNUpdateWebhookInput2map(ctx context.Context
 
 func (ec *executionContext) unmarshalNUpdateWebhookInputUpdates2map(ctx context.Context, v any) (map[string]any, error) {
 	res, err := ec.unmarshalInputUpdateWebhookInputUpdates(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdateWorkspaceMemberSettingsInput2map(ctx context.Context, v any) (map[string]any, error) {
+	res, err := ec.unmarshalInputUpdateWorkspaceMemberSettingsInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
@@ -10097,6 +10955,24 @@ func (ec *executionContext) marshalOFloat2ᚖfloat64(ctx context.Context, sel as
 	return graphql.WrapContextMarshaler(ctx, res)
 }
 
+func (ec *executionContext) unmarshalOInt2ᚖint(ctx context.Context, v any) (*int, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalInt(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.SelectionSet, v *int) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	_ = sel
+	_ = ctx
+	res := graphql.MarshalInt(*v)
+	return res
+}
+
 func (ec *executionContext) unmarshalOJSON2interface(ctx context.Context, v any) (any, error) {
 	if v == nil {
 		return nil, nil
@@ -10123,6 +10999,25 @@ func (ec *executionContext) marshalOObjectPermission2ᚕᚖgithubᚗcomᚋtwenty
 		fc := graphql.GetFieldContext(ctx)
 		fc.Result = &v[i]
 		return ec.marshalNObjectPermission2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋaccessᚋstoreᚐObjectPermission(ctx, sel, v[i])
+	})
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) marshalORole2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋaccessᚋstoreᚐRoleᚄ(ctx context.Context, sel ast.SelectionSet, v []*store.Role) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := graphql.MarshalSliceConcurrently(ctx, len(v), 0, false, func(ctx context.Context, i int) graphql.Marshaler {
+		fc := graphql.GetFieldContext(ctx)
+		fc.Result = &v[i]
+		return ec.marshalNRole2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋaccessᚋstoreᚐRole(ctx, sel, v[i])
 	})
 
 	for _, e := range ret {
