@@ -35,6 +35,8 @@ const (
 	adminRoleID      = "d0000000-0000-4000-8000-000000000001"
 	flaggedRoleID    = "d0000000-0000-4000-8000-000000000002"
 	memberRoleID     = "d0000000-0000-4000-8000-000000000003"
+	senderUserID     = "f0000000-0000-4000-8000-000000000001"
+	memberUserID     = "f0000000-0000-4000-8000-000000000002"
 	otherInvitation  = "a1000000-0000-4000-8000-000000000009"
 	otherDomain      = "b1000000-0000-4000-8000-000000000009"
 )
@@ -53,7 +55,10 @@ func newHarness(t *testing.T) *harness {
 	h := &harness{pool: pool}
 	statements := []string{
 		`SET LOCAL session_replication_role = replica`,
-		`INSERT INTO core.workspace (id, subdomain, "workspaceCustomApplicationId", "activationStatus") VALUES ('` + workspaceID + `', 'acme', '` + applicationID + `', 'PENDING_CREATION')`,
+		`INSERT INTO core.workspace (id, subdomain, "displayName", "inviteHash", "workspaceCustomApplicationId", "defaultRoleId", "databaseSchema", "activationStatus") VALUES ('` + workspaceID + `', 'acme', 'Acme', 'hash123', '` + applicationID + `', '` + memberRoleID + `', 'workspace_acme', 'PENDING_CREATION')`,
+		`INSERT INTO core."user" (id, email, "firstName", "lastName") VALUES ('` + senderUserID + `', 'sender@example.com', 'Sam', 'Sender')`,
+		`INSERT INTO core."user" (id, email) VALUES ('` + memberUserID + `', 'Member@Example.com')`,
+		`INSERT INTO core."userWorkspace" ("userId", "workspaceId") VALUES ('` + memberUserID + `', '` + workspaceID + `')`,
 		`INSERT INTO core.role (id, label, "canUpdateAllSettings", "workspaceId", "universalIdentifier", "applicationId") VALUES ('` + adminRoleID + `', 'Admin', true, '` + workspaceID + `', gen_random_uuid(), '` + applicationID + `')`,
 		`INSERT INTO core.role (id, label, "workspaceId", "universalIdentifier", "applicationId") VALUES ('` + flaggedRoleID + `', 'Members', '` + workspaceID + `', gen_random_uuid(), '` + applicationID + `')`,
 		`INSERT INTO core.role (id, label, "workspaceId", "universalIdentifier", "applicationId") VALUES ('` + memberRoleID + `', 'Member', '` + workspaceID + `', gen_random_uuid(), '` + applicationID + `')`,
@@ -108,9 +113,20 @@ func domainRow(id, workspace, domain string, validated bool, createdAt string) s
 }
 
 func (h *harness) handler(userWorkspaceID string) http.Handler {
-	graphql := invitationgql.NewHandler(&invitationgql.Resolver{Store: store.New(h.pool)}, slog.New(slog.NewTextHandler(io.Discard, nil)))
+	return h.handlerWith(userWorkspaceID, &recordingSender{}, auth.NewMemoryThrottle())
+}
+
+func (h *harness) handlerWith(userWorkspaceID string, mailer systemmail.Sender, throttle store.Throttle) http.Handler {
+	frontURL, err := url.Parse("https://app.example.com")
+	if err != nil {
+		panic(err)
+	}
+	graphql := invitationgql.NewHandler(&invitationgql.Resolver{
+		Store:   store.New(h.pool),
+		Inviter: store.NewInviter(h.pool, mailer, throttle, frontURL, false),
+	}, slog.New(slog.NewTextHandler(io.Discard, nil)))
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		principal := auth.Principal{UserID: "u", WorkspaceID: workspaceID, UserWorkspaceID: userWorkspaceID}
+		principal := auth.Principal{UserID: senderUserID, WorkspaceID: workspaceID, UserWorkspaceID: userWorkspaceID}
 		graphql.ServeHTTP(w, r.WithContext(auth.WithPrincipal(r.Context(), principal)))
 	})
 }

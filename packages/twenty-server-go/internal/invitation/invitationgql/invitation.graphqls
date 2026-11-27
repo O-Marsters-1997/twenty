@@ -15,6 +15,12 @@ type ApprovedAccessDomain {
   createdAt: DateTime!
 }
 
+type SendInvitations {
+  success: Boolean!
+  errors: [String!]!
+  result: [WorkspaceInvitation!]!
+}
+
 input DeleteApprovedAccessDomainInput {
   id: UUID!
 }
@@ -35,6 +41,8 @@ extend type Query {
 }
 
 extend type Mutation {
+  sendInvitations(emails: [String!]!, roleId: UUID): SendInvitations!
+  resendWorkspaceInvitation(appTokenId: String!): SendInvitations!
   deleteWorkspaceInvitation(appTokenId: String!): String!
   deleteApprovedAccessDomain(input: DeleteApprovedAccessDomainInput!): Boolean!
   createApprovedAccessDomain(input: CreateApprovedAccessDomainInput!): ApprovedAccessDomain!
