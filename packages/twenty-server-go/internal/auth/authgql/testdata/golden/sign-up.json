@@ -1,0 +1,9 @@
+{
+  "name": "sign-up",
+  "operation": "SignUp",
+  "fixture": "no existing user",
+  "endpoint": "/metadata",
+  "query": "mutation SignUp($email: String!, $password: String!, $captchaToken: String, $locale: String, $verifyEmailRedirectPath: String) { signUp(email: $email, password: $password, captchaToken: $captchaToken, locale: $locale, verifyEmailRedirectPath: $verifyEmailRedirectPath) { availableWorkspaces { availableWorkspacesForSignIn { id displayName loginToken personalInviteToken inviteHash workspaceUrls { subdomainUrl } logo } availableWorkspacesForSignUp { id displayName loginToken personalInviteToken inviteHash workspaceUrls { subdomainUrl } logo } } tokens { accessOrWorkspaceAgnosticToken { token expiresAt } refreshToken { token expiresAt } } } }",
+  "variables": {"email": "newcomer@example.com", "password": "correct horse"},
+  "response": {"data":{"signUp":{"availableWorkspaces":{"availableWorkspacesForSignIn":[],"availableWorkspacesForSignUp":[{"id":"26a06a83-ad30-4547-9126-7f6339d43e03","displayName":"Twenty","loginToken":null,"personalInviteToken":"pinned-invite-token","inviteHash":null,"workspaceUrls":{"subdomainUrl":"http://pinned.localhost:3001/"},"logo":""}]},"tokens":{"accessOrWorkspaceAgnosticToken":{"token":"x","expiresAt":"x"},"refreshToken":{"token":"x","expiresAt":"x"}}}}}
+}

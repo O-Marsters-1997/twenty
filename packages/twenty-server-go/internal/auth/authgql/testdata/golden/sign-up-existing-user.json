@@ -1,0 +1,9 @@
+{
+  "name": "sign-up-existing-user",
+  "operation": "SignUp",
+  "fixture": "user already registered",
+  "endpoint": "/metadata",
+  "query": "mutation SignUp($email: String!, $password: String!, $captchaToken: String, $locale: String, $verifyEmailRedirectPath: String) { signUp(email: $email, password: $password, captchaToken: $captchaToken, locale: $locale, verifyEmailRedirectPath: $verifyEmailRedirectPath) { availableWorkspaces { availableWorkspacesForSignIn { id displayName loginToken personalInviteToken inviteHash workspaceUrls { subdomainUrl } logo } availableWorkspacesForSignUp { id displayName loginToken personalInviteToken inviteHash workspaceUrls { subdomainUrl } logo } } tokens { accessOrWorkspaceAgnosticToken { token expiresAt } refreshToken { token expiresAt } } } }",
+  "variables": {"email": "member@example.com", "password": "correct horse"},
+  "response": {"errors":[{"message":"User already exists","locations":[{"line":1,"column":130}],"path":["signUp"],"extensions":{"code":"BAD_USER_INPUT","subCode":"USER_ALREADY_EXIST","userFriendlyMessage":"User already exists."}}],"data":null}
+}
