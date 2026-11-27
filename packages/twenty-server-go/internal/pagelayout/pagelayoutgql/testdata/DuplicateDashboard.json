@@ -1,0 +1,22 @@
+{
+  "name": "DuplicateDashboard",
+  "operation": "DuplicateDashboard",
+  "fixture": "dashboard titled Sales overview at position 3 whose layout has one tab of chart widgets, duplicated by a member of the workspace; id, pageLayoutId and timestamps are generated, so the test masks them; hand-written from the Node resolver, DashboardDuplicationService and DuplicatedDashboardDTO, no Node server was available to record it",
+  "endpoint": "/metadata",
+  "query": "mutation DuplicateDashboard($id: UUID!) { duplicateDashboard(id: $id) { id title pageLayoutId position createdAt updatedAt } }",
+  "variables": {
+    "id": "d1000000-0000-4000-8000-000000000001"
+  },
+  "response": {
+    "data": {
+      "duplicateDashboard": {
+        "id": "00000000-0000-4000-8000-000000000000",
+        "title": "Sales overview (Copy)",
+        "pageLayoutId": "00000000-0000-4000-8000-000000000000",
+        "position": 3,
+        "createdAt": "2026-01-01T00:00:00.000Z",
+        "updatedAt": "2026-01-01T00:00:00.000Z"
+      }
+    }
+  }
+}

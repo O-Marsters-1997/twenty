@@ -29,7 +29,7 @@ func NewHandler(resolver *Resolver, logger *slog.Logger) http.Handler {
 			presented.Extensions = map[string]any{"code": "FORBIDDEN"}
 		case errors.Is(err, store.ErrNotFound):
 			presented.Extensions = map[string]any{"code": "NOT_FOUND"}
-		case errors.Is(err, errUnsupportedUpdate):
+		case errors.Is(err, errUnsupportedUpdate), errors.Is(err, store.ErrInvalidInput):
 			presented.Extensions = map[string]any{"code": "BAD_USER_INPUT"}
 		default:
 			logger.Error("resolve graphql", "err", err)

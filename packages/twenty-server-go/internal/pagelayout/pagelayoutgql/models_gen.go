@@ -89,6 +89,15 @@ type ChatThreadsConfiguration struct {
 
 func (ChatThreadsConfiguration) IsWidgetConfiguration() {}
 
+type DuplicatedDashboard struct {
+	ID           string  `json:"id"`
+	Title        *string `json:"title,omitempty"`
+	PageLayoutID *string `json:"pageLayoutId,omitempty"`
+	Position     float64 `json:"position"`
+	CreatedAt    string  `json:"createdAt"`
+	UpdatedAt    string  `json:"updatedAt"`
+}
+
 type EmailThreadConfiguration struct {
 	ConfigurationType WidgetConfigurationType `json:"configurationType"`
 }
@@ -352,6 +361,15 @@ type TimelineConfiguration struct {
 
 func (TimelineConfiguration) IsWidgetConfiguration() {}
 
+type UpdatePageLayoutTabWithWidgetsInput struct {
+	ID         string                               `json:"id"`
+	Title      string                               `json:"title"`
+	Position   float64                              `json:"position"`
+	Icon       *string                              `json:"icon,omitempty"`
+	LayoutMode *PageLayoutTabLayoutMode             `json:"layoutMode,omitempty"`
+	Widgets    []*UpdatePageLayoutWidgetWithIDInput `json:"widgets"`
+}
+
 type UpdatePageLayoutWidgetInput struct {
 	PageLayoutTabID                   *string     `json:"pageLayoutTabId,omitempty"`
 	Title                             *string     `json:"title,omitempty"`
@@ -362,6 +380,26 @@ type UpdatePageLayoutWidgetInput struct {
 	ConditionalDisplay                any         `json:"conditionalDisplay,omitempty"`
 	ConditionalAvailabilityExpression *string     `json:"conditionalAvailabilityExpression,omitempty"`
 	IsActive                          *bool       `json:"isActive,omitempty"`
+}
+
+type UpdatePageLayoutWidgetWithIDInput struct {
+	ID                                string     `json:"id"`
+	PageLayoutTabID                   string     `json:"pageLayoutTabId"`
+	Title                             string     `json:"title"`
+	Type                              WidgetType `json:"type"`
+	ObjectMetadataID                  *string    `json:"objectMetadataId,omitempty"`
+	Position                          any        `json:"position,omitempty"`
+	Configuration                     any        `json:"configuration,omitempty"`
+	ConditionalDisplay                any        `json:"conditionalDisplay,omitempty"`
+	ConditionalAvailabilityExpression *string    `json:"conditionalAvailabilityExpression,omitempty"`
+}
+
+type UpdatePageLayoutWithTabsInput struct {
+	Name             string                                 `json:"name"`
+	Type             PageLayoutType                         `json:"type"`
+	ObjectMetadataID *string                                `json:"objectMetadataId,omitempty"`
+	IsFirstTabPinned *bool                                  `json:"isFirstTabPinned,omitempty"`
+	Tabs             []*UpdatePageLayoutTabWithWidgetsInput `json:"tabs"`
 }
 
 type ViewConfiguration struct {

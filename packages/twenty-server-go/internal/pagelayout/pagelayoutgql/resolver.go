@@ -116,6 +116,59 @@ func (r *mutationResolver) UpdatePageLayoutWidget(ctx context.Context, id string
 	return toWidget(widget)
 }
 
+func (r *mutationResolver) UpdatePageLayoutWithTabsAndWidgets(ctx context.Context, id string, input UpdatePageLayoutWithTabsInput) (*PageLayout, error) {
+	caller, err := principal(ctx)
+	if err != nil {
+		return nil, err
+	}
+	granted, err := r.Store.HasLayoutsPermission(ctx, caller.UserWorkspaceID, caller.APIKeyID)
+	if err != nil {
+		return nil, err
+	}
+	if !granted {
+		return nil, store.ErrPermissionDenied
+	}
+	layoutInput := store.LayoutInput{
+		Name: input.Name, Type: string(input.Type), ObjectMetadataID: input.ObjectMetadataID, IsFirstTabPinned: input.IsFirstTabPinned,
+	}
+	for _, tab := range input.Tabs {
+		tabInput := store.TabInput{ID: tab.ID, Title: tab.Title, Position: tab.Position, Icon: tab.Icon}
+		if tab.LayoutMode != nil {
+			layoutMode := string(*tab.LayoutMode)
+			tabInput.LayoutMode = &layoutMode
+		}
+		for _, widget := range tab.Widgets {
+			tabInput.Widgets = append(tabInput.Widgets, store.WidgetInput{
+				ID: widget.ID, PageLayoutTabID: widget.PageLayoutTabID, Title: widget.Title, Type: string(widget.Type),
+				ObjectMetadataID: widget.ObjectMetadataID, Position: widget.Position, Configuration: widget.Configuration,
+				ConditionalAvailabilityExpression: widget.ConditionalAvailabilityExpression,
+			})
+		}
+		layoutInput.Tabs = append(layoutInput.Tabs, tabInput)
+	}
+	layout, err := r.Store.UpdateLayout(ctx, caller.WorkspaceID, id, layoutInput)
+	if err != nil {
+		return nil, err
+	}
+	return toLayout(layout)
+}
+
+func (r *mutationResolver) DuplicateDashboard(ctx context.Context, id string) (*DuplicatedDashboard, error) {
+	caller, err := principal(ctx)
+	if err != nil {
+		return nil, err
+	}
+	duplicated, err := r.Store.DuplicateDashboard(ctx, caller.WorkspaceID, id, caller.WorkspaceMemberID)
+	if err != nil {
+		return nil, err
+	}
+	const isoMillis = "2006-01-02T15:04:05.000Z"
+	return &DuplicatedDashboard{
+		ID: duplicated.ID, Title: &duplicated.Title, PageLayoutID: &duplicated.PageLayoutID, Position: duplicated.Position,
+		CreatedAt: duplicated.CreatedAt.UTC().Format(isoMillis), UpdatedAt: duplicated.UpdatedAt.UTC().Format(isoMillis),
+	}, nil
+}
+
 func toLayout(layout store.Layout) (*PageLayout, error) {
 	tabs := make([]*PageLayoutTab, 0, len(layout.Tabs))
 	for _, tab := range layout.Tabs {

@@ -96,6 +96,15 @@ type ComplexityRoot struct {
 		ConfigurationType func(childComplexity int) int
 	}
 
+	DuplicatedDashboard struct {
+		CreatedAt    func(childComplexity int) int
+		ID           func(childComplexity int) int
+		PageLayoutID func(childComplexity int) int
+		Position     func(childComplexity int) int
+		Title        func(childComplexity int) int
+		UpdatedAt    func(childComplexity int) int
+	}
+
 	EmailThreadConfiguration struct {
 		ConfigurationType func(childComplexity int) int
 	}
@@ -185,7 +194,9 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		UpdatePageLayoutWidget func(childComplexity int, id string, input UpdatePageLayoutWidgetInput) int
+		DuplicateDashboard                 func(childComplexity int, id string) int
+		UpdatePageLayoutWidget             func(childComplexity int, id string, input UpdatePageLayoutWidgetInput) int
+		UpdatePageLayoutWithTabsAndWidgets func(childComplexity int, id string, input UpdatePageLayoutWithTabsInput) int
 	}
 
 	NotesConfiguration struct {
@@ -345,6 +356,8 @@ type ComplexityRoot struct {
 
 type MutationResolver interface {
 	UpdatePageLayoutWidget(ctx context.Context, id string, input UpdatePageLayoutWidgetInput) (*PageLayoutWidget, error)
+	UpdatePageLayoutWithTabsAndWidgets(ctx context.Context, id string, input UpdatePageLayoutWithTabsInput) (*PageLayout, error)
+	DuplicateDashboard(ctx context.Context, id string) (*DuplicatedDashboard, error)
 }
 type QueryResolver interface {
 	GetPageLayouts(ctx context.Context, objectMetadataID *string, pageLayoutType *PageLayoutType) ([]*PageLayout, error)
@@ -643,6 +656,43 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ChatThreadsConfiguration.ConfigurationType(childComplexity), true
+
+	case "DuplicatedDashboard.createdAt":
+		if e.ComplexityRoot.DuplicatedDashboard.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DuplicatedDashboard.CreatedAt(childComplexity), true
+	case "DuplicatedDashboard.id":
+		if e.ComplexityRoot.DuplicatedDashboard.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DuplicatedDashboard.ID(childComplexity), true
+	case "DuplicatedDashboard.pageLayoutId":
+		if e.ComplexityRoot.DuplicatedDashboard.PageLayoutID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DuplicatedDashboard.PageLayoutID(childComplexity), true
+	case "DuplicatedDashboard.position":
+		if e.ComplexityRoot.DuplicatedDashboard.Position == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DuplicatedDashboard.Position(childComplexity), true
+	case "DuplicatedDashboard.title":
+		if e.ComplexityRoot.DuplicatedDashboard.Title == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DuplicatedDashboard.Title(childComplexity), true
+	case "DuplicatedDashboard.updatedAt":
+		if e.ComplexityRoot.DuplicatedDashboard.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DuplicatedDashboard.UpdatedAt(childComplexity), true
 
 	case "EmailThreadConfiguration.configurationType":
 		if e.ComplexityRoot.EmailThreadConfiguration.ConfigurationType == nil {
@@ -968,6 +1018,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.MessageCampaignDetailsConfiguration.ConfigurationType(childComplexity), true
 
+	case "Mutation.duplicateDashboard":
+		if e.ComplexityRoot.Mutation.DuplicateDashboard == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_duplicateDashboard_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.DuplicateDashboard(childComplexity, args["id"].(string)), true
 	case "Mutation.updatePageLayoutWidget":
 		if e.ComplexityRoot.Mutation.UpdatePageLayoutWidget == nil {
 			break
@@ -979,6 +1040,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.UpdatePageLayoutWidget(childComplexity, args["id"].(string), args["input"].(UpdatePageLayoutWidgetInput)), true
+	case "Mutation.updatePageLayoutWithTabsAndWidgets":
+		if e.ComplexityRoot.Mutation.UpdatePageLayoutWithTabsAndWidgets == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updatePageLayoutWithTabsAndWidgets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.UpdatePageLayoutWithTabsAndWidgets(childComplexity, args["id"].(string), args["input"].(UpdatePageLayoutWithTabsInput)), true
 
 	case "NotesConfiguration.configurationType":
 		if e.ComplexityRoot.NotesConfiguration.ConfigurationType == nil {
@@ -1576,7 +1648,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	ec := newExecutionContext(opCtx, e, make(chan graphql.DeferredResult))
 	inputUnmarshalers := func() *graphql.InputUnmarshalerIndex {
 		return graphql.NewInputUnmarshalerIndex(
+			graphql.NewInputUnmarshaler("UpdatePageLayoutTabWithWidgetsInput", ec.unmarshalInputUpdatePageLayoutTabWithWidgetsInput),
 			graphql.NewInputUnmarshaler("UpdatePageLayoutWidgetInput", ec.unmarshalInputUpdatePageLayoutWidgetInput),
+			graphql.NewInputUnmarshaler("UpdatePageLayoutWidgetWithIdInput", ec.unmarshalInputUpdatePageLayoutWidgetWithIdInput),
+			graphql.NewInputUnmarshaler("UpdatePageLayoutWithTabsInput", ec.unmarshalInputUpdatePageLayoutWithTabsInput),
 		)
 	}
 	first := true
@@ -1671,6 +1746,24 @@ var parsedSchema = gqlparser.MustLoadSchema(sources...)
 // childFields_* functions provide shared child field context lookups.
 // Each function is generated once per unique object type, deduplicating the
 // switch statements that were previously inlined in every fieldContext_* function.
+
+func (ec *executionContext) childFields_DuplicatedDashboard(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_DuplicatedDashboard_id(ctx, field)
+	case "title":
+		return ec.fieldContext_DuplicatedDashboard_title(ctx, field)
+	case "pageLayoutId":
+		return ec.fieldContext_DuplicatedDashboard_pageLayoutId(ctx, field)
+	case "position":
+		return ec.fieldContext_DuplicatedDashboard_position(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_DuplicatedDashboard_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_DuplicatedDashboard_updatedAt(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type DuplicatedDashboard", field.Name)
+}
 
 func (ec *executionContext) childFields_GridPosition(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
@@ -1932,6 +2025,20 @@ func (ec *executionContext) childFields___Type(ctx context.Context, field graphq
 
 // region    ***************************** args.gotpl *****************************
 
+func (ec *executionContext) field_Mutation_duplicateDashboard_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNUUID2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_updatePageLayoutWidget_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -1946,6 +2053,28 @@ func (ec *executionContext) field_Mutation_updatePageLayoutWidget_args(ctx conte
 	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input",
 		func(ctx context.Context, v any) (UpdatePageLayoutWidgetInput, error) {
 			return ec.unmarshalNUpdatePageLayoutWidgetInput2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋpagelayoutᚋpagelayoutgqlᚐUpdatePageLayoutWidgetInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updatePageLayoutWithTabsAndWidgets_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id",
+		func(ctx context.Context, v any) (string, error) {
+			return ec.unmarshalNString2string(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input",
+		func(ctx context.Context, v any) (UpdatePageLayoutWithTabsInput, error) {
+			return ec.unmarshalNUpdatePageLayoutWithTabsInput2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋpagelayoutᚋpagelayoutgqlᚐUpdatePageLayoutWithTabsInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -3120,6 +3249,144 @@ func (ec *executionContext) _ChatThreadsConfiguration_configurationType(ctx cont
 }
 func (ec *executionContext) fieldContext_ChatThreadsConfiguration_configurationType(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("ChatThreadsConfiguration", field, false, false, "WidgetConfigurationType")
+}
+
+func (ec *executionContext) _DuplicatedDashboard_id(ctx context.Context, field graphql.CollectedField, obj *DuplicatedDashboard) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DuplicatedDashboard_id(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNUUID2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_DuplicatedDashboard_id(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("DuplicatedDashboard", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _DuplicatedDashboard_title(ctx context.Context, field graphql.CollectedField, obj *DuplicatedDashboard) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DuplicatedDashboard_title(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Title, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_DuplicatedDashboard_title(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("DuplicatedDashboard", field, false, false, "String")
+}
+
+func (ec *executionContext) _DuplicatedDashboard_pageLayoutId(ctx context.Context, field graphql.CollectedField, obj *DuplicatedDashboard) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DuplicatedDashboard_pageLayoutId(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.PageLayoutID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOUUID2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_DuplicatedDashboard_pageLayoutId(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("DuplicatedDashboard", field, false, false, "UUID")
+}
+
+func (ec *executionContext) _DuplicatedDashboard_position(ctx context.Context, field graphql.CollectedField, obj *DuplicatedDashboard) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DuplicatedDashboard_position(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Position, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v float64) graphql.Marshaler {
+			return ec.marshalNFloat2float64(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_DuplicatedDashboard_position(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("DuplicatedDashboard", field, false, false, "Float")
+}
+
+func (ec *executionContext) _DuplicatedDashboard_createdAt(ctx context.Context, field graphql.CollectedField, obj *DuplicatedDashboard) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DuplicatedDashboard_createdAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.CreatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_DuplicatedDashboard_createdAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("DuplicatedDashboard", field, false, false, "String")
+}
+
+func (ec *executionContext) _DuplicatedDashboard_updatedAt(ctx context.Context, field graphql.CollectedField, obj *DuplicatedDashboard) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_DuplicatedDashboard_updatedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.UpdatedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalNString2string(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_DuplicatedDashboard_updatedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("DuplicatedDashboard", field, false, false, "String")
 }
 
 func (ec *executionContext) _EmailThreadConfiguration_configurationType(ctx context.Context, field graphql.CollectedField, obj *EmailThreadConfiguration) (ret graphql.Marshaler) {
@@ -4356,6 +4623,94 @@ func (ec *executionContext) fieldContext_Mutation_updatePageLayoutWidget(ctx con
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_updatePageLayoutWidget_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updatePageLayoutWithTabsAndWidgets(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_updatePageLayoutWithTabsAndWidgets(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().UpdatePageLayoutWithTabsAndWidgets(ctx, fc.Args["id"].(string), fc.Args["input"].(UpdatePageLayoutWithTabsInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *PageLayout) graphql.Marshaler {
+			return ec.marshalNPageLayout2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋpagelayoutᚋpagelayoutgqlᚐPageLayout(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_updatePageLayoutWithTabsAndWidgets(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_PageLayout(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updatePageLayoutWithTabsAndWidgets_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_duplicateDashboard(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_duplicateDashboard(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().DuplicateDashboard(ctx, fc.Args["id"].(string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *DuplicatedDashboard) graphql.Marshaler {
+			return ec.marshalNDuplicatedDashboard2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋpagelayoutᚋpagelayoutgqlᚐDuplicatedDashboard(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_duplicateDashboard(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_DuplicatedDashboard(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_duplicateDashboard_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -7728,6 +8083,83 @@ func (ec *executionContext) fieldContext___Type_isOneOf(_ context.Context, field
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputUpdatePageLayoutTabWithWidgetsInput(ctx context.Context, obj any) (UpdatePageLayoutTabWithWidgetsInput, error) {
+	var it UpdatePageLayoutTabWithWidgetsInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"id", "title", "position", "icon", "layoutMode", "widgets"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalNUUID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
+		case "title":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Title = data
+		case "position":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("position"))
+			data, err := ec.unmarshalNFloat2float64(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Position = data
+		case "icon":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("icon"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Icon = data
+		case "layoutMode":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("layoutMode"))
+			data, err := ec.unmarshalOPageLayoutTabLayoutMode2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋpagelayoutᚋpagelayoutgqlᚐPageLayoutTabLayoutMode(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.LayoutMode = data
+		case "widgets":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("widgets"))
+			data, err := ec.unmarshalNUpdatePageLayoutWidgetWithIdInput2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋpagelayoutᚋpagelayoutgqlᚐUpdatePageLayoutWidgetWithIDInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Widgets = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalUpdatePageLayoutTabWithWidgetsInput unmarshals raw into the UpdatePageLayoutTabWithWidgetsInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalUpdatePageLayoutTabWithWidgetsInput(ctx context.Context, raw any) (UpdatePageLayoutTabWithWidgetsInput, error) {
+	var out UpdatePageLayoutTabWithWidgetsInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "UpdatePageLayoutTabWithWidgetsInput", raw, &out)
+	return out, err
+}
+
 func (ec *executionContext) unmarshalInputUpdatePageLayoutWidgetInput(ctx context.Context, obj any) (UpdatePageLayoutWidgetInput, error) {
 	var it UpdatePageLayoutWidgetInput
 	if obj == nil {
@@ -7823,6 +8255,174 @@ func (ec *executionContext) unmarshalInputUpdatePageLayoutWidgetInput(ctx contex
 func UnmarshalUpdatePageLayoutWidgetInput(ctx context.Context, raw any) (UpdatePageLayoutWidgetInput, error) {
 	var out UpdatePageLayoutWidgetInput
 	err := graphql.UnmarshalNamedInputFromContext(ctx, "UpdatePageLayoutWidgetInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputUpdatePageLayoutWidgetWithIdInput(ctx context.Context, obj any) (UpdatePageLayoutWidgetWithIDInput, error) {
+	var it UpdatePageLayoutWidgetWithIDInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"id", "pageLayoutTabId", "title", "type", "objectMetadataId", "position", "configuration", "conditionalDisplay", "conditionalAvailabilityExpression"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "id":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+			data, err := ec.unmarshalNUUID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ID = data
+		case "pageLayoutTabId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("pageLayoutTabId"))
+			data, err := ec.unmarshalNUUID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PageLayoutTabID = data
+		case "title":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("title"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Title = data
+		case "type":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalNWidgetType2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋpagelayoutᚋpagelayoutgqlᚐWidgetType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
+		case "objectMetadataId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("objectMetadataId"))
+			data, err := ec.unmarshalOUUID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObjectMetadataID = data
+		case "position":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("position"))
+			data, err := ec.unmarshalOJSON2interface(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Position = data
+		case "configuration":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("configuration"))
+			data, err := ec.unmarshalOJSON2interface(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Configuration = data
+		case "conditionalDisplay":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("conditionalDisplay"))
+			data, err := ec.unmarshalOJSON2interface(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ConditionalDisplay = data
+		case "conditionalAvailabilityExpression":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("conditionalAvailabilityExpression"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ConditionalAvailabilityExpression = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalUpdatePageLayoutWidgetWithIdInput unmarshals raw into the UpdatePageLayoutWidgetWithIdInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalUpdatePageLayoutWidgetWithIdInput(ctx context.Context, raw any) (UpdatePageLayoutWidgetWithIDInput, error) {
+	var out UpdatePageLayoutWidgetWithIDInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "UpdatePageLayoutWidgetWithIdInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputUpdatePageLayoutWithTabsInput(ctx context.Context, obj any) (UpdatePageLayoutWithTabsInput, error) {
+	var it UpdatePageLayoutWithTabsInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"name", "type", "objectMetadataId", "isFirstTabPinned", "tabs"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "type":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
+			data, err := ec.unmarshalNPageLayoutType2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋpagelayoutᚋpagelayoutgqlᚐPageLayoutType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Type = data
+		case "objectMetadataId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("objectMetadataId"))
+			data, err := ec.unmarshalOUUID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObjectMetadataID = data
+		case "isFirstTabPinned":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isFirstTabPinned"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsFirstTabPinned = data
+		case "tabs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tabs"))
+			data, err := ec.unmarshalNUpdatePageLayoutTabWithWidgetsInput2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋpagelayoutᚋpagelayoutgqlᚐUpdatePageLayoutTabWithWidgetsInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Tabs = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalUpdatePageLayoutWithTabsInput unmarshals raw into the UpdatePageLayoutWithTabsInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalUpdatePageLayoutWithTabsInput(ctx context.Context, raw any) (UpdatePageLayoutWithTabsInput, error) {
+	var out UpdatePageLayoutWithTabsInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "UpdatePageLayoutWithTabsInput", raw, &out)
 	return out, err
 }
 
@@ -8408,6 +9008,64 @@ func (ec *executionContext) _ChatThreadsConfiguration(ctx context.Context, sel a
 			out.Values[i] = graphql.MarshalString("ChatThreadsConfiguration")
 		case "configurationType":
 			out.Values[i] = ec._ChatThreadsConfiguration_configurationType(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	if n := len(deferred.Defers); n > 0 {
+		atomic.AddInt32(&ec.Deferred, int32(min(n, math.MaxInt32)))
+		ec.ProcessDeferredGroup(deferred)
+	}
+
+	return out
+}
+
+var duplicatedDashboardImplementors = []string{"DuplicatedDashboard"}
+
+func (ec *executionContext) _DuplicatedDashboard(ctx context.Context, sel ast.SelectionSet, obj *DuplicatedDashboard) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, duplicatedDashboardImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferred := graphql.NewDeferredGroup(ctx)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("DuplicatedDashboard")
+		case "id":
+			out.Values[i] = ec._DuplicatedDashboard_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "title":
+			out.Values[i] = ec._DuplicatedDashboard_title(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "pageLayoutId":
+			out.Values[i] = ec._DuplicatedDashboard_pageLayoutId(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "position":
+			out.Values[i] = ec._DuplicatedDashboard_position(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createdAt":
+			out.Values[i] = ec._DuplicatedDashboard_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatedAt":
+			out.Values[i] = ec._DuplicatedDashboard_updatedAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
@@ -9046,6 +9704,20 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "updatePageLayoutWidget":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updatePageLayoutWidget(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updatePageLayoutWithTabsAndWidgets":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updatePageLayoutWithTabsAndWidgets(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "duplicateDashboard":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_duplicateDashboard(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -10494,6 +11166,14 @@ func (ec *executionContext) marshalNDateTime2githubᚗcomᚋtwentyhqᚋtwentyᚋ
 	return v
 }
 
+func (ec *executionContext) marshalNDuplicatedDashboard2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋpagelayoutᚋpagelayoutgqlᚐDuplicatedDashboard(ctx context.Context, sel ast.SelectionSet, v *DuplicatedDashboard) graphql.Marshaler {
+	if v == nil {
+		graphql.AddInvalidNullError(ctx, "DuplicatedDashboard!")
+		return graphql.Null
+	}
+	return ec._DuplicatedDashboard(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalNFieldDisplayMode2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋpagelayoutᚋpagelayoutgqlᚐFieldDisplayMode(ctx context.Context, v any) (FieldDisplayMode, error) {
 	var res FieldDisplayMode
 	err := res.UnmarshalGQL(v)
@@ -10628,8 +11308,51 @@ func (ec *executionContext) marshalNUUID2string(ctx context.Context, sel ast.Sel
 	return res
 }
 
+func (ec *executionContext) unmarshalNUpdatePageLayoutTabWithWidgetsInput2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋpagelayoutᚋpagelayoutgqlᚐUpdatePageLayoutTabWithWidgetsInputᚄ(ctx context.Context, v any) ([]*UpdatePageLayoutTabWithWidgetsInput, error) {
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]*UpdatePageLayoutTabWithWidgetsInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNUpdatePageLayoutTabWithWidgetsInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋpagelayoutᚋpagelayoutgqlᚐUpdatePageLayoutTabWithWidgetsInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalNUpdatePageLayoutTabWithWidgetsInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋpagelayoutᚋpagelayoutgqlᚐUpdatePageLayoutTabWithWidgetsInput(ctx context.Context, v any) (*UpdatePageLayoutTabWithWidgetsInput, error) {
+	res, err := ec.unmarshalInputUpdatePageLayoutTabWithWidgetsInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNUpdatePageLayoutWidgetInput2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋpagelayoutᚋpagelayoutgqlᚐUpdatePageLayoutWidgetInput(ctx context.Context, v any) (UpdatePageLayoutWidgetInput, error) {
 	res, err := ec.unmarshalInputUpdatePageLayoutWidgetInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdatePageLayoutWidgetWithIdInput2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋpagelayoutᚋpagelayoutgqlᚐUpdatePageLayoutWidgetWithIDInputᚄ(ctx context.Context, v any) ([]*UpdatePageLayoutWidgetWithIDInput, error) {
+	vSlice := graphql.CoerceList(v)
+	var err error
+	res := make([]*UpdatePageLayoutWidgetWithIDInput, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNUpdatePageLayoutWidgetWithIdInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋpagelayoutᚋpagelayoutgqlᚐUpdatePageLayoutWidgetWithIDInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalNUpdatePageLayoutWidgetWithIdInput2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋpagelayoutᚋpagelayoutgqlᚐUpdatePageLayoutWidgetWithIDInput(ctx context.Context, v any) (*UpdatePageLayoutWidgetWithIDInput, error) {
+	res, err := ec.unmarshalInputUpdatePageLayoutWidgetWithIdInput(ctx, v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) unmarshalNUpdatePageLayoutWithTabsInput2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋpagelayoutᚋpagelayoutgqlᚐUpdatePageLayoutWithTabsInput(ctx context.Context, v any) (UpdatePageLayoutWithTabsInput, error) {
+	res, err := ec.unmarshalInputUpdatePageLayoutWithTabsInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 

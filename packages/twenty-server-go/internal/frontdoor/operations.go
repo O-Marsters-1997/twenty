@@ -86,7 +86,7 @@ var InvitationOperations = []string{
 
 var PageLayoutOperations = []string{
 	"FindAllRecordFormPageLayouts", "FindAllRecordPageLayouts", "FindAllStandalonePageLayouts", "FindOnePageLayout", "FindOnePageLayoutType",
-	"UpdatePageLayoutWidgetIsActive",
+	"UpdatePageLayoutWidgetIsActive", "UpdatePageLayoutWithTabsAndWidgets", "DuplicateDashboard",
 }
 
 var blockedMetadataFields = []string{

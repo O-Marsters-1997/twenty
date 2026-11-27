@@ -113,7 +113,9 @@ func newHarness(t *testing.T) *harness {
 		`DELETE FROM core."pageLayoutWidget"`,
 		`DELETE FROM core."pageLayoutTab"`,
 		`DELETE FROM core."pageLayout"`,
-		`UPDATE ` + "workspace_2abogkkt2zd45pa9aun09djpf" + `.dashboard SET "pageLayoutId" = '` + layoutDashboard + `', "updatedAt" = '` + updatedAtBefore + `'`,
+		`DELETE FROM workspace_2abogkkt2zd45pa9aun09djpf.dashboard`,
+		`INSERT INTO workspace_2abogkkt2zd45pa9aun09djpf.dashboard (id, title, "position", "pageLayoutId", "updatedAt")
+			VALUES ('` + dashboardID + `', 'Sales overview', 3, '` + layoutDashboard + `', '` + updatedAtBefore + `')`,
 		pageLayoutRow(layoutRecordPage, "Company page", "RECORD_PAGE", objectMetadataID, "2026-01-01", tabHome, false),
 		pageLayoutRow(layoutRecordForm, "Creation form", "RECORD_FORM", objectMetadataID, "2026-01-02", "", false),
 		pageLayoutRow(layoutStandalone, "Settings home", "STANDALONE_PAGE", "", "2026-01-03", "", false),
@@ -277,6 +279,169 @@ func TestOperations_MatchNodeGolden(t *testing.T) {
 			t.Parallel()
 			h := newHarness(t)
 			golden.Assert(t, h.handler(adminUserWSID), "testdata", name)
+		})
+	}
+}
+
+func TestWriteOperations_MatchNodeGolden(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		name   string
+		ignore []string
+	}{
+		{"UpdatePageLayoutWithTabsAndWidgets", []string{
+			"data.updatePageLayoutWithTabsAndWidgets.updatedAt", "data.updatePageLayoutWithTabsAndWidgets.tabs.*.widgets.*.updatedAt",
+		}},
+		{"DuplicateDashboard", []string{
+			"data.duplicateDashboard.id", "data.duplicateDashboard.pageLayoutId",
+			"data.duplicateDashboard.createdAt", "data.duplicateDashboard.updatedAt",
+		}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			h := newHarness(t)
+			golden.Assert(t, h.handler(adminUserWSID), "testdata", tt.name, tt.ignore...)
+		})
+	}
+}
+
+func (h *harness) layoutInput(name string, tabs []any) map[string]any {
+	return map[string]any{"name": name, "type": "RECORD_PAGE", "objectMetadataId": objectMetadataID, "tabs": tabs}
+}
+
+const updateLayoutMutation = `mutation($id: String!, $input: UpdatePageLayoutWithTabsInput!) {
+	updatePageLayoutWithTabsAndWidgets(id: $id, input: $input) { id name tabs { id title isActive widgets { id title isActive } } } }`
+
+func widgetInput(id, tabID, title string, position map[string]any) map[string]any {
+	return map[string]any{"id": id, "pageLayoutTabId": tabID, "title": title, "type": "NOTES", "position": position,
+		"configuration": map[string]any{"configurationType": "NOTES"}}
+}
+
+func TestUpdatePageLayoutWithTabsAndWidgets(t *testing.T) {
+	t.Parallel()
+	vertical := func(index int) map[string]any { return map[string]any{"layoutMode": "VERTICAL_LIST", "index": index} }
+	const newWidget = "c1000000-0000-4000-8000-0000000000a1"
+	const newTab = "b1000000-0000-4000-8000-0000000000a1"
+	t.Run("creates, hides and hard-deletes by ownership", func(t *testing.T) {
+		t.Parallel()
+		h := newHarness(t)
+		input := h.layoutInput("Company page", []any{map[string]any{
+			"id": tabHome, "title": "Home", "position": 10, "icon": "IconHome", "layoutMode": "VERTICAL_LIST",
+			"widgets": []any{widgetInput(widgetTimeline, tabHome, "Timeline", vertical(1)), widgetInput(newWidget, tabHome, "Fresh", vertical(2))},
+		}})
+		got := h.send(t, h.handler(flaggedUserWSID), updateLayoutMutation, map[string]any{"id": layoutRecordPage, "input": input})
+		if got["errors"] != nil {
+			t.Fatalf("errors = %v", got["errors"])
+		}
+		timelineActive, _ := h.widgetState(t, widgetTimeline)
+		if !timelineActive {
+			t.Error("kept standard widget was deactivated")
+		}
+		if _, overrides := h.widgetState(t, widgetFields); !cmp.Equal(map[string]any{customApp: map[string]any{"isActive": false}}, overrides) {
+			t.Errorf("hidden standard widget overrides = %v, want isActive false", overrides)
+		}
+		var customWidgets int
+		if err := h.pool.QueryRow(t.Context(), `SELECT count(*) FROM core."pageLayoutWidget" WHERE id = $1`, widgetCustom).Scan(&customWidgets); err != nil {
+			t.Fatal(err)
+		}
+		if customWidgets != 0 {
+			t.Error("custom widget left out of the input was not deleted")
+		}
+		var tabs int
+		if err := h.pool.QueryRow(t.Context(), `SELECT count(*) FROM core."pageLayoutTab" WHERE id = $1`, tabTimeline).Scan(&tabs); err != nil {
+			t.Fatal(err)
+		}
+		if tabs != 1 {
+			t.Error("standard tab left out of the input must be hidden, not deleted")
+		}
+		var created string
+		if err := h.pool.QueryRow(t.Context(), `SELECT "applicationId"::text FROM core."pageLayoutWidget" WHERE id = $1`, newWidget).Scan(&created); err != nil {
+			t.Fatalf("created widget: %v", err)
+		}
+		if created != customApp {
+			t.Errorf("created widget application = %s, want the workspace custom application", created)
+		}
+	})
+	t.Run("creates a tab", func(t *testing.T) {
+		t.Parallel()
+		h := newHarness(t)
+		input := h.layoutInput("Company page", []any{map[string]any{"id": newTab, "title": "Extras", "position": 20, "widgets": []any{}}})
+		got := h.send(t, h.handler(adminUserWSID), updateLayoutMutation, map[string]any{"id": layoutRecordPage, "input": input})
+		if got["errors"] != nil {
+			t.Fatalf("errors = %v", got["errors"])
+		}
+	})
+	rejects := []struct {
+		name, caller, wantCode string
+		id                     string
+		tabs                   func() []any
+	}{
+		{"caller without the layouts permission", memberUserWSID, "FORBIDDEN", layoutRecordPage, func() []any { return []any{} }},
+		{"unknown layout", adminUserWSID, "NOT_FOUND", missingID, func() []any { return []any{} }},
+		{"deleted layout", adminUserWSID, "NOT_FOUND", layoutDeleted, func() []any { return []any{} }},
+		{"widget on an unknown tab", adminUserWSID, "BAD_USER_INPUT", layoutRecordPage, func() []any {
+			return []any{map[string]any{"id": tabHome, "title": "Home", "position": 10, "layoutMode": "VERTICAL_LIST",
+				"widgets": []any{widgetInput(widgetTimeline, missingID, "Timeline", vertical(0))}}}
+		}},
+		{"position that does not match the tab layout mode", adminUserWSID, "BAD_USER_INPUT", layoutRecordPage, func() []any {
+			return []any{map[string]any{"id": tabHome, "title": "Home", "position": 10, "layoutMode": "VERTICAL_LIST",
+				"widgets": []any{widgetInput(widgetTimeline, tabHome, "Timeline", map[string]any{"layoutMode": "CANVAS"})}}}
+		}},
+		{"grid position wider than the grid", adminUserWSID, "BAD_USER_INPUT", layoutRecordPage, func() []any {
+			grid := map[string]any{"layoutMode": "GRID", "row": 0, "column": 8, "rowSpan": 1, "columnSpan": 6}
+			return []any{map[string]any{"id": tabTimeline, "title": "Timeline", "position": 5, "layoutMode": "GRID",
+				"widgets": []any{widgetInput(widgetMoved, tabTimeline, "Notes", grid)}}}
+		}},
+	}
+	for _, tt := range rejects {
+		t.Run("rejects "+tt.name, func(t *testing.T) {
+			t.Parallel()
+			h := newHarness(t)
+			input := h.layoutInput("Renamed", tt.tabs())
+			got := h.send(t, h.handler(tt.caller), updateLayoutMutation, map[string]any{"id": tt.id, "input": input})
+			if code := errorCode(got); code != tt.wantCode {
+				t.Errorf("error code = %v, want %s", code, tt.wantCode)
+			}
+			var name string
+			if err := h.pool.QueryRow(t.Context(), `SELECT name FROM core."pageLayout" WHERE id = $1`, layoutRecordPage).Scan(&name); err != nil {
+				t.Fatal(err)
+			}
+			if name != "Company page" {
+				t.Errorf("rejected request renamed the layout to %q", name)
+			}
+		})
+	}
+}
+
+func TestDuplicateDashboard(t *testing.T) {
+	t.Parallel()
+	const mutation = `mutation($id: UUID!) { duplicateDashboard(id: $id) { id title pageLayoutId } }`
+	t.Run("copies the layout with its tabs and widgets", func(t *testing.T) {
+		t.Parallel()
+		h := newHarness(t)
+		got := h.send(t, h.handler(adminUserWSID), mutation, map[string]any{"id": dashboardID})
+		if got["errors"] != nil {
+			t.Fatalf("errors = %v", got["errors"])
+		}
+		var widgets int
+		err := h.pool.QueryRow(t.Context(), `SELECT count(*) FROM core."pageLayoutWidget" w JOIN core."pageLayoutTab" t ON t.id = w."pageLayoutTabId"
+			JOIN core."pageLayout" l ON l.id = t."pageLayoutId" WHERE l.name = 'Sales dashboard' AND l.id <> $1 AND w."applicationId" = $2`,
+			layoutDashboard, customApp).Scan(&widgets)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if widgets != 5 {
+			t.Errorf("copied widgets = %d, want 5", widgets)
+		}
+	})
+	for _, id := range []string{missingID, "not-a-uuid"} {
+		t.Run("rejects "+id, func(t *testing.T) {
+			t.Parallel()
+			h := newHarness(t)
+			if code := errorCode(h.send(t, h.handler(adminUserWSID), mutation, map[string]any{"id": id})); code != "NOT_FOUND" {
+				t.Errorf("error code = %v, want NOT_FOUND", code)
+			}
 		})
 	}
 }
