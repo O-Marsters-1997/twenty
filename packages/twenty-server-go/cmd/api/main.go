@@ -27,6 +27,8 @@ import (
 	applicationstore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/application/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth/authgql"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/chart"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/chart/chartgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/config"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/files/filesgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/frontdoor"
@@ -38,6 +40,7 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/metadatagql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/metagql"
 	metadatastore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/metadata/store"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/model"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/onboarding"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/onboarding/onboardinggql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/pagelayout/pagelayoutgql"
@@ -167,6 +170,12 @@ func run() error {
 		applicationgql.NewHandler(&applicationgql.Resolver{Store: applicationstore.New(pool, cfg.ServerURL)}, logger),
 		filesgql.NewHandler(&filesgql.Resolver{Files: fileSvc}, logger),
 		onboardinggql.NewHandler(&onboardinggql.Resolver{Store: onboarding.New(pool)}, logger),
+		chartgql.NewHandler(&chartgql.Resolver{Charts: &chart.Service{
+			Metadata: metadatastore.New(pool),
+			NewGrouper: func(object model.Object, fields []records.FieldMetadata) chart.Grouper {
+				return store.NewGroupByEngine(pool, object, fields)
+			},
+		}}, logger),
 		agentgql.Operations,
 	))
 
