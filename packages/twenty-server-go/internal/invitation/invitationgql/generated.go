@@ -45,8 +45,10 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		DeleteApprovedAccessDomain func(childComplexity int, input DeleteApprovedAccessDomainInput) int
-		DeleteWorkspaceInvitation  func(childComplexity int, appTokenID string) int
+		CreateApprovedAccessDomain   func(childComplexity int, input CreateApprovedAccessDomainInput) int
+		DeleteApprovedAccessDomain   func(childComplexity int, input DeleteApprovedAccessDomainInput) int
+		DeleteWorkspaceInvitation    func(childComplexity int, appTokenID string) int
+		ValidateApprovedAccessDomain func(childComplexity int, input ValidateApprovedAccessDomainInput) int
 	}
 
 	Query struct {
@@ -69,6 +71,8 @@ type ComplexityRoot struct {
 type MutationResolver interface {
 	DeleteWorkspaceInvitation(ctx context.Context, appTokenID string) (string, error)
 	DeleteApprovedAccessDomain(ctx context.Context, input DeleteApprovedAccessDomainInput) (bool, error)
+	CreateApprovedAccessDomain(ctx context.Context, input CreateApprovedAccessDomainInput) (*ApprovedAccessDomain, error)
+	ValidateApprovedAccessDomain(ctx context.Context, input ValidateApprovedAccessDomainInput) (*ApprovedAccessDomain, error)
 }
 type QueryResolver interface {
 	FindWorkspaceInvitations(ctx context.Context) ([]*WorkspaceInvitation, error)
@@ -118,6 +122,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.ApprovedAccessDomain.IsValidated(childComplexity), true
 
+	case "Mutation.createApprovedAccessDomain":
+		if e.ComplexityRoot.Mutation.CreateApprovedAccessDomain == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createApprovedAccessDomain_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateApprovedAccessDomain(childComplexity, args["input"].(CreateApprovedAccessDomainInput)), true
 	case "Mutation.deleteApprovedAccessDomain":
 		if e.ComplexityRoot.Mutation.DeleteApprovedAccessDomain == nil {
 			break
@@ -140,6 +155,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.DeleteWorkspaceInvitation(childComplexity, args["appTokenId"].(string)), true
+	case "Mutation.validateApprovedAccessDomain":
+		if e.ComplexityRoot.Mutation.ValidateApprovedAccessDomain == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_validateApprovedAccessDomain_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.ValidateApprovedAccessDomain(childComplexity, args["input"].(ValidateApprovedAccessDomainInput)), true
 
 	case "Query.findWorkspaceInvitations":
 		if e.ComplexityRoot.Query.FindWorkspaceInvitations == nil {
@@ -188,7 +214,9 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	ec := newExecutionContext(opCtx, e, make(chan graphql.DeferredResult))
 	inputUnmarshalers := func() *graphql.InputUnmarshalerIndex {
 		return graphql.NewInputUnmarshalerIndex(
+			graphql.NewInputUnmarshaler("CreateApprovedAccessDomainInput", ec.unmarshalInputCreateApprovedAccessDomainInput),
 			graphql.NewInputUnmarshaler("DeleteApprovedAccessDomainInput", ec.unmarshalInputDeleteApprovedAccessDomainInput),
+			graphql.NewInputUnmarshaler("ValidateApprovedAccessDomainInput", ec.unmarshalInputValidateApprovedAccessDomainInput),
 		)
 	}
 	first := true
@@ -428,6 +456,20 @@ func (ec *executionContext) childFields___Type(ctx context.Context, field graphq
 
 // region    ***************************** args.gotpl *****************************
 
+func (ec *executionContext) field_Mutation_createApprovedAccessDomain_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
+		func(ctx context.Context, v any) (CreateApprovedAccessDomainInput, error) {
+			return ec.unmarshalNCreateApprovedAccessDomainInput2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋinvitationᚋinvitationgqlᚐCreateApprovedAccessDomainInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_deleteApprovedAccessDomain_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -453,6 +495,20 @@ func (ec *executionContext) field_Mutation_deleteWorkspaceInvitation_args(ctx co
 		return nil, err
 	}
 	args["appTokenId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_validateApprovedAccessDomain_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input",
+		func(ctx context.Context, v any) (ValidateApprovedAccessDomainInput, error) {
+			return ec.unmarshalNValidateApprovedAccessDomainInput2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋinvitationᚋinvitationgqlᚐValidateApprovedAccessDomainInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
 	return args, nil
 }
 
@@ -718,6 +774,94 @@ func (ec *executionContext) fieldContext_Mutation_deleteApprovedAccessDomain(ctx
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteApprovedAccessDomain_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_createApprovedAccessDomain(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_createApprovedAccessDomain(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().CreateApprovedAccessDomain(ctx, fc.Args["input"].(CreateApprovedAccessDomainInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *ApprovedAccessDomain) graphql.Marshaler {
+			return ec.marshalNApprovedAccessDomain2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋinvitationᚋinvitationgqlᚐApprovedAccessDomain(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_createApprovedAccessDomain(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ApprovedAccessDomain(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_createApprovedAccessDomain_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_validateApprovedAccessDomain(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_validateApprovedAccessDomain(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().ValidateApprovedAccessDomain(ctx, fc.Args["input"].(ValidateApprovedAccessDomainInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *ApprovedAccessDomain) graphql.Marshaler {
+			return ec.marshalNApprovedAccessDomain2ᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋinvitationᚋinvitationgqlᚐApprovedAccessDomain(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_validateApprovedAccessDomain(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ApprovedAccessDomain(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_validateApprovedAccessDomain_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -2029,6 +2173,55 @@ func (ec *executionContext) fieldContext___Type_isOneOf(_ context.Context, field
 
 // region    **************************** input.gotpl *****************************
 
+func (ec *executionContext) unmarshalInputCreateApprovedAccessDomainInput(ctx context.Context, obj any) (CreateApprovedAccessDomainInput, error) {
+	var it CreateApprovedAccessDomainInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"domain", "email"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "domain":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("domain"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Domain = data
+		case "email":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Email = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalCreateApprovedAccessDomainInput unmarshals raw into the CreateApprovedAccessDomainInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalCreateApprovedAccessDomainInput(ctx context.Context, raw any) (CreateApprovedAccessDomainInput, error) {
+	var out CreateApprovedAccessDomainInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "CreateApprovedAccessDomainInput", raw, &out)
+	return out, err
+}
+
 func (ec *executionContext) unmarshalInputDeleteApprovedAccessDomainInput(ctx context.Context, obj any) (DeleteApprovedAccessDomainInput, error) {
 	var it DeleteApprovedAccessDomainInput
 	if obj == nil {
@@ -2068,6 +2261,55 @@ func (ec *executionContext) unmarshalInputDeleteApprovedAccessDomainInput(ctx co
 func UnmarshalDeleteApprovedAccessDomainInput(ctx context.Context, raw any) (DeleteApprovedAccessDomainInput, error) {
 	var out DeleteApprovedAccessDomainInput
 	err := graphql.UnmarshalNamedInputFromContext(ctx, "DeleteApprovedAccessDomainInput", raw, &out)
+	return out, err
+}
+
+func (ec *executionContext) unmarshalInputValidateApprovedAccessDomainInput(ctx context.Context, obj any) (ValidateApprovedAccessDomainInput, error) {
+	var it ValidateApprovedAccessDomainInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"validationToken", "approvedAccessDomainId"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "validationToken":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("validationToken"))
+			data, err := ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ValidationToken = data
+		case "approvedAccessDomainId":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvedAccessDomainId"))
+			data, err := ec.unmarshalNUUID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApprovedAccessDomainID = data
+		}
+	}
+	return it, nil
+}
+
+// UnmarshalValidateApprovedAccessDomainInput unmarshals raw into the ValidateApprovedAccessDomainInput input type, using the
+// unmarshaler bound to ctx's request. Call it from a resolver to decode an input
+// object that was not passed as a field argument.
+//
+// ctx must come from a gqlgen request; outside one there is no unmarshaler to use
+// and the returned error says so.
+func UnmarshalValidateApprovedAccessDomainInput(ctx context.Context, raw any) (ValidateApprovedAccessDomainInput, error) {
+	var out ValidateApprovedAccessDomainInput
+	err := graphql.UnmarshalNamedInputFromContext(ctx, "ValidateApprovedAccessDomainInput", raw, &out)
 	return out, err
 }
 
@@ -2156,6 +2398,20 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteApprovedAccessDomain":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteApprovedAccessDomain(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "createApprovedAccessDomain":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_createApprovedAccessDomain(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "validateApprovedAccessDomain":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_validateApprovedAccessDomain(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
@@ -2687,6 +2943,11 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
+func (ec *executionContext) unmarshalNCreateApprovedAccessDomainInput2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋinvitationᚋinvitationgqlᚐCreateApprovedAccessDomainInput(ctx context.Context, v any) (CreateApprovedAccessDomainInput, error) {
+	res, err := ec.unmarshalInputCreateApprovedAccessDomainInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
 func (ec *executionContext) unmarshalNDateTime2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋmetadataᚐTimestamp(ctx context.Context, v any) (metadata.Timestamp, error) {
 	var res metadata.Timestamp
 	err := res.UnmarshalGQL(v)
@@ -2728,6 +2989,11 @@ func (ec *executionContext) marshalNUUID2string(ctx context.Context, sel ast.Sel
 		graphql.AddInvalidNullFromMarshaler(ctx, "UUID!")
 	}
 	return res
+}
+
+func (ec *executionContext) unmarshalNValidateApprovedAccessDomainInput2githubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋinvitationᚋinvitationgqlᚐValidateApprovedAccessDomainInput(ctx context.Context, v any) (ValidateApprovedAccessDomainInput, error) {
+	res, err := ec.unmarshalInputValidateApprovedAccessDomainInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 func (ec *executionContext) marshalNWorkspaceInvitation2ᚕᚖgithubᚗcomᚋtwentyhqᚋtwentyᚋpackagesᚋtwentyᚑserverᚑgoᚋinternalᚋinvitationᚋinvitationgqlᚐWorkspaceInvitationᚄ(ctx context.Context, sel ast.SelectionSet, v []*WorkspaceInvitation) graphql.Marshaler {

@@ -23,9 +23,10 @@ func NewHandler(resolver *Resolver, logger *slog.Logger) http.Handler {
 		switch {
 		case errors.Is(err, auth.ErrUnauthenticated):
 			presented.Extensions = map[string]any{"code": "UNAUTHENTICATED"}
-		case errors.Is(err, store.ErrPermissionDenied), errors.Is(err, store.ErrDomainNotFound):
+		case errors.Is(err, store.ErrPermissionDenied), errors.Is(err, store.ErrDomainNotFound), errors.Is(err, auth.ErrInvalidApprovedAccessDomainToken):
 			presented.Extensions = map[string]any{"code": "FORBIDDEN"}
-		case errors.Is(err, store.ErrInvalidID):
+		case errors.Is(err, store.ErrInvalidID), errors.Is(err, store.ErrDomainMismatch),
+			errors.Is(err, store.ErrDomainNotCompany), errors.Is(err, store.ErrDomainRegistered):
 			presented.Extensions = map[string]any{"code": "BAD_USER_INPUT"}
 		default:
 			logger.Error("resolve graphql", "err", err)
