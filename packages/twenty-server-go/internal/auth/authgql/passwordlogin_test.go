@@ -96,9 +96,10 @@ func newPasswordHarness(t *testing.T, emailVerificationRequired bool) *loginHarn
 	passwordLogin := auth.NewPasswordLogin(pool, auth.NewPasswordHasher(), issuer, origins, config)
 	h.mail = &recordingSender{}
 	h.handler = authgql.NewHandler(&authgql.Resolver{
-		PasswordLogin: passwordLogin,
-		PasswordReset: auth.NewPasswordReset(pool, auth.NewPasswordHasher(), h.mail, frontURL),
-		Sessions:      auth.NewUserSession(pool, noCache{}, issuer, auth.SessionConfig{ServerURL: "http://localhost:3000"}, logger),
+		PasswordLogin:     passwordLogin,
+		PasswordReset:     auth.NewPasswordReset(pool, auth.NewPasswordHasher(), h.mail, frontURL),
+		EmailVerification: auth.NewEmailVerification(pool, passwordLogin, h.mail),
+		Sessions:          auth.NewUserSession(pool, noCache{}, issuer, auth.SessionConfig{ServerURL: "http://localhost:3000"}, logger),
 		Public: auth.NewPublicData(pool, passwordLogin, auth.PublicDataConfig{
 			GoogleAuthEnabled: true, PasswordAuthEnabled: true, DefaultSubdomain: "app",
 		}),

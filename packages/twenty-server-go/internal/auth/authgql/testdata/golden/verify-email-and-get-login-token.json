@@ -1,0 +1,9 @@
+{
+  "name": "verify-email-and-get-login-token",
+  "operation": "VerifyEmailAndGetLoginToken",
+  "fixture": "unverified user in acme with a live verification token, email verification required",
+  "endpoint": "/metadata",
+  "query": "mutation VerifyEmailAndGetLoginToken($emailVerificationToken: String!, $email: String!, $captchaToken: String, $origin: String!) { verifyEmailAndGetLoginToken(emailVerificationToken: $emailVerificationToken, email: $email, captchaToken: $captchaToken, origin: $origin) { loginToken { token expiresAt } workspaceUrls { subdomainUrl } } }",
+  "variables": {"emailVerificationToken": "live-verification-token", "email": "unverified@example.com", "origin": "http://acme.localhost:3001"},
+  "response": {"data":{"verifyEmailAndGetLoginToken":{"loginToken":{"token":"x","expiresAt":"x"},"workspaceUrls":{"subdomainUrl":"http://acme.localhost:3001/"}}}}
+}

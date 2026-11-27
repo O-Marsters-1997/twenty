@@ -35,6 +35,10 @@ func emailNotVerified() error {
 	return &LoginError{Code: "FORBIDDEN", SubCode: "EMAIL_NOT_VERIFIED", Message: "Email is not verified", FriendlyMessage: "Email is not verified."}
 }
 
+func badInput(message string) error {
+	return &LoginError{Code: "BAD_USER_INPUT", SubCode: "INVALID_INPUT", Message: message, FriendlyMessage: message + "."}
+}
+
 func forbidden(message string) error {
 	return &LoginError{Code: "FORBIDDEN", SubCode: "FORBIDDEN_EXCEPTION", Message: message, FriendlyMessage: defaultForbiddenMessage}
 }

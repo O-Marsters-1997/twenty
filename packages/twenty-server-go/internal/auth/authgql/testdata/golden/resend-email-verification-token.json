@@ -1,0 +1,9 @@
+{
+  "name": "resend-email-verification-token",
+  "operation": "ResendEmailVerificationToken",
+  "fixture": "unverified user in acme, email verification required",
+  "endpoint": "/metadata",
+  "query": "mutation ResendEmailVerificationToken($email: String!, $origin: String!) { resendEmailVerificationToken(email: $email, origin: $origin) { success } }",
+  "variables": {"email": "unverified@example.com", "origin": "http://acme.localhost:3001"},
+  "response": {"data":{"resendEmailVerificationToken":{"success":true}}}
+}

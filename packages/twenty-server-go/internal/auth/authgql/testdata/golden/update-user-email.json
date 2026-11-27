@@ -1,0 +1,9 @@
+{
+  "name": "update-user-email",
+  "operation": "UpdateUserEmail",
+  "fixture": "workspace member in acme, email verification required",
+  "endpoint": "/metadata",
+  "query": "mutation UpdateUserEmail($newEmail: String!, $verifyEmailRedirectPath: String) { updateUserEmail(newEmail: $newEmail, verifyEmailRedirectPath: $verifyEmailRedirectPath) }",
+  "variables": {"newEmail": "new-member@example.com", "verifyEmailRedirectPath": "/settings/profile"},
+  "response": {"data":{"updateUserEmail":true}}
+}
