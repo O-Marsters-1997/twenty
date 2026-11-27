@@ -22,6 +22,7 @@ type Resolver struct {
 	NoteTargets        records.NoteTargets
 	Tasks              records.Tasks
 	TaskTargets        records.TaskTargets
+	Searcher           records.Searcher
 }
 
 func (r *Resolver) actor(ctx context.Context) (records.Actor, error) {

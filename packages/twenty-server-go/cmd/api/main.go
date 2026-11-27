@@ -130,6 +130,7 @@ func run() error {
 		NoteTargets:        store.NewNoteTargets(pool),
 		Tasks:              store.NewTasks(pool),
 		TaskTargets:        store.NewTaskTargets(pool),
+		Searcher:           store.NewSearch(pool),
 	}, logger), chatHandler, workflowHandler, messaginggql.NewHandler(&messaginggql.Resolver{
 		Timeline: messagingstore.NewTimeline(pool),
 		Banners:  messagingstore.NewReconnectBanners(pool),

@@ -11,6 +11,9 @@ import (
 
 type Pager interface {
 	Page(ctx context.Context, request store.PageRequest) (store.Page, error)
+	ObjectRecordCounts(ctx context.Context) ([]store.ObjectRecordCount, error)
+	MostlyEmptyFieldMetadataIDs(ctx context.Context, objectMetadataID string) ([]string, error)
+	Minimal(ctx context.Context) (store.MinimalMetadata, error)
 }
 
 type Resolver struct {
@@ -66,9 +69,41 @@ func (r *queryResolver) GetToolInputSchema(_ context.Context, toolName string) (
 	return tool.Spec().InputSchema, nil
 }
 
+func (r *queryResolver) ObjectRecordCounts(ctx context.Context) ([]*store.ObjectRecordCount, error) {
+	counts, err := r.Store.ObjectRecordCounts(ctx)
+	if err != nil {
+		return nil, err
+	}
+	result := make([]*store.ObjectRecordCount, len(counts))
+	for i := range counts {
+		result[i] = &counts[i]
+	}
+	return result, nil
+}
+
+func (r *queryResolver) MostlyEmptyFieldMetadataIds(ctx context.Context, objectMetadataID string) ([]string, error) {
+	return r.Store.MostlyEmptyFieldMetadataIDs(ctx, objectMetadataID)
+}
+
+func (r *queryResolver) MinimalMetadata(ctx context.Context) (*store.MinimalMetadata, error) {
+	minimal, err := r.Store.Minimal(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &minimal, nil
+}
+
+func (r *minimalMetadataResolver) CollectionHashes(context.Context, *store.MinimalMetadata) ([]*CollectionHash, error) {
+	return []*CollectionHash{}, nil
+}
+
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
+func (r *Resolver) MinimalMetadata() MinimalMetadataResolver { return &minimalMetadataResolver{r} }
+
 type queryResolver struct{ *Resolver }
+
+type minimalMetadataResolver struct{ *Resolver }
 
 func deref(value *string) string {
 	if value == nil {
