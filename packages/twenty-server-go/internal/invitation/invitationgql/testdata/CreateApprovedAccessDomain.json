@@ -1,0 +1,9 @@
+{
+  "name": "CreateApprovedAccessDomain",
+  "operation": "CreateApprovedAccessDomain",
+  "fixture": "workspace with a validated and an unvalidated approved access domain and another workspace's domain",
+  "endpoint": "/metadata",
+  "query": "mutation CreateApprovedAccessDomain($input: CreateApprovedAccessDomainInput!) { createApprovedAccessDomain(input: $input) { id domain isValidated createdAt } }",
+  "variables": {"input": {"domain": "newco.test", "email": "ada@newco.test"}},
+  "response": {"data": {"createApprovedAccessDomain": {"id": "00000000-0000-4000-8000-000000000000", "domain": "newco.test", "isValidated": false, "createdAt": "2026-01-01T00:00:00.000Z"}}}
+}
