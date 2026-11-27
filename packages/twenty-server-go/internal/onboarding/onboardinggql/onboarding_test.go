@@ -3,6 +3,7 @@ package onboardinggql_test
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"io"
 	"log/slog"
 	"net/http"
@@ -10,6 +11,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/auth"
@@ -89,8 +91,11 @@ func (h *harness) value(t *testing.T, key string) any {
 	t.Helper()
 	var raw []byte
 	err := h.pool.QueryRow(t.Context(), `SELECT value FROM core."keyValuePair" WHERE "userId" = $1 AND "workspaceId" = $2 AND key = $3`, userID, workspaceID, key).Scan(&raw)
-	if err != nil {
+	if errors.Is(err, pgx.ErrNoRows) {
 		return nil
+	}
+	if err != nil {
+		t.Fatal(err)
 	}
 	var decoded any
 	if err := json.Unmarshal(raw, &decoded); err != nil {
