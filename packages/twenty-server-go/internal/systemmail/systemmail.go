@@ -145,6 +145,16 @@ func InvitationEmail(to, link, senderName, workspaceName string) (Message, error
 	return render(verificationTemplate, to, data.Title, data.Title+"\n\n"+data.Body+"\n\n"+data.Action+": "+link, data)
 }
 
+func ApprovedAccessDomainEmail(to, link, domain string) (Message, error) {
+	data := struct{ Title, Body, Link, Action string }{
+		Title:  "Validate domain " + domain,
+		Body:   "Please validate this domain to allow users with @" + domain + " email addresses to join your workspace without an invitation.",
+		Link:   link,
+		Action: "Validate domain",
+	}
+	return render(verificationTemplate, to, "Approved access domain validation", data.Title+"\n\n"+data.Body+"\n\n"+data.Action+": "+link, data)
+}
+
 func render(tmpl *htmltemplate.Template, to, subject, text string, data any) (Message, error) {
 	var html strings.Builder
 	if err := tmpl.Execute(&html, data); err != nil {

@@ -1,29 +1,14 @@
 package invitationgql_test
 
 import (
-	"context"
 	"strings"
-	"sync"
 	"testing"
 	"time"
 
 	"github.com/google/go-cmp/cmp"
 
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/golden"
-	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/systemmail"
 )
-
-type recordingSender struct {
-	mu   sync.Mutex
-	sent []systemmail.Message
-}
-
-func (s *recordingSender) Send(_ context.Context, message systemmail.Message) error {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-	s.sent = append(s.sent, message)
-	return nil
-}
 
 type denyAll struct{}
 

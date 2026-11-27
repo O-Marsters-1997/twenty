@@ -29,6 +29,7 @@ type Resolver struct {
 	RoleStore    *store.Roles
 	Permissions  *store.Permissions
 	Tokens       TokenIssuer
+	FeatureFlags *store.FeatureFlags
 }
 
 func (r *Resolver) authorize(ctx context.Context, userSessionOnly bool, flags ...string) error {
@@ -189,6 +190,8 @@ func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
 func (r *Resolver) Role() RoleResolver { return &roleResolver{r} }
 
+func (r *Resolver) WorkspaceMember() WorkspaceMemberResolver { return &workspaceMemberResolver{r} }
+
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
 type (
@@ -196,7 +199,56 @@ type (
 	mutationResolver struct{ *Resolver }
 	queryResolver    struct{ *Resolver }
 	roleResolver     struct{ *Resolver }
+
+	workspaceMemberResolver struct{ *Resolver }
 )
+
+func (r *workspaceMemberResolver) Roles(ctx context.Context, member *store.WorkspaceMember) ([]*store.Role, error) {
+	return pointers(r.RoleStore.ForUserWorkspace(ctx, member.UserWorkspaceID))
+}
+
+func (r *mutationResolver) UpdateWorkspaceMemberRole(ctx context.Context, workspaceMemberID string, roleID string) (*store.WorkspaceMember, error) {
+	if err := r.authorize(ctx, true, store.FlagRoles); err != nil {
+		return nil, err
+	}
+	principal, _ := auth.PrincipalFrom(ctx)
+	return pointer(r.RoleStore.AssignToWorkspaceMember(ctx, workspaceMemberID, roleID, principal.UserWorkspaceID))
+}
+
+func (r *mutationResolver) UpdateWorkspaceMemberSettings(ctx context.Context, input map[string]any) (bool, error) {
+	if err := r.authorize(ctx, false); err != nil {
+		return false, err
+	}
+	principal, _ := auth.PrincipalFrom(ctx)
+	workspaceMemberID, _ := input["workspaceMemberId"].(string)
+	update, _ := input["update"].(map[string]any)
+	isSelf := principal.WorkspaceMemberID == workspaceMemberID
+	if !isSelf && principal.UserID != "" && principal.APIKeyID == "" {
+		userID, err := r.RoleStore.MemberUserID(ctx, workspaceMemberID)
+		if err != nil {
+			return false, err
+		}
+		isSelf = userID == principal.UserID
+	}
+	if !isSelf {
+		if err := r.authorize(ctx, false, store.FlagWorkspaceMembers); err != nil {
+			return false, err
+		}
+	}
+	if err := r.RoleStore.UpdateMemberSettings(ctx, workspaceMemberID, update); err != nil {
+		return false, err
+	}
+	return true, nil
+}
+
+func (r *mutationResolver) UpdateLabPublicFeatureFlag(ctx context.Context, input map[string]any) (*store.FeatureFlag, error) {
+	if err := r.authorize(ctx, false, store.FlagWorkspace); err != nil {
+		return nil, err
+	}
+	key, _ := input["publicFeatureFlag"].(string)
+	value, _ := input["value"].(bool)
+	return pointer(r.FeatureFlags.UpdatePublic(ctx, key, value))
+}
 
 func (r *mutationResolver) CreateOneRole(ctx context.Context, createRoleInput map[string]any) (*store.Role, error) {
 	if err := r.authorize(ctx, false, store.FlagRoles); err != nil {

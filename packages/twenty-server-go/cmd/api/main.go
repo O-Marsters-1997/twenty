@@ -48,6 +48,7 @@ import (
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records/recordsgql"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/records/store"
+	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/systemmail"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow"
 	workflowstore "github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/store"
 	"github.com/twentyhq/twenty/packages/twenty-server-go/internal/workflow/workflowgql"
@@ -161,12 +162,16 @@ func run() error {
 			RoleStore:    accessstore.NewRoles(pool),
 			Permissions:  accessstore.NewPermissions(pool),
 			Tokens:       stack.issuer,
+			FeatureFlags: accessstore.NewFeatureFlags(pool, nil),
 		}, logger),
 		authHandler,
 		workspaceSettingsHandler(pool, cfg, passwordLogins, logger),
 		invitationgql.NewHandler(&invitationgql.Resolver{
-			Store:   invitationstore.New(pool),
-			Inviter: invitationstore.NewInviter(pool, newSystemMailer(), auth.NewMemoryThrottle(), stack.frontURL, cfg.MultiWorkspace),
+			Store:    invitationstore.New(pool),
+			Inviter:  invitationstore.NewInviter(pool, systemmail.NewSMTPSender(smtpConfigFromEnv()), auth.NewMemoryThrottle(), stack.frontURL, cfg.MultiWorkspace),
+			Tokens:   stack.issuer,
+			Sender:   systemmail.NewSMTPSender(smtpConfigFromEnv()),
+			FrontURL: stack.frontURL,
 		}, logger),
 		pagelayoutgql.NewHandler(&pagelayoutgql.Resolver{Store: pagelayoutstore.New(pool)}, logger),
 		applicationgql.NewHandler(&applicationgql.Resolver{Store: applicationstore.New(pool, cfg.ServerURL)}, logger),

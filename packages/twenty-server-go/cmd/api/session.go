@@ -86,10 +86,21 @@ func newPublicData(pool *pgxpool.Pool, cfg config.Config, passwordLogin *auth.Pa
 	})
 }
 
+func smtpConfigFromEnv() systemmail.SMTPConfig {
+	return systemmail.SMTPConfig{
+		Host:        os.Getenv("EMAIL_SMTP_HOST"),
+		Port:        os.Getenv("EMAIL_SMTP_PORT"),
+		User:        os.Getenv("EMAIL_SMTP_USER"),
+		Password:    os.Getenv("EMAIL_SMTP_PASSWORD"),
+		FromName:    os.Getenv("EMAIL_FROM_NAME"),
+		FromAddress: os.Getenv("EMAIL_FROM_ADDRESS"),
+	}
+}
+
 func newAuthResolver(pool *pgxpool.Pool, cfg config.Config, twoFactor *auth.TwoFactor, passwordLogin *auth.PasswordLogin, stack authStack) *authgql.Resolver {
 	return &authgql.Resolver{
 		Public:        newPublicData(pool, cfg, passwordLogin),
-		PasswordReset: auth.NewPasswordReset(pool, auth.NewPasswordHasher(), newSystemMailer(), stack.frontURL),
+		PasswordReset: auth.NewPasswordReset(pool, auth.NewPasswordHasher(), systemmail.NewSMTPSender(smtpConfigFromEnv()), stack.frontURL),
 		TwoFactor:     twoFactor,
 		PasswordLogin: passwordLogin,
 		Sessions:      stack.sessions,
@@ -103,17 +114,6 @@ func newAuthResolver(pool *pgxpool.Pool, cfg config.Config, twoFactor *auth.TwoF
 			EmailVerificationRequired: os.Getenv("IS_EMAIL_VERIFICATION_REQUIRED") == "true",
 		},
 	}
-}
-
-func newSystemMailer() systemmail.Sender {
-	return systemmail.NewSMTPSender(systemmail.SMTPConfig{
-		Host:        os.Getenv("EMAIL_SMTP_HOST"),
-		Port:        os.Getenv("EMAIL_SMTP_PORT"),
-		User:        os.Getenv("EMAIL_SMTP_USER"),
-		Password:    os.Getenv("EMAIL_SMTP_PASSWORD"),
-		FromName:    os.Getenv("EMAIL_FROM_NAME"),
-		FromAddress: os.Getenv("EMAIL_FROM_ADDRESS"),
-	})
 }
 
 func parseSameSite(value string) (http.SameSite, error) {

@@ -13,6 +13,11 @@ type ApprovedAccessDomain struct {
 	CreatedAt   metadata.Timestamp `json:"createdAt"`
 }
 
+type CreateApprovedAccessDomainInput struct {
+	Domain string `json:"domain"`
+	Email  string `json:"email"`
+}
+
 type DeleteApprovedAccessDomainInput struct {
 	ID string `json:"id"`
 }
@@ -27,6 +32,11 @@ type SendInvitations struct {
 	Success bool                   `json:"success"`
 	Errors  []string               `json:"errors"`
 	Result  []*WorkspaceInvitation `json:"result"`
+}
+
+type ValidateApprovedAccessDomainInput struct {
+	ValidationToken        string `json:"validationToken"`
+	ApprovedAccessDomainID string `json:"approvedAccessDomainId"`
 }
 
 type WorkspaceInvitation struct {

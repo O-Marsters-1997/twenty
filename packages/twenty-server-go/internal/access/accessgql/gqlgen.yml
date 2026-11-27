@@ -36,6 +36,15 @@ models:
     model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/access/store.FullName
   WorkspaceMember:
     model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/access/store.WorkspaceMember
+    fields:
+      roles:
+        resolver: true
+  FeatureFlag:
+    model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/access/store.FeatureFlag
+  UpdateWorkspaceMemberSettingsInput:
+    model: map[string]interface{}
+  UpdateLabPublicFeatureFlagInput:
+    model: map[string]interface{}
   Agent:
     model: github.com/twentyhq/twenty/packages/twenty-server-go/internal/access/store.RoleAgent
   ApiKeyForRole:

@@ -1,0 +1,9 @@
+{
+  "name": "UpdateWorkspaceMemberSettings",
+  "operation": "UpdateWorkspaceMemberSettings",
+  "fixture": "workspace member Ada Lovelace updating her own colour scheme, name and locale",
+  "endpoint": "/metadata",
+  "query": "mutation UpdateWorkspaceMemberSettings($input: UpdateWorkspaceMemberSettingsInput!) { updateWorkspaceMemberSettings(input: $input) }",
+  "variables": {"input": {"workspaceMemberId": "0b7a6c1e-3f55-4a47-8d6e-6c1f1b7f2a05", "update": {"colorScheme": "Dark", "name": {"firstName": "Augusta", "lastName": "King"}, "locale": "fr-FR"}}},
+  "response": {"data": {"updateWorkspaceMemberSettings": true}}
+}

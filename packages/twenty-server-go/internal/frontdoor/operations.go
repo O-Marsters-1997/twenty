@@ -71,6 +71,7 @@ var AccessOperations = []string{
 	"GenerateApiKeyToken", "GeneratePlaygroundToken",
 	"GetRoles", "GetRole", "CreateOneRole", "UpdateOneRole", "DeleteOneRole",
 	"UpsertFieldPermissions", "UpsertObjectPermissions", "UpsertPermissionFlags",
+	"UpdateWorkspaceMemberRole", "UpdateWorkspaceMemberSettings", "UpdateLabPublicFeatureFlag",
 }
 
 var TwoFactorOperations = []string{
@@ -85,7 +86,7 @@ var SessionManagementOperations = []string{"CurrentUserSessions", "RevokeUserSes
 
 var InvitationOperations = []string{
 	"GetWorkspaceInvitations", "DeleteWorkspaceInvitation", "GetApprovedAccessDomains", "DeleteApprovedAccessDomain",
-	"SendInvitations", "ResendWorkspaceInvitation",
+	"SendInvitations", "ResendWorkspaceInvitation", "CreateApprovedAccessDomain", "ValidateApprovedAccessDomain",
 }
 
 var OnboardingOperations = []string{"GoBackToPreviousOnboardingStep", "SkipSyncEmailOnboardingStep"}
@@ -119,7 +120,7 @@ var PublicWorkspaceOperations = []string{
 
 var WorkspaceDataOperations = []string{"GetWorkspaceCreationDefaults", "CheckWorkspaceSubdomainAvailability", "GetWorkspaceIframeOrigins"}
 
-var WorkspaceSettingsOperations = []string{"UpdateWorkspace", "UpdateWorkspaceAllowedIframeOrigins", "ActivateWorkspace"}
+var WorkspaceSettingsOperations = []string{"UpdateWorkspace", "UpdateWorkspaceAllowedIframeOrigins", "ActivateWorkspace", "DeleteCurrentWorkspace", "DeleteUserWorkspace", "DeleteUserAccount"}
 
 var blockedMetadataOperations = []string{
 	"CreateOneObjectMetadataItem", "UpdateOneObjectMetadataItem", "DeleteOneObjectMetadataItem",
